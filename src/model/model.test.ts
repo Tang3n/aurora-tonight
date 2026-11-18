@@ -11,7 +11,7 @@ import {
   type HourInput,
   type HourScore,
 } from './score';
-import { buildTonight, cloudAt, kpAt, nightHours, nightlyOutlook, type KpBlock } from './night';
+import { buildTonight, cloudAt, kpAt, kpValueAt, nightHours, nightlyOutlook, type KpBlock } from './night';
 import { ovationNear, parseOvation } from './ovation';
 import { localParts } from './time';
 
@@ -143,6 +143,16 @@ describe('aligning sources', () => {
     expect(kpAt(blocks, new Date('2026-11-18T23:30:00Z'))?.kp).toBe(4.67);
     expect(kpAt(blocks, new Date('2026-11-19T00:00:00Z'))?.kp).toBe(2.33);
     expect(kpAt(blocks, new Date('2026-11-19T05:00:00Z'))).toBeNull();
+  });
+
+  it('interpolates Kp between block centres', () => {
+    // centre of the 21:00 block → its own value
+    expect(kpValueAt(blocks, new Date('2026-11-18T22:30:00Z'))).toBeCloseTo(4.67);
+    // block boundary → halfway between neighbours
+    expect(kpValueAt(blocks, new Date('2026-11-19T00:00:00Z'))).toBeCloseTo((4.67 + 2.33) / 2);
+    // edge of the data → hold the last value
+    expect(kpValueAt(blocks, new Date('2026-11-19T02:30:00Z'))).toBeCloseTo(2.33);
+    expect(kpValueAt(blocks, new Date('2026-11-19T05:00:00Z'))).toBeNull();
   });
 
   it('picks the nearest cloud point within 3 hours', () => {

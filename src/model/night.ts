@@ -52,6 +52,23 @@ export function kpAt(blocks: KpBlock[], t: Date): KpBlock | null {
   return blocks.find((b) => ms >= b.start.getTime() && ms < b.start.getTime() + 3 * HOUR) ?? null;
 }
 
+/**
+ * Kp at an instant, linearly interpolated between the centres of neighbouring 3-hour blocks.
+ * Geomagnetic activity changes continuously; a step function would make the timeline jump
+ * from "great" to "nothing" exactly at block boundaries.
+ */
+export function kpValueAt(blocks: KpBlock[], t: Date): number | null {
+  const own = kpAt(blocks, t);
+  if (!own) return null;
+  const ms = t.getTime();
+  const centre = own.start.getTime() + 1.5 * HOUR;
+  const neighbourStart = ms < centre ? own.start.getTime() - 3 * HOUR : own.start.getTime() + 3 * HOUR;
+  const neighbour = blocks.find((b) => b.start.getTime() === neighbourStart);
+  if (!neighbour) return own.kp;
+  const w = Math.abs(ms - centre) / (3 * HOUR); // 0 at own centre, 0.5 at the boundary
+  return own.kp * (1 - w) + neighbour.kp * w;
+}
+
 /** Nearest cloud point within 3 hours (forecasts turn 6-hourly after ~2.5 days). */
 export function cloudAt(points: CloudPoint[], t: Date): Cloud | null {
   let best: CloudPoint | null = null;
@@ -112,7 +129,7 @@ export function buildTonight(now: Date, p: Place, data: TonightData): Tonight {
     return scoreHour(
       {
         time: t,
-        kp: data.kp ? (kpAt(data.kp, mid)?.kp ?? null) : null,
+        kp: data.kp ? kpValueAt(data.kp, mid) : null,
         cloud: data.clouds ? cloudAt(data.clouds, mid) : null,
         sunAltitude: sunAltitude(mid, p),
         moon: moonAt(mid, p),
