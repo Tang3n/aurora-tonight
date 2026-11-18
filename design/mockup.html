@@ -147,7 +147,13 @@
     .hours span:nth-child(even) { visibility: hidden; }
   }
   @media (max-width: 480px) {
-    .factors { grid-template-columns: 1fr; }
+    .factors { gap: 10px; }
+    .factor { padding: 16px; }
+    .factor .ic { width: 28px; height: 28px; }
+    .factor .v { font-size: 24px; margin-top: 12px; }
+    .factor .v small { display: block; margin: 4px 0 0; font-size: 12px; }
+    .factor p { font-size: 12px; }
+    .look .v { font-size: 15px; }
     .wind { grid-template-columns: 1fr 1fr; }
     .sentence { font-size: 17px; }
   }
