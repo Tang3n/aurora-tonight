@@ -19,19 +19,26 @@ Everything runs in the browser — there is no backend. The page fetches public,
 | NOAA SWPC — Kp forecast (3-hour blocks) | aurora activity for each hour tonight |
 | NOAA SWPC — OVATION nowcast (1° grid) | the oval map and the current hour |
 | NOAA SWPC — real-time solar wind (1 min) | Bz, speed, density right now |
-| MET Norway — Locationforecast | low / mid / high cloud cover per hour |
+| MET Norway — Locationforecast | total + layered cloud cover and fog per hour |
 | Open-Meteo — Geocoding | place search |
 | computed locally (`suncalc`) | sun altitude, moon phase and altitude |
 
-Each hour gets a score:
+For every hour of the night the app estimates the **chance to see aurora with your own eyes** (and separately with a
+phone camera) by following the light:
 
-```
-score = 100 × activity × sky × darkness × moon        (each factor 0..1)
-```
+1. **Where is the oval?** Starkov (1994) boundary model driven by the Kp forecast and *magnetic local time*
+   (the oval reaches furthest south around magnetic midnight).
+2. **How far is it from you?** Distance in AACGM-v2 **magnetic** latitude — a precomputed grid
+   (`tools/gen_aacgm_grid.py`), because the simple dipole is 3–4° off over Scandinavia.
+3. **How high above the horizon?** Elevation of the aurora's lower edge at 110 km, with Earth curvature.
+4. **How much light gets through?** Atmospheric extinction (Kasten & Young airmass).
+5. **Can it beat the sky?** Contrast against a background brightened by twilight and the Moon
+   (Krisciunas & Schaefer 1991), with thresholds for the eye (~1 kR) and a camera (~0.1 kR).
+6. **Is it clear?** MET Norway total cloud cover, averaged over ±1 h.
 
-The factors are multiplied on purpose: a single blocker — daylight or overcast sky — means no aurora, however strong
-the storm. *Activity* compares the forecast Kp with the Kp your **geomagnetic** latitude needs (aurora follows the
-magnetic field, not geography). If a data source fails, its factor falls back to a cautious default and the page says so.
+Forecast Kp is treated as a distribution (σ ≈ 1.2), and the live OVATION nowcast is run through the same light path
+for the next hour or two. Brightness was calibrated to NOAA's Kp→latitude table — not yet against real sightings,
+so the number is a score, not a calibrated probability. If a data source fails, the page says so and stays cautious.
 
 See [docs/spec.md](docs/spec.md) for the full spec and model.
 

@@ -97,6 +97,8 @@ interface MetNoJson {
       data: {
         instant: {
           details: {
+            cloud_area_fraction?: number;
+            fog_area_fraction?: number;
             cloud_area_fraction_low?: number;
             cloud_area_fraction_medium?: number;
             cloud_area_fraction_high?: number;
@@ -119,14 +121,18 @@ export async function fetchClouds(lat: number, lon: number): Promise<CloudForeca
   const pct = (x: number | undefined) => (x ?? 0) / 100;
   return {
     updated: new Date(json.properties.meta.updated_at),
-    points: json.properties.timeseries.map((t) => ({
-      time: new Date(t.time),
-      cloud: {
-        low: pct(t.data.instant.details.cloud_area_fraction_low),
-        mid: pct(t.data.instant.details.cloud_area_fraction_medium),
-        high: pct(t.data.instant.details.cloud_area_fraction_high),
-      },
-    })),
+    points: json.properties.timeseries.map((t) => {
+      const d = t.data.instant.details;
+      const low = pct(d.cloud_area_fraction_low);
+      const mid = pct(d.cloud_area_fraction_medium);
+      const high = pct(d.cloud_area_fraction_high);
+      // `total` is MET's own overlap-aware value; fall back to random overlap if absent.
+      const total = d.cloud_area_fraction !== undefined ? pct(d.cloud_area_fraction) : 1 - (1 - low) * (1 - mid) * (1 - high);
+      return {
+        time: new Date(t.time),
+        cloud: { total, low, mid, high, ...(d.fog_area_fraction !== undefined ? { fog: pct(d.fog_area_fraction) } : {}) },
+      };
+    }),
   };
 }
 

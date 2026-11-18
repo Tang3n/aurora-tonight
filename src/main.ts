@@ -8,8 +8,8 @@
 import './styles.css';
 import SunCalc from 'suncalc';
 import { LANGS, STRINGS, detectLang, type Lang } from './i18n';
-import { buildTonight, nightlyOutlook, type KpBlock } from './model/night';
-import { ovationNear, type OvationGrid } from './model/ovation';
+import { buildTonight, nightlyOutlook, type KpBlock, type Tonight } from './model/night';
+import type { OvationGrid } from './model/ovation';
 import { bestWindow } from './model/score';
 import {
   fetchClouds,
@@ -81,9 +81,13 @@ const ovalCanvas = $<HTMLCanvasElement>('oval');
 
 /* ---------- loading ---------- */
 
+/** Bumped whenever any source delivers new data; part of the physics cache key. */
+let dataVersion = 0;
+
 async function load<T>(name: string, fn: () => Promise<T>, apply: (v: T) => void) {
   try {
     apply(await fn());
+    dataVersion++;
     state.failed.delete(name);
   } catch (err) {
     console.warn(`[aurora] ${name} failed`, err);
@@ -106,6 +110,20 @@ function redrawOval() {
   drawOval(ovalCanvas, state.ovation, state.loc, STRINGS[state.lang].you);
 }
 
+// The physics runs ~10⁵ small evaluations per night; cache it between renders (language switch,
+// tooltip, "why" toggle) and recompute only when data, place or the minute changes.
+let tonightCache: { key: string; value: Tonight } | null = null;
+function computeTonight(now: Date): Tonight {
+  const key = [state.loc.lat, state.loc.lon, dataVersion, Math.floor(now.getTime() / 60_000)].join('|');
+  if (tonightCache?.key !== key) {
+    tonightCache = {
+      key,
+      value: buildTonight(now, state.loc, { kp: state.kp, clouds: state.clouds?.points ?? null, ovation: state.ovation }),
+    };
+  }
+  return tonightCache.value;
+}
+
 function render() {
   const S = STRINGS[state.lang];
   const now = new Date();
@@ -113,18 +131,14 @@ function render() {
   const fmt = makeFmt(state.lang, loc.tz);
   document.documentElement.lang = state.lang === 'no' ? 'nb' : state.lang;
 
-  // Solar wind older than 30 min is not a nowcast any more.
-  const lastWind = state.wind?.at(-1);
-  const bz = lastWind && now.getTime() - lastWind.time.getTime() < 30 * 60_000 ? lastWind.bz : null;
-  const tonight = buildTonight(now, loc, {
-    kp: state.kp,
-    clouds: state.clouds?.points ?? null,
-    nowcast: { ovation: state.ovation ? ovationNear(state.ovation, loc.lat, loc.lon) : null, bz },
-  });
-  const win = bestWindow(tonight.hours);
+  const tonight = computeTonight(now);
+  const win = bestWindow(tonight.hours, (h) => h.eye);
+  const camWin = win ? null : bestWindow(tonight.hours, (h) => h.camera, 30);
   const nowHour = tonight.hours.find((h) => now >= h.time && now.getTime() < h.time.getTime() + 3600_000);
-  const headline = win?.peak.score ?? Math.max(0, ...tonight.hours.map((h) => h.score));
-  const goNow = !!(win && nowHour && nowHour.time >= win.start && nowHour.time < win.end && nowHour.score >= 50);
+  const focus = win?.peak ?? camWin?.peak ?? null;
+  const headline = focus?.eye ?? Math.max(0, ...tonight.hours.map((h) => h.eye));
+  const headlineCamera = focus?.camera ?? Math.max(0, ...tonight.hours.map((h) => h.camera));
+  const goNow = !!(win && nowHour && nowHour.time >= win.start && nowHour.time < win.end && nowHour.eye >= 50);
 
   const vm: ViewModel = {
     S,
@@ -133,7 +147,9 @@ function render() {
     lat: loc.lat,
     tonight,
     window: win,
+    cameraWindow: camWin,
     headline,
+    headlineCamera,
     goNow,
     ovationTime: state.ovation?.observed ?? null,
     cloudsUpdated: state.clouds?.updated ?? null,

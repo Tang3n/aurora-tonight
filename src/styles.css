@@ -180,3 +180,9 @@
 /* tooltip is positioned relative to the timeline card, so the card must be its containing block */
 #timeline { position: relative; }
 .tooltip { transform: translateY(-100%); }
+/* camera bar sits behind the eye bar as an outline */
+.hour { position: relative; }
+.hour .bar { position: relative; z-index: 1; }
+.hour .bar.cam { position: absolute; left: 0; right: 0; bottom: 0; z-index: 0; background: rgba(180,140,255,.10); border: 1px dashed rgba(180,140,255,.45); border-bottom: 0; }
+.cam-swatch { background: rgba(180,140,255,.15); border: 1px dashed rgba(180,140,255,.6); }
+.label small.cam { color: var(--violet); margin-top: 2px; }

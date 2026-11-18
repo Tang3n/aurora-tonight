@@ -52,12 +52,21 @@ export interface ViewModel {
   now: Date;
   lat: number;
   tonight: Tonight;
+  /** Best window for the naked eye, and (if the eye has none) for a phone camera. */
   window: Window | null;
+  cameraWindow: Window | null;
   headline: number;
+  headlineCamera: number;
   goNow: boolean;
   ovationTime: Date | null;
   cloudsUpdated: Date | null;
   kpOk: boolean;
+}
+
+/** The hour whose verdict the hero describes: eye peak, else camera peak, else the darkest hour. */
+export function focusHour(vm: Pick<ViewModel, 'window' | 'cameraWindow' | 'tonight'>): HourScore | null {
+  return vm.window?.peak ?? vm.cameraWindow?.peak ?? vm.tonight.hours.reduce<HourScore | null>(
+    (a, h) => (!a || h.auroraEye > a.auroraEye ? h : a), null);
 }
 
 /** Hero card with the verdict. */
@@ -65,15 +74,19 @@ export function verdictHtml(vm: ViewModel, whyOpen: boolean): string {
   const { S, fmt, tonight, window: win, headline, now } = vm;
   const label = labelFor(headline);
   const dir = vm.lat >= 0 ? S.north : S.south;
-  const peakKp = Math.max(0, ...tonight.hours.map((h) => h.input.kp ?? 0));
-  const high = peakKp - tonight.kpNeeded > 2;
+  const focus = focusHour(vm);
+  const elevation = focus?.arcElevation ?? 0;
 
   let sentence: string;
   if (!tonight.hours.length) sentence = S.sentence.noNight;
-  else if (!win) {
-    const sky = mean(tonight.hours.map((h) => h.factors.sky));
-    sentence = sky < 0.35 ? S.sentence.clouds : S.sentence.quiet(tonight.kpNeeded.toFixed(1));
-  } else sentence = `${S.sentence.window(fmt.time(win.start), fmt.time(win.end))} ${S.sentence.look(dir, high)}`;
+  else if (win) sentence = `${S.sentence.window(fmt.time(win.start), fmt.time(win.end))} ${S.sentence.look(dir, elevation)}`;
+  else if (vm.cameraWindow)
+    sentence = `${S.sentence.cameraOnly(fmt.time(vm.cameraWindow.start), fmt.time(vm.cameraWindow.end))} ${S.sentence.look(dir, elevation)}`;
+  else {
+    const clear = mean(tonight.hours.map((h) => h.clear));
+    const aurora = Math.max(...tonight.hours.map((h) => h.auroraEye));
+    sentence = clear < 0.35 && aurora > 0.3 ? S.sentence.clouds : S.sentence.quiet(tonight.kpNeeded.toFixed(1));
+  }
 
   const dot = (ok: boolean) => `<i class="dot${ok ? '' : ' bad'}"></i>`;
   const meta = [
@@ -89,7 +102,7 @@ export function verdictHtml(vm: ViewModel, whyOpen: boolean): string {
     <div class="eyebrow">${S.tonight} · ${fmt.day(now)}</div>
     <div class="verdict">
       <div class="score${headline < 30 ? ' dim' : ''}">${headline}</div>
-      <div class="label c-${label}">${vm.goNow ? S.goNow : S.labels[label]}<small>${S.outOf100}</small></div>
+      <div class="label c-${label}">${vm.goNow ? S.goNow : S.labels[label]}<small>${S.eyeChance}</small><small class="cam">${S.camera(vm.headlineCamera)}</small></div>
     </div>
     <p class="sentence">${sentence}</p>
     <div class="scale" role="img" aria-label="${headline} / 100"><i style="left:${Math.max(1, Math.min(99, headline))}%"></i></div>
@@ -97,9 +110,9 @@ export function verdictHtml(vm: ViewModel, whyOpen: boolean): string {
     <div class="meta">${meta.join('')}<button class="why" id="why" aria-expanded="${whyOpen}">${S.why}</button></div>
     <div class="whybox" ${whyOpen ? '' : 'hidden'}>${S.whyText}</div>
     <div class="look">
-      <div><div class="k">${S.look}</div><div class="v">${S.lookValue(dir, high)}</div></div>
+      <div><div class="k">${S.look}</div><div class="v">${S.lookValue(dir, elevation)}</div></div>
       <div><div class="k">${S.kpNeeded}</div><div class="v">${tonight.kpNeeded.toFixed(1)}</div></div>
-      <div><div class="k">${S.magLat}</div><div class="v">${Math.abs(tonight.magLat).toFixed(1)}°</div></div>
+      <div><div class="k">${S.magLat}</div><div class="v">${Math.abs(tonight.mlat).toFixed(1)}°</div></div>
     </div>`;
 }
 
@@ -121,13 +134,14 @@ export function timelineHtml(vm: ViewModel, place: { lat: number; lon: number })
     sub = isNaN(evening.sunset.getTime()) ? S.polarNight : S.sunTimes(fmt.time(evening.sunset), fmt.time(dark), fmt.time(morning.sunrise));
   }
   const cols = `style="grid-template-columns:repeat(${Math.max(1, hours.length)},1fr)"`;
-  const best = vm.window;
+  const best = vm.window ?? vm.cameraWindow;
   const bars = hours
     .map((h, i) => {
       const isNow = now >= h.time && now.getTime() < h.time.getTime() + 3600_000;
       const inBest = best && h.time >= best.start && h.time < best.end;
-      return `<div class="hour${isNow ? ' now' : ''}${inBest ? ' best' : ''}"${isNow ? ` data-now="${S.now}"` : ''} data-i="${i}" tabindex="0" aria-label="${fmt.time(h.time)}: ${h.score}">
-        <div class="bar" style="height:${Math.max(3, h.score)}%;background:${barColor(h.score)};opacity:${0.35 + (h.score / 100) * 0.65}"></div></div>`;
+      return `<div class="hour${isNow ? ' now' : ''}${inBest ? ' best' : ''}"${isNow ? ` data-now="${S.now}"` : ''} data-i="${i}" tabindex="0" aria-label="${fmt.time(h.time)}: ${h.eye} / ${h.camera}">
+        <div class="bar cam" style="height:${Math.max(3, h.camera)}%"></div>
+        <div class="bar" style="height:${Math.max(3, h.eye)}%;background:${barColor(h.eye)};opacity:${0.35 + (h.eye / 100) * 0.65}"></div></div>`;
     })
     .join('');
   return `
@@ -135,25 +149,26 @@ export function timelineHtml(vm: ViewModel, place: { lat: number; lon: number })
     <div class="timeline" ${cols}>${bars || `<div class="empty-tl">${S.sentence.noNight}</div>`}</div>
     <div class="hours" ${cols}>${hours.map((h) => `<span>${fmt.hour(h.time)}</span>`).join('')}</div>
     <div class="clouds" ${cols}>${hours
-      .map((h) => `<i style="opacity:${h.input.cloud ? 0.08 + (1 - h.factors.sky) * 0.7 : 0}"></i>`)
+      .map((h) => `<i style="opacity:${h.cloud ? 0.08 + (1 - h.clear) * 0.7 : 0}"></i>`)
       .join('')}</div>
     <div class="tl-legend">
-      <span><i style="background:linear-gradient(90deg,var(--aurora-2),var(--aurora))"></i>${S.legendChance}</span>
+      <span><i style="background:linear-gradient(90deg,var(--aurora-2),var(--aurora))"></i>${S.legendEye}</span>
+      <span><i class="cam-swatch"></i>${S.legendCamera}</span>
       <span><i style="background:#c9d6ea"></i>${S.legendCloud}</span>
     </div>
     <div class="tooltip" id="tip" role="tooltip"></div>`;
 }
 
 export function tooltipHtml(h: HourScore, S: Strings, fmt: Fmt): string {
-  const i = h.input;
-  const dark = h.factors.dark >= 0.99 ? S.tt.full : S.tt.twilight;
-  const moon = i.moon.altitude > 0 ? `${S.tt.up}, ${pct(i.moon.illumination)} %` : S.tt.down;
-  const cloud = i.cloud ? `${pct(1 - h.factors.sky)} %` : '—';
-  return `<b>${fmt.time(h.time)} · ${h.score}</b><dl>
-    <dt>${S.tt.aurora}</dt><dd>${i.kp?.toFixed(1) ?? '—'}</dd>
-    <dt>${S.tt.clouds}</dt><dd>${cloud}</dd>
-    <dt>${S.tt.dark}</dt><dd>${dark}</dd>
-    <dt>${S.tt.moon}</dt><dd>${moon}</dd></dl>`;
+  const height = h.arcElevation >= 60 ? S.tt.overhead : `${Math.max(0, Math.round(h.arcElevation))}°`;
+  const live = h.nowcastWeight > 0.5 ? ` · ${S.tt.live}` : '';
+  return `<b>${fmt.time(h.time)}${live}</b><dl>
+    <dt>${S.tt.eye}</dt><dd>${h.eye} %</dd>
+    <dt>${S.tt.camera}</dt><dd>${h.camera} %</dd>
+    <dt>${S.tt.kp}</dt><dd>${h.kp?.toFixed(1) ?? '—'}</dd>
+    <dt>${S.tt.height}</dt><dd>${height}</dd>
+    <dt>${S.tt.clear}</dt><dd>${h.cloud ? `${pct(h.clear)} %` : '—'}</dd>
+    <dt>${S.tt.sky}</dt><dd>${h.background < 100 ? `${h.background.toFixed(1)}×` : '☀'}</dd></dl>`;
 }
 
 const ICONS = {
@@ -180,43 +195,43 @@ export function factorsHtml(vm: ViewModel, place: { lat: number; lon: number }, 
   const H = tonight.hours;
   const f = S.f;
   if (!H.length) return '';
+  const dir = vm.lat >= 0 ? S.north : S.south;
+  const focus = focusHour(vm)!;
 
-  // Activity
-  let peak: HourScore | null = null;
-  for (const h of H) if (h.input.kp !== null && (!peak || h.input.kp > (peak.input.kp ?? 0))) peak = h;
-  const need = tonight.kpNeeded;
-  const actW = Math.max(...H.map((h) => h.factors.activity));
-  const activity = peak
-    ? factorCard(
-        'activity',
-        peak.input.kp! >= need + 1 ? 'good' : peak.input.kp! >= need - 0.5 ? 'ok' : 'bad',
-        peak.input.kp! >= need + 1 ? f.strong : peak.input.kp! >= need - 0.5 ? f.moderate : f.weak,
-        `Kp ${peak.input.kp!.toFixed(1)}`,
-        f.peakAt(fmt.time(peak.time)),
-        f.kpText(need.toFixed(1), peak.input.kp! >= need),
-        actW,
-        S,
-      )
-    : factorCard('activity', 'bad', f.noData, '—', '', S.failed('Kp'), actW, S);
+  // Aurora: clear-sky visibility at the best hour, explained by where the oval stands.
+  const a = focus.auroraEye;
+  const activity =
+    focus.kp === null
+      ? factorCard('activity', 'bad', f.noData, '—', '', S.failed('Kp'), a, S)
+      : factorCard(
+          'activity',
+          a > 0.6 ? 'good' : a > 0.25 ? 'ok' : 'bad',
+          a > 0.6 ? f.strong : a > 0.25 ? f.moderate : f.weak,
+          `${pct(a)} %`,
+          f.auroraSub,
+          f.auroraText(focus.kp.toFixed(1), dir, focus.arcElevation),
+          a,
+          S,
+        );
 
   // Clouds
-  const hasCloud = H.some((h) => h.input.cloud);
-  const sky = mean(H.map((h) => h.factors.sky));
-  const clearHours = H.filter((h) => h.input.cloud && h.factors.sky > 0.7).length;
+  const hasCloud = H.some((h) => h.cloud);
+  const clear = mean(H.map((h) => h.clear));
+  const clearHours = H.filter((h) => h.cloud && h.clear > 0.7).length;
   const clouds = hasCloud
     ? factorCard(
         'clouds',
-        sky > 0.75 ? 'good' : sky > 0.4 ? 'ok' : 'bad',
-        sky > 0.75 ? f.clear : sky > 0.4 ? f.partly : f.overcast,
-        `${pct(1 - sky)} %`,
+        clear > 0.75 ? 'good' : clear > 0.4 ? 'ok' : 'bad',
+        clear > 0.75 ? f.clear : clear > 0.4 ? f.partly : f.overcast,
+        `${pct(clear)} %`,
         f.cloudSub,
         f.cloudText(clearHours, H.length),
-        sky,
+        clear,
         S,
       )
-    : factorCard('clouds', 'bad', f.noData, '—', '', S.failed(S.weather), sky, S);
+    : factorCard('clouds', 'bad', f.noData, '—', '', S.failed(S.weather), clear, S);
 
-  // Darkness
+  // Darkness: share of the night without twilight brightening the sky.
   const evening = SunCalc.getTimes(new Date(H[0]!.time.getTime() - 12 * 3600_000), place.lat, place.lon);
   const morning = SunCalc.getTimes(H.at(-1)!.time, place.lat, place.lon);
   const darkText = isNaN(evening.night.getTime())
@@ -224,7 +239,7 @@ export function factorsHtml(vm: ViewModel, place: { lat: number; lon: number }, 
       ? f.darkAll
       : f.darkText(fmt.time(evening.nauticalDusk), fmt.time(morning.nauticalDawn))
     : f.darkText(fmt.time(evening.night), fmt.time(morning.nightEnd));
-  const darkW = mean(H.map((h) => h.factors.dark));
+  const darkW = H.filter((h) => h.twilight < 0.5).length / H.length;
   const dark = factorCard(
     'dark',
     sunNow < -15 ? 'good' : sunNow < -6 ? 'ok' : 'bad',
@@ -236,16 +251,16 @@ export function factorsHtml(vm: ViewModel, place: { lat: number; lon: number }, 
     S,
   );
 
-  // Moon
-  const moonW = mean(H.map((h) => h.factors.moon));
-  const upShare = H.filter((h) => h.input.moon.altitude > 0).length / H.length;
+  // Moon: how much it brightens the sky where the aurora will be.
+  const maxMoon = Math.max(...H.map((h) => h.moon));
+  const moonW = mean(H.map((h) => 1 / (1 + h.moon)));
   const moon = factorCard(
     'moon',
-    moonW > 0.9 ? 'good' : 'ok',
-    moonW > 0.9 ? f.faint : f.bright,
+    maxMoon < 1 ? 'good' : maxMoon < 5 ? 'ok' : 'bad',
+    maxMoon < 1 ? f.faint : f.bright,
     `${pct(moonNow)} %`,
     f.moonSub,
-    upShare > 0 ? f.moonUp(pct(upShare)) : f.moonDown,
+    maxMoon > 0.05 ? f.moonText((1 + maxMoon).toFixed(maxMoon < 9 ? 1 : 0)) : f.moonDown,
     moonW,
     S,
   );

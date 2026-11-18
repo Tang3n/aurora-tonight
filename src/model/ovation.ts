@@ -33,21 +33,3 @@ export function ovationAt(grid: OvationGrid, lat: number, lon: number): number {
   const lo = (((Math.round(lon) % 360) + 360) % 360);
   return grid.values[lo * 181 + (la + 90)] ?? 0;
 }
-
-/**
- * Visibility near the observer. Aurora overhead somewhere poleward can still be seen
- * on the horizon (it glows at ~110 km altitude), so we scan up to 10° towards the pole
- * and ±15° in longitude, discounting by distance.
- */
-export function ovationNear(grid: OvationGrid, lat: number, lon: number): number {
-  const toPole = lat >= 0 ? 1 : -1;
-  let best = 0;
-  for (let dLat = 0; dLat <= 10; dLat++) {
-    for (let dLon = -15; dLon <= 15; dLon++) {
-      const v = ovationAt(grid, lat + toPole * dLat, lon + dLon);
-      const w = (1 - dLat / 12) * (1 - Math.abs(dLon) / 20);
-      if (v * w > best) best = v * w;
-    }
-  }
-  return best;
-}
