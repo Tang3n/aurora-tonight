@@ -6,3 +6,4 @@ dist/
 tools/.venv/
 validation/data/
 validation/dist/
+__pycache__/
