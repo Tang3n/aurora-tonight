@@ -209,7 +209,9 @@ function showTip(el: HTMLElement | null) {
   const card = $('timeline').getBoundingClientRect();
   const r = el.getBoundingClientRect();
   tip.style.left = `${Math.min(card.width - 190, Math.max(8, r.left - card.left - 70))}px`;
-  tip.style.top = `${r.top - card.top - 10}px`;
+  // Sit just above the bar itself (CSS shifts the tooltip up by its own height).
+  const barTop = el.querySelector('.bar')?.getBoundingClientRect().top ?? r.top;
+  tip.style.top = `${barTop - card.top - 8}px`;
   tip.classList.add('show');
 }
 const timelineEl = $('timeline');
