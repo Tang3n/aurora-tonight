@@ -49,7 +49,11 @@ camera. Code: `src/model/{aacgm,oval,visibility,night}.ts`; parameters and their
 are listed in `PARAMS` in `visibility.ts`. Research behind it: Starkov 1994 via Sigernes et al. 2011; Case et al.
 2016; Zhang & Paxton 2008; Krisciunas & Schaefer 1991; Kasten & Young 1989; SWPC Kp verification.
 
-Next: validate against Aurorasaurus sightings / all-sky cameras, log forecast vs observed Kp, light pollution layer.
+Validated 2026-11-18 against the Kilpisjärvi all-sky camera (see `validation/README.md`): the physics ranks clear
+hours well (AUC 0.97); forecast cloud was far too harsh and now uses an empirical curve (overall AUC 0.67 → 0.79,
+Brier skill −0.23 → +0.22).
+
+Next: sightings further south (Aurorasaurus), log forecast vs observed Kp, light pollution layer.
 
 ## Visual direction — "Living sky" (decided 2026-11-18)
 Full-screen animated aurora curtains (WebGL shader) behind the UI; their brightness and motion follow the real score,

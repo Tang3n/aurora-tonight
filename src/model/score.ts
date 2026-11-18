@@ -15,8 +15,9 @@ export interface HourScore {
   /** Aurora visibility assuming a clear sky, 0..1 (eye / camera). */
   auroraEye: number;
   auroraCamera: number;
-  /** Chance of a clear line of sight, 0..1. */
+  /** Chance cloud does not hide the aurora, 0..1, for the eye and for a camera. */
   clear: number;
+  clearCamera: number;
   /** Sky brightness in multiples of a natural dark sky, and its parts. */
   background: number;
   twilight: number;

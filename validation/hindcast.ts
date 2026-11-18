@@ -111,7 +111,8 @@ for (const line of lines.slice(1)) {
   const bg = skyBackground(sunAlt, moon);
   const vCam = expectedVisibility(Math.abs(mlat), mlt, k, 'observed', PARAMS.thresholdCamera, bg);
   const vEye = expectedVisibility(Math.abs(mlat), mlt, k, 'observed', PARAMS.thresholdEye, bg);
-  const clear = clearSky(cloud);
+  const clear = clearSky(cloud, 'camera');
+  const clearEye = clearSky(cloud, 'eye');
   // v1: activity × sky(layers) × dark × moon(−30 % max), using the same clouds
   const v1Sky = (1 - cloud.low) * (1 - 0.7 * cloud.mid) * (1 - 0.3 * cloud.high);
   const moonIllum = SunCalc.getMoonIllumination(mid).fraction;
@@ -121,7 +122,7 @@ for (const line of lines.slice(1)) {
   out.push(
     [time, f[col('structure')], k.toFixed(2), mlt.toFixed(2), sunAlt.toFixed(1), moon.toFixed(2), moonInSlice ? 1 : 0,
       cloud.total.toFixed(2), clear.toFixed(3), vCam.toFixed(4), vEye.toFixed(4), (clear * vCam).toFixed(4),
-      (clear * vEye).toFixed(4), v1.toFixed(4), elev.toFixed(1)].join(','),
+      (clearEye * vEye).toFixed(4), v1.toFixed(4), elev.toFixed(1)].join(','),
   );
 }
 

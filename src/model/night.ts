@@ -154,7 +154,8 @@ export function buildTonight(now: Date, p: Place, data: TonightData): Tonight {
 
     const cloud = data.clouds ? cloudAt(data.clouds, mid) : null;
     if (!cloud) missing.push('cloud');
-    const clear = cloud ? clearSky(cloud) : 0.5;
+    const clear = cloud ? clearSky(cloud, 'eye') : 0.5;
+    const clearCamera = cloud ? clearSky(cloud, 'camera') : 0.6;
 
     const sunAlt = sunAltitude(mid, p);
     const elevation = arcElevation(absMlat, mlt, kpMean);
@@ -179,10 +180,11 @@ export function buildTonight(now: Date, p: Place, data: TonightData): Tonight {
     return {
       time: t,
       eye: Math.round(100 * clear * auroraEye),
-      camera: Math.round(100 * clear * auroraCamera),
+      camera: Math.max(Math.round(100 * clear * auroraEye), Math.round(100 * clearCamera * auroraCamera)),
       auroraEye,
       auroraCamera,
       clear,
+      clearCamera,
       background,
       twilight,
       moon,

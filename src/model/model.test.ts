@@ -124,11 +124,13 @@ describe('buildTonight', () => {
     expect(h === 23 || h === 0 || h === 1 || h === 22).toBe(true);
   });
 
-  it('clouds zero the score but leave the clear-sky visibility intact', () => {
+  it('forecast overcast cuts the score to ~20 % (eye) / ~40 % (camera) of the clear-sky value', () => {
     const cloudy = { ...data(4), clouds: clearNight('2026-11-18T12:00:00Z').map((p) => ({ ...p, cloud: { total: 1, low: 1, mid: 0, high: 0 } })) };
+    const clear = buildTonight(NOW, TROMSO, data(4));
     const t = buildTonight(NOW, TROMSO, cloudy);
-    expect(Math.max(...t.hours.map((h) => h.eye))).toBe(0);
-    expect(Math.max(...t.hours.map((h) => h.auroraEye))).toBeGreaterThan(0.5);
+    const peak = (x: typeof t, k: 'eye' | 'camera') => Math.max(...x.hours.map((h) => h[k]));
+    expect(peak(t, 'eye') / peak(clear, 'eye')).toBeCloseTo(0.2, 1);
+    expect(peak(t, 'camera') / peak(clear, 'camera')).toBeCloseTo(0.4, 1);
   });
 
   it('degrades gracefully when every source failed', () => {

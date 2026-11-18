@@ -130,7 +130,7 @@ const en: Strings = {
   unavailable: (w) => `${w} unavailable`,
   why: 'Why this score?',
   whyText:
-    'The score is the chance to see aurora with your own eyes. For every hour we place the auroral oval from the Kp forecast and magnetic local time (Starkov model), measure how far it is from you in <b>magnetic</b> latitude (AACGM), and work out how high above the horizon its lower edge stands and how much light the atmosphere absorbs on the way. That light has to beat a sky brightened by <b>twilight</b> and the <b>Moon</b>, and finally the sky must be <b>clear</b>. The uncertainty of the Kp forecast (±1.2) is included. The camera number uses a ten times lower brightness threshold. Not yet calibrated against observations — treat it as a score.',
+    'The score is the chance to see aurora with your own eyes. For every hour we place the auroral oval from the Kp forecast and magnetic local time (Starkov model), measure how far it is from you in <b>magnetic</b> latitude (AACGM), and work out how high above the horizon its lower edge stands and how much light the atmosphere absorbs on the way. That light has to beat a sky brightened by <b>twilight</b> and the <b>Moon</b>, and finally it has to get through the <b>clouds</b> — a cloudy forecast is not a sure no: an all-sky camera in Kilpisjärvi still saw aurora in 42 % of hours forecast as overcast. The uncertainty of the Kp forecast (±1.2) is included. The camera number uses a ten times lower brightness threshold. Checked against five months of camera data in northern Finland; not yet against sightings further south.',
   look: 'Look',
   lookValue: (dir, e) => (e >= 60 ? 'Overhead' : `${cap(dir)}, ${deg(e)} up`),
   kpNeeded: 'Kp needed here',
@@ -146,7 +146,7 @@ const en: Strings = {
   legendCamera: 'Phone camera',
   legendCloud: 'Cloud cover (more opaque = cloudier)',
   now: 'now',
-  tt: { eye: 'Eye', camera: 'Camera', kp: 'Kp', clear: 'Clear sky', height: 'Aurora height', sky: 'Sky brightness', overhead: 'overhead', live: 'live' },
+  tt: { eye: 'Eye', camera: 'Camera', kp: 'Kp', clear: 'Through clouds', height: 'Aurora height', sky: 'Sky brightness', overhead: 'overhead', live: 'live' },
   f: {
     activity: 'Aurora',
     clouds: 'Clouds',
@@ -165,7 +165,7 @@ const en: Strings = {
     auroraSub: 'if the sky is clear',
     auroraText: (kp, dir, e) =>
       e >= 60 ? `At Kp ${kp} the oval reaches over you.` : `At Kp ${kp} its lower edge stands ~${deg(e)} above the ${dir} horizon.`,
-    cloudSub: 'clear sky',
+    cloudSub: 'chance clouds let it through',
     cloudText: (c, t) => `${c} of ${t} hours tonight are mostly clear.`,
     sunSub: 'sun altitude now',
     darkText: (a, b) => `Fully dark from ${a} to ${b}.`,
@@ -225,7 +225,7 @@ const cs: Strings = {
   unavailable: (w) => `${w} nedostupné`,
   why: 'Proč takové skóre?',
   whyText:
-    'Skóre je šance, že záři uvidíš vlastníma očima. Pro každou hodinu umístíme ovál podle předpovědi Kp a magnetického místního času (Starkovův model), změříme jeho vzdálenost v <b>magnetické</b> šířce (AACGM) a spočítáme, jak vysoko nad obzorem stojí jeho spodní okraj a kolik světla cestou pohltí atmosféra. To světlo musí přebít oblohu zjasněnou <b>soumrakem</b> a <b>Měsícem</b> a nakonec musí být <b>jasno</b>. Počítá se i s nejistotou předpovědi Kp (±1,2). Číslo pro fotoaparát používá desetkrát nižší práh jasu. Zatím není ověřené na pozorováních — ber ho jako skóre.',
+    'Skóre je šance, že záři uvidíš vlastníma očima. Pro každou hodinu umístíme ovál podle předpovědi Kp a magnetického místního času (Starkovův model), změříme jeho vzdálenost v <b>magnetické</b> šířce (AACGM) a spočítáme, jak vysoko nad obzorem stojí jeho spodní okraj a kolik světla cestou pohltí atmosféra. To světlo musí přebít oblohu zjasněnou <b>soumrakem</b> a <b>Měsícem</b> a nakonec musí projít <b>mraky</b> — zatažená předpověď neznamená jisté ne: celooblohová kamera v Kilpisjärvi viděla záři i ve 42 % hodin hlášených jako zatažené. Počítá se i s nejistotou předpovědi Kp (±1,2). Číslo pro fotoaparát používá desetkrát nižší práh jasu. Ověřeno na pěti měsících dat z kamery v severním Finsku; jižněji zatím ne.',
   look: 'Kam se dívat',
   lookValue: (dir, e) => (e >= 60 ? 'Nad hlavu' : `${cap(dir)}, ${deg(e)} nad obzor`),
   kpNeeded: 'Potřebné Kp',
@@ -241,7 +241,7 @@ const cs: Strings = {
   legendCamera: 'Fotoaparát mobilu',
   legendCloud: 'Oblačnost (sytější = víc mraků)',
   now: 'teď',
-  tt: { eye: 'Oko', camera: 'Fotoaparát', kp: 'Kp', clear: 'Jasno', height: 'Výška záře', sky: 'Jas oblohy', overhead: 'nad hlavou', live: 'živě' },
+  tt: { eye: 'Oko', camera: 'Fotoaparát', kp: 'Kp', clear: 'Přes mraky', height: 'Výška záře', sky: 'Jas oblohy', overhead: 'nad hlavou', live: 'živě' },
   f: {
     activity: 'Záře',
     clouds: 'Mraky',
@@ -250,7 +250,7 @@ const cs: Strings = {
     strong: 'Silná',
     moderate: 'Střední',
     weak: 'Slabá',
-    clear: 'Jasno',
+    clear: 'Přes mraky',
     partly: 'Polojasno',
     overcast: 'Zataženo',
     darkS: 'Tma',
@@ -260,7 +260,7 @@ const cs: Strings = {
     auroraSub: 'při jasné obloze',
     auroraText: (kp, dir, e) =>
       e >= 60 ? `Při Kp ${kp} sahá ovál až nad tebe.` : `Při Kp ${kp} je spodní okraj ~${deg(e)} nad obzorem na ${dir === 'sever' ? 'severu' : 'jihu'}.`,
-    cloudSub: 'jasná obloha',
+    cloudSub: 'šance, že ji mraky nezakryjí',
     cloudText: (c, t) => `${c} z ${t} hodin dnešní noci je převážně jasno.`,
     sunSub: 'výška slunce teď',
     darkText: (a, b) => `Úplná tma od ${a} do ${b}.`,
@@ -320,7 +320,7 @@ const no: Strings = {
   unavailable: (w) => `${w} utilgjengelig`,
   why: 'Hvorfor denne poengsummen?',
   whyText:
-    'Poengsummen er sjansen for å se nordlys med egne øyne. For hver time plasserer vi nordlysovalen ut fra Kp-prognosen og magnetisk lokaltid (Starkov-modellen), måler avstanden i <b>magnetisk</b> breddegrad (AACGM) og regner ut hvor høyt over horisonten underkanten står og hvor mye lys atmosfæren tar. Lyset må slå en himmel som er lysere på grunn av <b>skumring</b> og <b>måne</b>, og til slutt må det være <b>klart</b>. Usikkerheten i Kp-prognosen (±1,2) er tatt med. Kameratallet bruker en ti ganger lavere lysterskel. Ennå ikke kalibrert mot observasjoner — se det som en poengsum.',
+    'Poengsummen er sjansen for å se nordlys med egne øyne. For hver time plasserer vi nordlysovalen ut fra Kp-prognosen og magnetisk lokaltid (Starkov-modellen), måler avstanden i <b>magnetisk</b> breddegrad (AACGM) og regner ut hvor høyt over horisonten underkanten står og hvor mye lys atmosfæren tar. Lyset må slå en himmel som er lysere på grunn av <b>skumring</b> og <b>måne</b>, og til slutt må det komme gjennom <b>skyene</b> — et skyet varsel er ikke et sikkert nei: et allsky-kamera i Kilpisjärvi så nordlys i 42 % av timene som var varslet overskyet. Usikkerheten i Kp-prognosen (±1,2) er tatt med. Kameratallet bruker en ti ganger lavere lysterskel. Sjekket mot fem måneder med kameradata i Nord-Finland; ennå ikke lenger sør.',
   look: 'Se mot',
   lookValue: (dir, e) => (e >= 60 ? 'Rett opp' : `${cap(dir)}, ${deg(e)} opp`),
   kpNeeded: 'Kp som trengs her',
@@ -336,7 +336,7 @@ const no: Strings = {
   legendCamera: 'Mobilkamera',
   legendCloud: 'Skydekke (tettere = mer skyet)',
   now: 'nå',
-  tt: { eye: 'Øyet', camera: 'Kamera', kp: 'Kp', clear: 'Klar himmel', height: 'Nordlysets høyde', sky: 'Himmelens lysstyrke', overhead: 'rett over', live: 'direkte' },
+  tt: { eye: 'Øyet', camera: 'Kamera', kp: 'Kp', clear: 'Gjennom skyer', height: 'Nordlysets høyde', sky: 'Himmelens lysstyrke', overhead: 'rett over', live: 'direkte' },
   f: {
     activity: 'Nordlys',
     clouds: 'Skyer',
@@ -355,7 +355,7 @@ const no: Strings = {
     auroraSub: 'ved klar himmel',
     auroraText: (kp, dir, e) =>
       e >= 60 ? `Ved Kp ${kp} når ovalen over deg.` : `Ved Kp ${kp} står underkanten ~${deg(e)} over horisonten i ${dir}.`,
-    cloudSub: 'klar himmel',
+    cloudSub: 'sjanse for at skyene slipper det gjennom',
     cloudText: (c, t) => `${c} av ${t} timer i natt er stort sett klare.`,
     sunSub: 'solhøyde nå',
     darkText: (a, b) => `Helt mørkt fra ${a} til ${b}.`,

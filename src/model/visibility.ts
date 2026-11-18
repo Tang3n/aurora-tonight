@@ -194,18 +194,41 @@ export interface CloudCover {
   fog?: number;
 }
 
-/** Fraction of sky covered only by high cloud that still lets bright aurora through (estimate). */
-const HIGH_ONLY_CREDIT = 0.4;
-
 /**
- * Chance of a clear line of sight. MET's total cloud already handles layer overlap; layers only
- * give partial credit back when the sky is covered exclusively by high (thin, icy) cloud.
+ * Chance that cloud does not hide the aurora, from forecast total cloud cover.
+ *
+ * Empirical, from the Kilpisjärvi all-sky camera hindcast (validation/README.md): in hours when the
+ * physics says aurora is there, the camera still saw it in 82 % / 73 % / 73 % / 43 % of hours with
+ * ERA5 cloud 20–50 / 50–80 / 80–95 / 95–100 % (97 % when clear). Forecast cloud is coarse and has
+ * gaps, so "100 % cloud" is not "0 % chance". Values below are those rates relative to clear sky.
+ * The eye is less sensitive than that camera, so it gets the midpoint between the camera curve and
+ * the naive 1 − cloud (≈ 20 % at full overcast) — a judgement call, not measured.
  */
-export function clearSky(c: CloudCover): number {
-  const lowMid = Math.min(c.total, 1 - (1 - c.low) * (1 - c.mid));
-  const highOnly = Math.max(0, c.total - lowMid);
-  let p = 1 - c.total + HIGH_ONLY_CREDIT * highOnly;
-  if (c.fog !== undefined) p *= 1 - c.fog;
+const CAMERA_THROUGH_CLOUD: [number, number][] = [
+  [0, 1],
+  [0.1, 1],
+  [0.35, 0.85],
+  [0.65, 0.73],
+  [0.875, 0.73],
+  [0.975, 0.43],
+  [1, 0.4],
+];
+
+function interp(table: [number, number][], x: number): number {
+  if (x <= table[0]![0]) return table[0]![1];
+  for (let i = 1; i < table.length; i++) {
+    const [x1, y1] = table[i]!;
+    const [x0, y0] = table[i - 1]!;
+    if (x <= x1) return y0 + ((x - x0) / (x1 - x0)) * (y1 - y0);
+  }
+  return table[table.length - 1]![1];
+}
+
+export function clearSky(c: CloudCover, detector: Detector = 'eye'): number {
+  const total = Math.max(0, Math.min(1, c.total));
+  const camera = interp(CAMERA_THROUGH_CLOUD, total);
+  let p = detector === 'camera' ? camera : (camera + (1 - total)) / 2;
+  if (c.fog !== undefined) p *= 1 - c.fog; // fog at the observer blocks everything
   return Math.max(0, Math.min(1, p));
 }
 

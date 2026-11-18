@@ -89,11 +89,19 @@ describe('visibility (dark, clear, magnetic midnight) — research report table'
 });
 
 describe('local conditions', () => {
-  it('clear sky uses MET total cloud, with partial credit for high-only cover', () => {
+  it('cloud: forecast overcast still leaves a chance (camera hindcast), less for the eye', () => {
     expect(clearSky({ total: 0, low: 0, mid: 0, high: 0 })).toBe(1);
-    expect(clearSky({ total: 1, low: 1, mid: 0, high: 0 })).toBe(0);
-    expect(clearSky({ total: 1, low: 0, mid: 0, high: 1 })).toBeCloseTo(0.4);
-    expect(clearSky({ total: 0.5, low: 0.5, mid: 0, high: 0, fog: 0.5 })).toBeCloseTo(0.25);
+    expect(clearSky({ total: 1, low: 1, mid: 0, high: 0 }, 'camera')).toBeCloseTo(0.4);
+    expect(clearSky({ total: 1, low: 1, mid: 0, high: 0 }, 'eye')).toBeCloseTo(0.2);
+    expect(clearSky({ total: 0.5, low: 0.5, mid: 0, high: 0 }, 'camera')).toBeGreaterThan(clearSky({ total: 0.5, low: 0.5, mid: 0, high: 0 }, 'eye'));
+    expect(clearSky({ total: 0, low: 0, mid: 0, high: 0, fog: 0.5 })).toBeCloseTo(0.5);
+    // monotonic
+    let prev = 1;
+    for (let t = 0; t <= 1; t += 0.05) {
+      const v = clearSky({ total: t, low: t, mid: 0, high: 0 }, 'camera');
+      expect(v).toBeLessThanOrEqual(prev + 1e-9);
+      prev = v;
+    }
   });
 
   it('a full moon 30° up brightens the sky ~20× (Krisciunas & Schaefer)', () => {
