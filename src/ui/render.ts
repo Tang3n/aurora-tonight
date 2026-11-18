@@ -318,5 +318,5 @@ export function nightsHtml(S: Strings, fmt: Fmt, nights: NightOutlook[] | null):
 }
 
 export function footerHtml(S: Strings): string {
-  return `<span>${S.sources}: <a href="https://www.swpc.noaa.gov/">NOAA SWPC</a> · <a href="https://api.met.no/">MET Norway</a> · <a href="https://open-meteo.com/">Open-Meteo</a></span><span>${S.disclaimer}</span>`;
+  return `<span>${S.sources}: <a href="https://www.swpc.noaa.gov/">NOAA SWPC</a> · <a href="https://api.met.no/">MET Norway</a> · <a href="https://open-meteo.com/">Open-Meteo</a></span><span>${S.disclaimer}</span><span><a href="https://tang3n.github.io/portfolio/">Štěpán Mészáros</a> · <a href="https://github.com/Tang3n/aurora-tonight">GitHub</a></span>`;
 }
