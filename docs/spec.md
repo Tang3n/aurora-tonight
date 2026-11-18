@@ -29,11 +29,10 @@ Static site (GitHub Pages), no backend, no accounts, no API keys.
 5. **Right now panel** — live solar wind (Bz, speed, density) with plain-language reading ("Bz is southward — good").
 6. **3-day outlook** — max Kp per night.
 7. **Data freshness** — every value shows its age; stale or failed sources degrade the score instead of breaking the page.
+8. **Aurora oval map** — OVATION grid rendered on a polar globe with your position.
+9. **Languages** — EN / CS / NO.
 
-### Candidates (pick later)
-- Aurora oval map (OVATION grid rendered on a globe/map with your position)
-- Live animated aurora background whose intensity follows the real score
-- Languages EN / CS / NO
+### Later
 - PWA (installable, offline shell)
 - In-tab alert when the score crosses a threshold
 - Island in the portfolio fjord world linking here
@@ -57,10 +56,13 @@ score(h) = activity(h) × sky(h) × dark(h) × moon(h)      each factor in 0..1
 
 The model is shown to the user ("why this score"), not hidden.
 
+## Visual direction — "Living sky" (decided 2026-11-18)
+Full-screen animated aurora curtains (WebGL shader) behind the UI; their brightness and motion follow the real score,
+so a bad night literally looks dark. Content sits in dark glass cards. Mountain silhouette at the bottom.
+Mockup: `design/mockup.html`.
+
 ## Tech
 Vite + TypeScript, no UI framework; deploy to GitHub Pages via Actions. Unit tests for the scoring and astronomy code (Vitest).
 
 ## Open questions
-- Visual direction
-- Which candidate features go into v1
 - Final name / domain
