@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Report a sighting</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#04070f}
+a{color:#5cffb0;text-decoration:none}a:hover{color:#a9ffd6}
+.card{background:rgba(14,22,40,.72);border:1px solid rgba(160,220,255,.12);border-radius:20px;padding:16px}
+.label{font:600 14px Inter,sans-serif;margin:0 0 8px;display:block}
+.seg{min-height:44px;flex:1;border-radius:12px;font:500 14px Inter,sans-serif;cursor:pointer}
+</style>
+</helmet>
+<div style="position:relative;width:390px;height:844px;overflow:hidden;background:#04070f;color:#e8f1ff;font:15px/1.45 Inter,sans-serif">
+  <sc-if value="{{sent}}" hint-placeholder-val="{{ false }}">
+    <div style="height:844px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:32px;box-sizing:border-box;text-align:center">
+      <div style="width:72px;height:72px;border-radius:50%;background:rgba(92,255,176,.15);display:flex;align-items:center;justify-content:center">
+        <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#5cffb0" stroke-width="2.4"><path d="M20 6L9 17l-5-5"></path></svg>
+      </div>
+      <h1 style="margin:0;font:600 24px 'Space Grotesk',sans-serif">Thanks, that helps</h1>
+      <p style="margin:0;color:#93a3bc;font-size:15px">People with alerts within 50 km will hear about it. Your report also goes into tonight's scorecard.</p>
+      <a href="Main.dc.html" style="min-height:48px;padding:0 24px;border-radius:14px;background:#5cffb0;color:#04120b;display:flex;align-items:center;font:600 15px Inter,sans-serif;margin-top:8px">Back to tonight</a>
+    </div>
+  </sc-if>
+  <sc-if value="{{editing}}" hint-placeholder-val="{{ true }}">
+  <div style="height:844px;overflow-y:auto;padding:16px 16px 24px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;align-items:center;gap:8px">
+      <a href="Main.dc.html" aria-label="Close" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#e8f1ff;background:rgba(14,22,40,.72)">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </a>
+      <h1 style="margin:0;font:600 20px 'Space Grotesk',sans-serif">What did you see?</h1>
+    </div>
+
+    <div class="card" style="display:flex;align-items:center;gap:12px;padding:12px 14px">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5cffb0" stroke-width="2"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+      <div style="flex:1;font-size:14px"><b style="font-weight:600">Dalsnuten viewpoint</b><div style="font-size:12px;color:#93a3bc">Now, 22:14 · from GPS, matched to a spot</div></div>
+      <button style="min-height:44px;background:none;border:0;color:#5cffb0;font:500 14px Inter,sans-serif">Change</button>
+    </div>
+
+    <div>
+      <span class="label">Aurora</span>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <sc-for list="{{seen}}" as="o" hint-placeholder-count="3">
+          <button style="{{o.style}}" onClick="{{o.pick}}">
+            <span style="font:600 15px Inter,sans-serif">{{o.title}}</span>
+            <span style="font-size:13px;color:#93a3bc">{{o.sub}}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div>
+      <span class="label">Sky</span>
+      <div style="display:flex;gap:8px">
+        <sc-for list="{{sky}}" as="o" hint-placeholder-count="3">
+          <button class="seg" style="{{o.style}}" onClick="{{o.pick}}">{{o.title}}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div>
+      <span class="label">Photo (optional)</span>
+      <button style="width:100%;min-height:88px;border-radius:16px;border:1.5px dashed rgba(160,220,255,.25);background:transparent;color:#c9d6ea;font:500 14px Inter,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
+        <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h3l2-3h6l2 3h3v13H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>
+        Add a photo · GPS data is removed before upload
+      </button>
+    </div>
+
+    <div>
+      <span class="label">Show my location as</span>
+      <div style="display:flex;gap:8px">
+        <sc-for list="{{prec}}" as="o" hint-placeholder-count="3">
+          <button class="seg" style="{{o.style}}" onClick="{{o.pick}}">{{o.title}}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <label style="display:block">
+      <span class="label">Note</span>
+      <textarea rows="2" placeholder="Faint arc, pillars after 22:10…" style="width:100%;box-sizing:border-box;border-radius:14px;border:1px solid rgba(160,220,255,.16);background:rgba(14,22,40,.8);color:#e8f1ff;font:15px Inter,sans-serif;padding:12px;resize:none"></textarea>
+    </label>
+
+    <div style="font-size:12px;color:#93a3bc">We store tonight's forecast with your report (eye 41 · camera 64), so we can check how right we were.</div>
+
+    <button onClick="{{submit}}" style="min-height:52px;border-radius:14px;border:0;background:#5cffb0;color:#04120b;font:600 16px Inter,sans-serif;cursor:pointer">Send report</button>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { seen: 'eye', sky: 'partly', prec: 'spot', sent: false };
+  }
+  renderVals() {
+    var self = this;
+    var s = this.state;
+    function opts(key, list, base, onStyle, offStyle) {
+      return list.map(function (o) {
+        var on = s[key] === o[0];
+        return { title: o[1], sub: o[2] || '', style: base + (on ? onStyle : offStyle),
+          pick: function () { var n = {}; n[key] = o[0]; self.setState(n); } };
+      });
+    }
+    var rowBase = 'min-height:56px;width:100%;text-align:left;padding:10px 14px;border-radius:14px;display:flex;flex-direction:column;gap:2px;cursor:pointer;color:#e8f1ff;';
+    var segOn = 'background:rgba(92,255,176,.16);border:1.5px solid #5cffb0;color:#e8f1ff;';
+    var segOff = 'background:rgba(14,22,40,.8);border:1px solid rgba(160,220,255,.16);color:#c9d6ea;';
+    return {
+      sent: s.sent,
+      editing: !s.sent,
+      seen: opts('seen', [
+        ['eye', 'Seen with the eye', 'Visible colour or motion without a camera'],
+        ['camera', 'Camera only', 'Grey glow to the eye, green on the sensor'],
+        ['none', 'Nothing', 'Still useful: it tells us when we were wrong']
+      ], rowBase, segOn, segOff),
+      sky: opts('sky', [['clear', 'Clear'], ['partly', 'Partly'], ['overcast', 'Overcast']], '', segOn, segOff),
+      prec: opts('prec', [['spot', 'This spot'], ['1km', '~1 km'], ['10km', '~10 km']], '', segOn, segOff),
+      submit: function () { self.setState({ sent: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

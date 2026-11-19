@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Aurora Tonight — web home</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#04070f}
+a{color:#5cffb0;text-decoration:none}a:hover{color:#a9ffd6}
+.card{background:rgba(14,22,40,.72);border:1px solid rgba(160,220,255,.12);border-radius:20px;padding:20px}
+.eyebrow{font:500 11px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#93a3bc}
+.nav a{color:#c9d6ea;min-height:44px;display:flex;align-items:center;padding:0 12px;border-radius:10px;font:500 14px Inter,sans-serif}
+.nav a.on{color:#e8f1ff;background:rgba(255,255,255,.07)}
+.chip{min-height:36px;padding:0 14px;border-radius:999px;border:1px solid rgba(160,220,255,.16);background:rgba(14,22,40,.8);color:#c9d6ea;font:500 13px Inter,sans-serif}
+.chip.on{background:#5cffb0;color:#04120b;border-color:#5cffb0}
+</style>
+</helmet>
+<div style="position:relative;min-height:1180px;background:#04070f;color:#e8f1ff;font:15px/1.5 Inter,sans-serif;overflow:hidden">
+  <div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:520px;background:radial-gradient(60% 70% at 25% 0%,rgba(92,255,176,.2),transparent 60%),radial-gradient(40% 60% at 80% 0%,rgba(180,140,255,.16),transparent 60%)"></div>
+
+  <div style="position:relative;max-width:1280px;margin:0 auto;padding:16px 24px 48px;display:flex;flex-direction:column;gap:20px">
+    <header style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:10px;font:600 17px 'Space Grotesk',sans-serif;margin-right:12px">
+        <span aria-hidden="true" style="width:26px;height:26px;border-radius:50%;background:conic-gradient(from 200deg,#39d0ff,#5cffb0,#b48cff,#39d0ff);box-shadow:0 0 18px rgba(92,255,176,.45)"></span>Aurora Tonight
+      </div>
+      <nav class="nav" aria-label="Main" style="display:flex;gap:4px;flex-wrap:wrap">
+        <a class="on" href="WebHome.dc.html">Tonight</a>
+        <a href="WebSpot.dc.html">Spots</a>
+        <a href="WebScorecard.dc.html">Scorecard</a>
+      </nav>
+      <div style="flex:1"></div>
+      <label style="display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid rgba(160,220,255,.14);background:rgba(14,22,40,.72);flex:0 1 280px">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#93a3bc" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Search a place</span>
+        <input value="Stavanger" style="flex:1;min-width:0;background:none;border:0;color:#e8f1ff;font:15px Inter,sans-serif;outline:none">
+      </label>
+      <button style="min-height:44px;padding:0 18px;border-radius:999px;border:0;background:#5cffb0;color:#04120b;font:600 14px Inter,sans-serif">Sign in</button>
+    </header>
+
+    <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:stretch">
+      <div style="flex:1 1 360px;display:flex;flex-direction:column;gap:16px;min-width:0">
+        <div class="card">
+          <div class="eyebrow">Tonight at Stavanger</div>
+          <div style="display:flex;align-items:flex-end;gap:18px;margin-top:12px">
+            <div style="font:700 112px/.82 'Space Grotesk',sans-serif;letter-spacing:-.04em;color:#ffc56b">31</div>
+            <div style="padding-bottom:8px">
+              <div style="font:600 26px/1 'Space Grotesk',sans-serif;color:#ffc56b">Maybe</div>
+              <div style="font-size:13px;color:#93a3bc;margin-top:6px">eye 31 · camera 58</div>
+            </div>
+          </div>
+          <p style="margin:16px 0 0;font-size:18px">Patchy cloud here. <b style="color:#5cffb0;font-weight:600">Clear sky 35 min north-east</b>, best 22:30–00:30, low on the northern horizon.</p>
+          <div style="display:flex;align-items:flex-end;gap:5px;height:84px;margin-top:20px">
+            <sc-for list="{{hours}}" as="h" hint-placeholder-count="11">
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+                <div style="{{h.bar}}"></div>
+                <div style="font-size:11px;color:#93a3bc">{{h.t}}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div class="card" style="display:flex;gap:12px;align-items:center">
+          <span aria-hidden="true" style="width:10px;height:10px;border-radius:50%;background:#5cffb0;box-shadow:0 0 10px #5cffb0;flex:none"></span>
+          <div style="flex:1;font-size:14px"><b style="font-weight:600">2 sightings within 80 km</b> in the last hour<div style="font-size:13px;color:#93a3bc">Sola beach 21:42 · camera only · Dalsnuten 21:58 · eye</div></div>
+        </div>
+        <a href="WebScorecard.dc.html" class="card" style="display:flex;gap:12px;align-items:center;color:#e8f1ff">
+          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b48cff" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>
+          <div style="flex:1;font-size:14px">Last night we said <b>22, unlikely</b>. 6 reports: 5 nothing, 1 camera only.</div>
+          <span style="font-size:14px;color:#5cffb0">Scorecard</span>
+        </a>
+      </div>
+
+      <div class="card" style="flex:999 1 560px;min-width:0;padding:0;overflow:hidden;position:relative;min-height:560px">
+        <svg role="img" aria-label="Map around Stavanger: cloud over the coast, clear sky inland to the north-east, spots with tonight's score" viewBox="0 0 390 420" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+          <defs>
+            <radialGradient id="wclear" cx="70%" cy="35%" r="45%"><stop offset="0" stop-color="#5cffb0" stop-opacity=".28"></stop><stop offset="1" stop-color="#5cffb0" stop-opacity="0"></stop></radialGradient>
+            <filter id="wblur"><feGaussianBlur stdDeviation="14"></feGaussianBlur></filter>
+          </defs>
+          <rect width="390" height="420" fill="#081120"></rect>
+          <path d="M0 0 H150 C140 40 170 60 150 95 C130 120 160 150 140 185 C120 220 150 250 120 290 C100 320 120 360 90 420 H0 Z" fill="#0b1a2e"></path>
+          <path d="M150 0 H390 V420 H90 C120 360 100 320 120 290 C150 250 120 220 140 185 C160 150 130 120 150 95 C170 60 140 40 150 0 Z" fill="#111d2f"></path>
+          <path d="M190 120 C230 140 250 110 300 130 C330 140 350 120 390 135" stroke="#0b1a2e" stroke-width="10" fill="none"></path>
+          <path d="M210 200 C240 215 270 190 320 210 C350 222 370 205 390 215" stroke="#0b1a2e" stroke-width="7" fill="none"></path>
+          <rect width="390" height="420" fill="url(#wclear)"></rect>
+          <g filter="url(#wblur)" fill="#9fb0c8" opacity=".35">
+            <ellipse cx="90" cy="250" rx="110" ry="70"></ellipse>
+            <ellipse cx="60" cy="110" rx="80" ry="60"></ellipse>
+            <ellipse cx="180" cy="360" rx="120" ry="50"></ellipse>
+          </g>
+          <circle cx="150" cy="265" r="135" fill="none" stroke="#5cffb0" stroke-opacity=".35" stroke-dasharray="4 6"></circle>
+          <g font-family="Space Grotesk" font-weight="700" font-size="11" text-anchor="middle">
+            <circle cx="262" cy="150" r="13" fill="#5cffb0"></circle><text x="262" y="154" fill="#04120b">71</text>
+            <circle cx="225" cy="190" r="13" fill="#5cffb0"></circle><text x="225" y="194" fill="#04120b">64</text>
+            <circle cx="300" cy="245" r="12" fill="#ffc56b"></circle><text x="300" y="249" fill="#1a1204">47</text>
+            <circle cx="105" cy="300" r="12" fill="#3a4d6b"></circle><text x="105" y="304" fill="#e8f1ff">18</text>
+            <circle cx="70" cy="215" r="12" fill="#3a4d6b"></circle><text x="70" y="219" fill="#e8f1ff">22</text>
+          </g>
+          <circle cx="150" cy="265" r="6" fill="#e8f1ff" stroke="#04070f" stroke-width="3"></circle>
+          <text x="160" y="280" fill="#e8f1ff" font-size="9" font-family="Inter">You · 31</text>
+        </svg>
+        <div style="position:absolute;left:16px;top:16px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="chip">≤ 30 min</button>
+          <button class="chip on">≤ 1 h</button>
+          <button class="chip">≤ 2 h</button>
+        </div>
+        <div style="position:absolute;right:16px;bottom:16px;display:flex;gap:12px;font-size:12px;color:#c9d6ea;background:rgba(4,7,15,.75);padding:8px 12px;border-radius:12px;flex-wrap:wrap">
+          <span style="display:flex;align-items:center;gap:6px"><span aria-hidden="true" style="width:10px;height:10px;border-radius:50%;background:#9fb0c8;opacity:.6"></span>cloud</span>
+          <span style="display:flex;align-items:center;gap:6px"><span aria-hidden="true" style="width:10px;height:10px;border-radius:50%;background:#5cffb0"></span>good spot</span>
+          <span style="display:flex;align-items:center;gap:6px"><span aria-hidden="true" style="width:14px;border-top:1px dashed #5cffb0"></span>1 h drive</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+        <h2 style="margin:0;font:600 20px 'Space Grotesk',sans-serif">Best within 1 h tonight</h2>
+        <span style="font-size:13px;color:#93a3bc">Cloud clears inland; the coast stays covered until 02:00</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
+        <sc-for list="{{spots}}" as="s" hint-placeholder-count="4">
+          <a href="WebSpot.dc.html" class="card" style="display:flex;flex-direction:column;gap:12px;color:#e8f1ff;padding:0;overflow:hidden">
+            <div role="img" aria-label="{{s.photoLabel}}" style="{{s.photo}}"></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:0 16px 16px">
+              <div style="{{s.badge}}">{{s.score}}</div>
+              <div style="flex:1;min-width:0">
+                <div style="font:600 16px/1.3 'Space Grotesk',sans-serif">{{s.name}}</div>
+                <div style="font-size:12px;color:#93a3bc">{{s.drive}} · {{s.meta}}</div>
+              </div>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var data = [['18',4],['19',8],['20',15],['21',33],['22',52],['23',58],['00',54],['01',40],['02',22],['03',12],['04',6]];
+    var hours = data.map(function (d) {
+      var v = d[1];
+      var c = v >= 50 ? '#5cffb0' : v >= 30 ? '#ffc56b' : '#3a4d6b';
+      return { t: d[0], bar: 'width:100%;border-radius:4px;height:' + Math.max(4, Math.round(v * 1.2)) + 'px;background:' + c };
+    });
+    var rows = [
+      ['71', 'Lysefjord ridge', '55 min', 'clear 90 % · very dark', 'rgba(92,255,176,.6)'],
+      ['64', 'Dalsnuten viewpoint', '35 min', 'clear 85 % · dark', 'rgba(57,208,255,.45)'],
+      ['47', 'Gjesdal lake', '30 min', 'clear 60 % · trees north', 'rgba(180,140,255,.4)'],
+      ['22', 'Sola beach', '20 min', 'cloud 80 % · open sea', 'rgba(120,140,170,.25)']
+    ];
+    var spots = rows.map(function (r) {
+      var v = +r[0];
+      var bg = v >= 50 ? '#5cffb0' : v >= 30 ? '#ffc56b' : '#3a4d6b';
+      var fg = v >= 30 ? '#04120b' : '#e8f1ff';
+      return { score: r[0], name: r[1], drive: r[2], meta: r[3], photoLabel: 'Photo placeholder: ' + r[1],
+        photo: 'height:120px;background:radial-gradient(60% 60% at 45% 45%,' + r[4] + ',transparent 70%),linear-gradient(180deg,#071226,#0b1a2e 75%,#05080f 76%)',
+        badge: 'width:44px;height:44px;flex:none;border-radius:12px;display:flex;align-items:center;justify-content:center;font:700 18px Space Grotesk,sans-serif;background:' + bg + ';color:' + fg };
+    });
+    return { hours: hours, spots: spots };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Scorecard — Aurora Tonight</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#04070f}
+a{color:#5cffb0;text-decoration:none}a:hover{color:#a9ffd6}
+.card{background:rgba(14,22,40,.72);border:1px solid rgba(160,220,255,.12);border-radius:20px;padding:20px}
+.eyebrow{font:500 11px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#93a3bc}
+.nav a{color:#c9d6ea;min-height:44px;display:flex;align-items:center;padding:0 12px;border-radius:10px;font:500 14px Inter,sans-serif}
+.nav a.on{color:#e8f1ff;background:rgba(255,255,255,.07)}
+.chip{min-height:36px;padding:0 14px;border-radius:999px;border:1px solid rgba(160,220,255,.16);background:rgba(14,22,40,.8);color:#c9d6ea;font:500 13px Inter,sans-serif}
+.chip.on{background:#5cffb0;color:#04120b;border-color:#5cffb0}
+th{font:500 11px Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#93a3bc;text-align:left;padding:10px 12px;border-bottom:1px solid rgba(160,220,255,.14)}
+td{padding:12px;border-bottom:1px solid rgba(160,220,255,.08);font-size:14px}
+</style>
+</helmet>
+<div style="position:relative;min-height:1180px;background:#04070f;color:#e8f1ff;font:15px/1.5 Inter,sans-serif">
+  <div style="max-width:1280px;margin:0 auto;padding:16px 24px 48px;display:flex;flex-direction:column;gap:20px">
+    <header style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:10px;font:600 17px 'Space Grotesk',sans-serif;margin-right:12px">
+        <span aria-hidden="true" style="width:26px;height:26px;border-radius:50%;background:conic-gradient(from 200deg,#39d0ff,#5cffb0,#b48cff,#39d0ff);box-shadow:0 0 18px rgba(92,255,176,.45)"></span>Aurora Tonight
+      </div>
+      <nav class="nav" aria-label="Main" style="display:flex;gap:4px;flex-wrap:wrap">
+        <a href="WebHome.dc.html">Tonight</a>
+        <a href="WebSpot.dc.html">Spots</a>
+        <a class="on" href="WebScorecard.dc.html">Scorecard</a>
+      </nav>
+      <div style="flex:1"></div>
+      <button style="min-height:44px;padding:0 18px;border-radius:999px;border:0;background:#5cffb0;color:#04120b;font:600 14px Inter,sans-serif">Sign in</button>
+    </header>
+
+    <div style="max-width:760px">
+      <h1 style="margin:12px 0 0;font:600 40px/1.1 'Space Grotesk',sans-serif">How right were we?</h1>
+      <p style="margin:12px 0 0;font-size:18px;color:#c9d6ea">Every report stores the forecast we showed at that time and place. This page compares the two, including the nights we got wrong.</p>
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="chip on">South Norway</button>
+      <button class="chip">Mid Norway</button>
+      <button class="chip">North Norway</button>
+      <button class="chip">Finland &amp; Sweden</button>
+      <div style="flex:1"></div>
+      <button class="chip">Last 30 nights</button>
+      <button class="chip">Season</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+      <div class="card"><div class="eyebrow">Reports</div><div style="font:700 36px 'Space Grotesk',sans-serif;margin-top:8px">412</div><div style="font-size:13px;color:#93a3bc">from 96 people, 30 nights</div></div>
+      <div class="card"><div class="eyebrow">“Nothing” reports</div><div style="font:700 36px 'Space Grotesk',sans-serif;margin-top:8px">58 %</div><div style="font-size:13px;color:#93a3bc">the misses keep us honest</div></div>
+      <div class="card"><div class="eyebrow">Brier skill</div><div style="font:700 36px 'Space Grotesk',sans-serif;margin-top:8px;color:#5cffb0">+0.22</div><div style="font-size:13px;color:#93a3bc">vs. always guessing the average</div></div>
+      <div class="card"><div class="eyebrow">Called right</div><div style="font:700 36px 'Space Grotesk',sans-serif;margin-top:8px">24 / 30</div><div style="font-size:13px;color:#93a3bc">nights with 3+ reports</div></div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:stretch">
+      <div class="card" style="flex:999 1 560px;min-width:0">
+        <div class="eyebrow">Forecast score vs. share of reports that saw aurora</div>
+        <div style="display:flex;align-items:flex-end;gap:18px;height:240px;margin-top:24px;border-bottom:1px solid rgba(160,220,255,.14)">
+          <sc-for list="{{bins}}" as="b" hint-placeholder-count="5">
+            <div style="flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;position:relative">
+              <div style="font:600 14px 'Space Grotesk',sans-serif">{{b.pct}}</div>
+              <div style="{{b.bar}}"></div>
+              <div style="{{b.ideal}}"></div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:18px;margin-top:8px">
+          <sc-for list="{{bins}}" as="b" hint-placeholder-count="5">
+            <div style="flex:1;text-align:center;font-size:12px;color:#93a3bc">{{b.label}}</div>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:20px;margin-top:14px;font-size:13px;color:#93a3bc;flex-wrap:wrap">
+          <span style="display:flex;align-items:center;gap:6px"><span aria-hidden="true" style="width:12px;height:12px;border-radius:3px;background:#5cffb0"></span>seen by reporters</span>
+          <span style="display:flex;align-items:center;gap:6px"><span aria-hidden="true" style="width:16px;border-top:2px dashed #b48cff"></span>perfectly calibrated</span>
+        </div>
+      </div>
+      <div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:12px">
+        <div class="card">
+          <div class="eyebrow">Where we miss</div>
+          <ul style="margin:12px 0 0;padding-left:18px;font-size:15px;display:flex;flex-direction:column;gap:8px">
+            <li>Too optimistic below Kp 2: quiet nights scored 30–40 still came up empty.</li>
+            <li>Coastal fog that the cloud forecast misses.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="eyebrow">Method</div>
+          <p style="margin:12px 0 0;font-size:14px;color:#c9d6ea">Physics model (Starkov oval, AACGM-v2, extinction, moon and twilight contrast) plus an empirical cloud curve, checked against the Kilpisjärvi all-sky camera and these reports.</p>
+          <a href="WebScorecard.dc.html" style="display:inline-flex;min-height:44px;align-items:center;font-size:14px">Read the method and data on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:8px 8px 4px">
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;min-width:640px">
+          <thead><tr><th>Night</th><th>Forecast</th><th>Eye</th><th>Camera</th><th>Nothing</th><th>Verdict</th></tr></thead>
+          <tbody>
+            <sc-for list="{{nights}}" as="n" hint-placeholder-count="5">
+              <tr><td>{{n.d}}</td><td style="font-weight:600">{{n.fc}}</td><td>{{n.eye}}</td><td>{{n.cam}}</td><td>{{n.none}}</td><td style="{{n.mark}}">{{n.verdict}}</td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var data = [['0–20', 6, 10], ['20–40', 21, 30], ['40–60', 47, 50], ['60–80', 68, 70], ['80+', 85, 90]];
+    var bins = data.map(function (d) {
+      return { label: d[0], pct: d[1] + '%',
+        bar: 'width:100%;border-radius:8px 8px 0 0;background:#5cffb0;height:' + Math.round(d[1] * 2) + 'px',
+        ideal: 'position:absolute;left:-6px;right:-6px;bottom:' + Math.round(d[2] * 2) + 'px;border-top:2px dashed #b48cff' };
+    });
+    var nights = [
+      ['18 Nov', '22', '0', '1', '5', 'Right', true],
+      ['17 Nov', '61', '9', '3', '2', 'Right', true],
+      ['16 Nov', '35', '0', '0', '7', 'Too high', false],
+      ['14 Nov', '48', '2', '4', '3', 'Right', true],
+      ['13 Nov', '18', '1', '2', '1', 'Too low', false]
+    ].map(function (n) {
+      return { d: n[0], fc: n[1], eye: n[2], cam: n[3], none: n[4], verdict: n[5],
+        mark: 'font-weight:600;color:' + (n[6] ? '#5cffb0' : '#ffc56b') };
+    });
+    return { bins: bins, nights: nights };
+  }
+}
+</script>
+</body>
+</html>
