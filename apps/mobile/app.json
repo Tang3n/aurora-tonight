@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "Aurora Tonight",
+    "slug": "aurora-tonight",
+    "version": "0.2.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "scheme": "auroratonight",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "io.github.tang3n.aurora"
+    },
+    "android": {
+      "package": "io.github.tang3n.aurora",
+      "adaptiveIcon": {
+        "backgroundColor": "#04070f",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": ["@maplibre/maplibre-react-native"]
+  }
+}

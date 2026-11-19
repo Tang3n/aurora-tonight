@@ -1,0 +1,29 @@
+{
+  "name": "@aurora/core",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "description": "Shared React hooks, view model and translations for the web and the mobile app. No DOM, no React Native (ADR 13).",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@aurora/data": "*",
+    "@aurora/model": "*",
+    "suncalc": "^1.9.0"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.108.0",
+    "react": "19.3.0"
+  },
+  "devDependencies": {
+    "@tanstack/react-query": "^5.108.0",
+    "@types/react": "~19.3.0",
+    "@types/suncalc": "^1.9.2",
+    "react": "19.3.0"
+  }
+}

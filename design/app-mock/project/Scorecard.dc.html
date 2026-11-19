@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Scorecard</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#04070f}
+a{color:#5cffb0;text-decoration:none}a:hover{color:#a9ffd6}
+.card{background:rgba(14,22,40,.72);border:1px solid rgba(160,220,255,.12);border-radius:20px;padding:16px}
+.eyebrow{font:500 11px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#93a3bc}
+.chip{min-height:36px;padding:0 14px;border-radius:999px;border:1px solid rgba(160,220,255,.16);background:rgba(14,22,40,.8);color:#c9d6ea;font:500 13px Inter,sans-serif}
+.chip.on{background:#5cffb0;color:#04120b;border-color:#5cffb0}
+</style>
+</helmet>
+<div style="position:relative;width:390px;height:844px;overflow:hidden;background:#04070f;color:#e8f1ff;font:15px/1.45 Inter,sans-serif">
+  <div style="height:844px;overflow-y:auto;padding:16px 16px 24px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:center;gap:8px">
+      <a href="Main.dc.html" aria-label="Back" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#e8f1ff;background:rgba(14,22,40,.72)">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"></path></svg>
+      </a>
+      <h1 style="margin:0;font:600 20px 'Space Grotesk',sans-serif">How right were we?</h1>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="chip on">South Norway</button>
+      <button class="chip">Mid Norway</button>
+      <button class="chip">North</button>
+    </div>
+
+    <div class="card">
+      <div class="eyebrow">Last 30 nights · 412 reports</div>
+      <p style="margin:10px 0 0;font-size:16px">When we said <b style="color:#5cffb0;font-weight:600">60–80</b>, people saw aurora <b style="color:#5cffb0;font-weight:600">68 %</b> of the time.</p>
+      <div style="display:flex;align-items:flex-end;gap:10px;height:150px;margin-top:16px;padding-bottom:4px;border-bottom:1px solid rgba(160,220,255,.14);position:relative">
+        <sc-for list="{{bins}}" as="b" hint-placeholder-count="5">
+          <div style="flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;position:relative">
+            <div style="font:600 12px 'Space Grotesk',sans-serif;color:#e8f1ff">{{b.pct}}</div>
+            <div style="{{b.bar}}"></div>
+            <div style="{{b.ideal}}"></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:6px">
+        <sc-for list="{{bins}}" as="b" hint-placeholder-count="5">
+          <div style="flex:1;text-align:center;font-size:11px;color:#93a3bc">{{b.label}}</div>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:#93a3bc">
+        <span style="display:flex;align-items:center;gap:6px"><span aria-hidden="true" style="width:12px;height:12px;border-radius:3px;background:#5cffb0"></span>seen by reporters</span>
+        <span style="display:flex;align-items:center;gap:6px"><span aria-hidden="true" style="width:14px;height:0;border-top:2px dashed #b48cff"></span>perfectly calibrated</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="eyebrow">Where we miss</div>
+      <ul style="margin:10px 0 0;padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:6px">
+        <li>Too optimistic below Kp 2: quiet nights scored 30–40 still came up empty.</li>
+        <li>Coastal fog that the cloud forecast misses.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="eyebrow">Recent nights</div>
+      <div style="display:flex;flex-direction:column;margin-top:8px">
+        <sc-for list="{{nights}}" as="n" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;gap:10px;min-height:44px;border-bottom:1px solid rgba(160,220,255,.08)">
+            <div style="width:56px;font-size:13px;color:#93a3bc">{{n.d}}</div>
+            <div style="width:34px;font:600 15px 'Space Grotesk',sans-serif">{{n.fc}}</div>
+            <div style="flex:1;font-size:13px">{{n.out}}</div>
+            <div style="{{n.mark}}">{{n.verdict}}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="font-size:12px;color:#93a3bc">Calibration also checked against the Kilpisjärvi all-sky camera. Method and data are open on GitHub.</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var data = [['0–20', 6, 10], ['20–40', 21, 30], ['40–60', 47, 50], ['60–80', 68, 70], ['80+', 85, 90]];
+    var bins = data.map(function (d) {
+      return { label: d[0], pct: d[1] + '%',
+        bar: 'width:100%;border-radius:6px 6px 0 0;background:#5cffb0;height:' + Math.round(d[1] * 1.15) + 'px',
+        ideal: 'position:absolute;left:-4px;right:-4px;bottom:' + Math.round(d[2] * 1.15) + 'px;border-top:2px dashed #b48cff' };
+    });
+    var nights = [
+      ['18 Nov', '22', '5 nothing, 1 camera', 'right', true],
+      ['17 Nov', '61', '9 eye, 3 camera, 2 nothing', 'right', true],
+      ['16 Nov', '35', '7 nothing', 'too high', false],
+      ['15 Nov', '12', 'no reports', '–', null]
+    ].map(function (n) {
+      var c = n[4] === true ? '#5cffb0' : n[4] === false ? '#ffc56b' : '#93a3bc';
+      return { d: n[0], fc: n[1], out: n[2], verdict: n[3], mark: 'font:500 12px Inter,sans-serif;color:' + c };
+    });
+    return { bins: bins, nights: nights };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // DOM lib only for the web-platform globals React Native also has (fetch, timers, AbortController),
+    // which core reaches through packages/data. Real DOM use is forbidden: src/platform.test.ts checks it.
+    "lib": ["ES2022", "DOM"],
+    "types": ["react"]
+  },
+  "include": ["src"],
+  // Tests run in Node under Vitest, not in the apps.
+  "exclude": ["src/**/*.test.ts"]
+}

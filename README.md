@@ -47,12 +47,26 @@ See [docs/spec.md](docs/spec.md) for the full spec and model.
 ```sh
 npm install
 npm run dev     # http://localhost:5173/aurora-tonight/
-npm test        # unit tests for the scoring model
-npm run build   # typecheck + production build to dist/
+npm test        # unit tests in every workspace
+npm run typecheck
+npm run build   # typecheck + production build of the web app to apps/web/dist/
 ```
 
-Code map: `src/model/` pure scoring and astronomy (unit-tested) · `src/data/` all network access · `src/ui/` rendering ·
-`src/main.ts` state and refresh schedule. Pushes to `main` deploy to GitHub Pages via Actions.
+npm workspaces monorepo:
+
+| Path | What |
+|---|---|
+| `packages/model` | pure scoring and astronomy, unit-tested; no DOM or Node APIs, runs on web, mobile and server |
+| `packages/data` | all network access (NOAA, MET Norway, Open-Meteo), only `fetch` |
+| `packages/core` | shared React hooks (data refresh via TanStack Query), view model, translations; no DOM, no React Native |
+| `apps/web` | the website in React: `src/components/`, `src/App.tsx`; WebGL sky and oval map in `src/ui/` |
+| `apps/mobile` | Expo / React Native app (currently the portability spike) |
+| `validation/` | hindcast against the Kilpisjärvi all-sky camera |
+| `tools/` | generator of the AACGM grid |
+
+Pushes to `main` deploy `apps/web` to GitHub Pages via Actions. Plans and decisions: [docs/spec.md](docs/spec.md),
+[docs/architecture.md](docs/architecture.md) (diagrams), [docs/adr/](docs/adr/README.md),
+[docs/tech-stack.md](docs/tech-stack.md).
 
 ## License
 

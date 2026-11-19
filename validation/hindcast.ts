@@ -16,10 +16,10 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import SunCalc from 'suncalc';
-import { magneticLocalTime, toMagnetic } from '../src/model/aacgm';
-import { moonSkyRatio } from '../src/model/astro';
-import { kpValueAt, type KpBlock } from '../src/model/night';
-import { PARAMS, arcElevation, clearSky, expectedVisibility, skyBackground } from '../src/model/visibility';
+import { magneticLocalTime, toMagnetic } from '../packages/model/src/aacgm';
+import { moonSkyRatio } from '../packages/model/src/astro';
+import { kpValueAt, type KpBlock } from '../packages/model/src/night';
+import { PARAMS, arcElevation, clearSky, expectedVisibility, skyBackground } from '../packages/model/src/visibility';
 
 const DATA = join(dirname(fileURLToPath(import.meta.url)), '..', 'data');
 const STATION = { code: 'KIL', lat: 69.05, lon: 20.79 };

@@ -1,0 +1,17 @@
+{
+  "name": "@aurora/data",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "description": "Typed fetchers for NOAA SWPC, MET Norway and Open-Meteo. Uses only fetch, so it runs in browsers and React Native.",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@aurora/model": "*"
+  }
+}

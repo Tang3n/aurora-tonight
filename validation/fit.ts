@@ -14,7 +14,7 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { PARAMS, expectedVisibility, skyBackground, visibility } from '../src/model/visibility';
+import { PARAMS, expectedVisibility, skyBackground, visibility } from '../packages/model/src/visibility';
 
 const DATA = join(dirname(fileURLToPath(import.meta.url)), '..', 'data');
 const MLAT = 66.56;

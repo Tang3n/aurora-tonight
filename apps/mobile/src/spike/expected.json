@@ -1,0 +1,511 @@
+{
+  "timeZones": {
+    "Europe/Oslo @ 2026-01-15T12:00:00Z": {
+      "date": "2026-01-15",
+      "hour": 13,
+      "minute": 0
+    },
+    "America/Anchorage @ 2026-01-15T12:00:00Z": {
+      "date": "2026-01-15",
+      "hour": 3,
+      "minute": 0
+    },
+    "Asia/Kolkata @ 2026-01-15T12:00:00Z": {
+      "date": "2026-01-15",
+      "hour": 17,
+      "minute": 30
+    },
+    "UTC @ 2026-01-15T12:00:00Z": {
+      "date": "2026-01-15",
+      "hour": 12,
+      "minute": 0
+    },
+    "Europe/Oslo @ 2026-07-15T12:00:00Z": {
+      "date": "2026-07-15",
+      "hour": 14,
+      "minute": 0
+    },
+    "America/Anchorage @ 2026-07-15T12:00:00Z": {
+      "date": "2026-07-15",
+      "hour": 4,
+      "minute": 0
+    },
+    "Asia/Kolkata @ 2026-07-15T12:00:00Z": {
+      "date": "2026-07-15",
+      "hour": 17,
+      "minute": 30
+    },
+    "UTC @ 2026-07-15T12:00:00Z": {
+      "date": "2026-07-15",
+      "hour": 12,
+      "minute": 0
+    },
+    "Europe/Oslo @ 2026-03-29T00:30:00Z": {
+      "date": "2026-03-29",
+      "hour": 1,
+      "minute": 30
+    },
+    "America/Anchorage @ 2026-03-29T00:30:00Z": {
+      "date": "2026-03-28",
+      "hour": 16,
+      "minute": 30
+    },
+    "Asia/Kolkata @ 2026-03-29T00:30:00Z": {
+      "date": "2026-03-29",
+      "hour": 6,
+      "minute": 0
+    },
+    "UTC @ 2026-03-29T00:30:00Z": {
+      "date": "2026-03-29",
+      "hour": 0,
+      "minute": 30
+    },
+    "Europe/Oslo @ 2026-03-29T01:30:00Z": {
+      "date": "2026-03-29",
+      "hour": 3,
+      "minute": 30
+    },
+    "America/Anchorage @ 2026-03-29T01:30:00Z": {
+      "date": "2026-03-28",
+      "hour": 17,
+      "minute": 30
+    },
+    "Asia/Kolkata @ 2026-03-29T01:30:00Z": {
+      "date": "2026-03-29",
+      "hour": 7,
+      "minute": 0
+    },
+    "UTC @ 2026-03-29T01:30:00Z": {
+      "date": "2026-03-29",
+      "hour": 1,
+      "minute": 30
+    }
+  },
+  "atob": "hello, aurora",
+  "magnetic": {
+    "mlat": 56.244486,
+    "mlon": 83.918537
+  },
+  "tonight": {
+    "hours": [
+      {
+        "time": "2026-11-19T16:00:00.000Z",
+        "eye": 0,
+        "camera": 0,
+        "auroraEye": 0.000004,
+        "auroraCamera": 0.000211,
+        "clear": 0.465,
+        "clearCamera": 0.73,
+        "background": 79.476893,
+        "twilight": 66.377076,
+        "moon": 12.099818,
+        "sunAltitude": -10.058175,
+        "moonIllumination": 0.725314,
+        "moonAltitude": 22.861442,
+        "mlt": 17.431986,
+        "kp": 3,
+        "cloud": {
+          "total": 0.8,
+          "low": 0.7,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": -3.229567,
+        "nowcastWeight": 0,
+        "missing": []
+      },
+      {
+        "time": "2026-11-19T17:00:00.000Z",
+        "eye": 0,
+        "camera": 1,
+        "auroraEye": 0.000257,
+        "auroraCamera": 0.007563,
+        "clear": 0.465,
+        "clearCamera": 0.73,
+        "background": 15.523187,
+        "twilight": 0.108955,
+        "moon": 14.414232,
+        "sunAltitude": -17.51878,
+        "moonIllumination": 0.729177,
+        "moonAltitude": 27.752371,
+        "mlt": 18.389721,
+        "kp": 3.223333,
+        "cloud": {
+          "total": 0.8,
+          "low": 0.7,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": -2.042373,
+        "nowcastWeight": 0,
+        "missing": []
+      },
+      {
+        "time": "2026-11-19T18:00:00.000Z",
+        "eye": 0,
+        "camera": 1,
+        "auroraEye": 0.00071,
+        "auroraCamera": 0.018706,
+        "clear": 0.465,
+        "clearCamera": 0.73,
+        "background": 17.017165,
+        "twilight": 0,
+        "moon": 16.017165,
+        "sunAltitude": -25.234705,
+        "moonIllumination": 0.733027,
+        "moonAltitude": 30.887523,
+        "mlt": 19.347616,
+        "kp": 3.446667,
+        "cloud": {
+          "total": 0.8,
+          "low": 0.7,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": -0.787735,
+        "nowcastWeight": 0,
+        "missing": []
+      },
+      {
+        "time": "2026-11-19T19:00:00.000Z",
+        "eye": 0,
+        "camera": 3,
+        "auroraEye": 0.001967,
+        "auroraCamera": 0.04271,
+        "clear": 0.5275,
+        "clearCamera": 0.73,
+        "background": 17.62722,
+        "twilight": 0,
+        "moon": 16.62722,
+        "sunAltitude": -32.823143,
+        "moonIllumination": 0.736863,
+        "moonAltitude": 31.922166,
+        "mlt": 20.306425,
+        "kp": 3.67,
+        "cloud": {
+          "total": 0.675,
+          "low": 0.575,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": 0.522785,
+        "nowcastWeight": 0,
+        "missing": []
+      },
+      {
+        "time": "2026-11-19T20:00:00.000Z",
+        "eye": 0,
+        "camera": 7,
+        "auroraEye": 0.005749,
+        "auroraCamera": 0.090547,
+        "clear": 0.61,
+        "clearCamera": 0.77,
+        "background": 17.140319,
+        "twilight": 0,
+        "moon": 16.140319,
+        "sunAltitude": -39.814701,
+        "moonIllumination": 0.740685,
+        "moonAltitude": 30.739743,
+        "mlt": 21.267862,
+        "kp": 3.89,
+        "cloud": {
+          "total": 0.55,
+          "low": 0.45,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": 1.988471,
+        "nowcastWeight": 0,
+        "missing": []
+      },
+      {
+        "time": "2026-11-19T21:00:00.000Z",
+        "eye": 1,
+        "camera": 14,
+        "auroraEye": 0.015631,
+        "auroraCamera": 0.170753,
+        "clear": 0.6975,
+        "clearCamera": 0.82,
+        "background": 15.671841,
+        "twilight": 0,
+        "moon": 14.671841,
+        "sunAltitude": -45.595876,
+        "moonIllumination": 0.744492,
+        "moonAltitude": 27.507334,
+        "mlt": 22.234764,
+        "kp": 4.11,
+        "cloud": {
+          "total": 0.425,
+          "low": 0.325,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": 3.725393,
+        "nowcastWeight": 0,
+        "missing": []
+      },
+      {
+        "time": "2026-11-19T22:00:00.000Z",
+        "eye": 3,
+        "camera": 24,
+        "auroraEye": 0.033814,
+        "auroraCamera": 0.27274,
+        "clear": 0.79,
+        "clearCamera": 0.88,
+        "background": 13.515742,
+        "twilight": 0,
+        "moon": 12.515742,
+        "sunAltitude": -49.407581,
+        "moonIllumination": 0.748285,
+        "moonAltitude": 22.60529,
+        "mlt": 23.210935,
+        "kp": 4.33,
+        "cloud": {
+          "total": 0.3,
+          "low": 0.2,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": 5.622346,
+        "nowcastWeight": 0,
+        "missing": []
+      },
+      {
+        "time": "2026-11-19T23:00:00.000Z",
+        "eye": 3,
+        "camera": 27,
+        "auroraEye": 0.042186,
+        "auroraCamera": 0.306507,
+        "clear": 0.79,
+        "clearCamera": 0.88,
+        "background": 11.034985,
+        "twilight": 0,
+        "moon": 10.034985,
+        "sunAltitude": -50.539575,
+        "moonIllumination": 0.752063,
+        "moonAltitude": 16.499136,
+        "mlt": 0.200637,
+        "kp": 4.11,
+        "cloud": {
+          "total": 0.3,
+          "low": 0.2,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": 5.969342,
+        "nowcastWeight": 0,
+        "missing": []
+      },
+      {
+        "time": "2026-11-20T00:00:00.000Z",
+        "eye": 4,
+        "camera": 28,
+        "auroraEye": 0.045077,
+        "auroraCamera": 0.31317,
+        "clear": 0.79,
+        "clearCamera": 0.88,
+        "background": 8.601433,
+        "twilight": 0,
+        "moon": 7.601433,
+        "sunAltitude": -48.736883,
+        "moonIllumination": 0.755824,
+        "moonAltitude": 9.653799,
+        "mlt": 1.207759,
+        "kp": 3.89,
+        "cloud": {
+          "total": 0.3,
+          "low": 0.2,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": 5.438632,
+        "nowcastWeight": 0,
+        "missing": []
+      },
+      {
+        "time": "2026-11-20T01:00:00.000Z",
+        "eye": 3,
+        "camera": 24,
+        "auroraEye": 0.038115,
+        "auroraCamera": 0.279951,
+        "clear": 0.7325,
+        "clearCamera": 0.84,
+        "background": 7.031892,
+        "twilight": 0,
+        "moon": 6.031892,
+        "sunAltitude": -44.39764,
+        "moonIllumination": 0.75957,
+        "moonAltitude": 2.585651,
+        "mlt": 2.234751,
+        "kp": 3.67,
+        "cloud": {
+          "total": 0.375,
+          "low": 0.275,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": 4.30724,
+        "nowcastWeight": 0,
+        "missing": []
+      },
+      {
+        "time": "2026-11-20T02:00:00.000Z",
+        "eye": 10,
+        "camera": 40,
+        "auroraEye": 0.146781,
+        "auroraCamera": 0.489993,
+        "clear": 0.68,
+        "clearCamera": 0.81,
+        "background": 1,
+        "twilight": 0,
+        "moon": 0,
+        "sunAltitude": -38.276572,
+        "moonIllumination": 0.7633,
+        "moonAltitude": -4.406616,
+        "mlt": 3.281531,
+        "kp": 3.336667,
+        "cloud": {
+          "total": 0.45,
+          "low": 0.35,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": 2.779896,
+        "nowcastWeight": 0,
+        "missing": []
+      },
+      {
+        "time": "2026-11-20T03:00:00.000Z",
+        "eye": 6,
+        "camera": 29,
+        "auroraEye": 0.089815,
+        "auroraCamera": 0.366189,
+        "clear": 0.6275,
+        "clearCamera": 0.78,
+        "background": 1,
+        "twilight": 0,
+        "moon": 0,
+        "sunAltitude": -31.106853,
+        "moonIllumination": 0.767013,
+        "moonAltitude": -11.226537,
+        "mlt": 4.344733,
+        "kp": 3.003333,
+        "cloud": {
+          "total": 0.525,
+          "low": 0.425,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": 1.18775,
+        "nowcastWeight": 0,
+        "missing": []
+      },
+      {
+        "time": "2026-11-20T04:00:00.000Z",
+        "eye": 4,
+        "camera": 24,
+        "auroraEye": 0.074432,
+        "auroraCamera": 0.319788,
+        "clear": 0.575,
+        "clearCamera": 0.75,
+        "background": 1,
+        "twilight": 0,
+        "moon": 0,
+        "sunAltitude": -23.46466,
+        "moonIllumination": 0.77071,
+        "moonAltitude": -17.262717,
+        "mlt": 5.417744,
+        "kp": 2.67,
+        "cloud": {
+          "total": 0.6,
+          "low": 0.5,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": -0.455967,
+        "nowcastWeight": 0,
+        "missing": []
+      },
+      {
+        "time": "2026-11-20T05:00:00.000Z",
+        "eye": 2,
+        "camera": 15,
+        "auroraEye": 0.034965,
+        "auroraCamera": 0.205149,
+        "clear": 0.575,
+        "clearCamera": 0.75,
+        "background": 1.606511,
+        "twilight": 0.606511,
+        "moon": 0,
+        "sunAltitude": -15.794104,
+        "moonIllumination": 0.774389,
+        "moonAltitude": -22.098273,
+        "mlt": 6.491798,
+        "kp": 2.446667,
+        "cloud": {
+          "total": 0.6,
+          "low": 0.5,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": -1.976108,
+        "nowcastWeight": 0,
+        "missing": []
+      },
+      {
+        "time": "2026-11-20T06:00:00.000Z",
+        "eye": 0,
+        "camera": 0,
+        "auroraEye": 0.000007,
+        "auroraCamera": 0.000361,
+        "clear": 0.575,
+        "clearCamera": 0.75,
+        "background": 301.542223,
+        "twilight": 300.542223,
+        "moon": 0,
+        "sunAltitude": -8.466032,
+        "moonIllumination": 0.77805,
+        "moonAltitude": -25.317571,
+        "mlt": 7.557894,
+        "kp": 2.223333,
+        "cloud": {
+          "total": 0.6,
+          "low": 0.5,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": -3.3673,
+        "nowcastWeight": 0,
+        "missing": []
+      },
+      {
+        "time": "2026-11-20T07:00:00.000Z",
+        "eye": 0,
+        "camera": 0,
+        "auroraEye": 0,
+        "auroraCamera": 0,
+        "clear": 0.575,
+        "clearCamera": 0.75,
+        "background": 10001,
+        "twilight": 10000,
+        "moon": 0,
+        "sunAltitude": -1.82405,
+        "moonIllumination": 0.781693,
+        "moonAltitude": -26.583292,
+        "mlt": 8.608802,
+        "kp": 2,
+        "cloud": {
+          "total": 0.6,
+          "low": 0.5,
+          "mid": 0.1,
+          "high": 0.05
+        },
+        "arcElevation": -4.506968,
+        "nowcastWeight": 0,
+        "missing": []
+      }
+    ],
+    "mlat": 56.244486,
+    "kpNeeded": 5
+  }
+}

@@ -73,3 +73,20 @@ label's own sensitivity, keeping the 50 % eye line within 1° of NOAA's table. T
 Nov–Jan by 0.004 Brier and made Feb–Mar worse (0.126 → 0.143) — noise, so the parameters stay. The low-Kp
 optimism at Kilpisjärvi (26 hours) conflicts with NOAA's table and stays an open question.
 The keogram "structured aurora" label behaves like a detector of ~0.3–0.5 kR — between a phone camera and the eye.
+
+## Cloud sources: MET Norway vs Open-Meteo `metno_seamless` (2026-11-19)
+
+"Where to go" scores many spots with one Open-Meteo request (ADR 6), while the home point keeps MET
+Norway. The model uses only total cloud cover, so `compare_cloud_sources.py` compares that hour by hour
+for the next ~33 hours at six places (Stavanger, Dalsnuten, Egersund, Haugesund, Trondheim, Steinkjer):
+
+| | value |
+|---|---|
+| hours compared | 198 |
+| mean absolute difference | 0.4 percentage points |
+| bias (Open-Meteo − MET) | +0.1 pp |
+| hours in a different cloud class (<50 / 50–95 / >95 %) | 1 % |
+
+`metno_seamless` is MET's own MET Nordic forecast re-served, so the two are interchangeable for the
+model and a spot next to home scores the same as home. This is forecast vs forecast on one day, not a
+truth check; rerun it if Open-Meteo changes the model behind `metno_seamless`.
