@@ -190,7 +190,8 @@
 /* notification settings (Android app only) */
 .pill.bell { padding: 8px 11px; }
 .pill.bell.on svg { color: var(--aurora-2); opacity: 1; }
-.popover.alerts { padding: 14px; display: grid; gap: 10px; }
+/* opaque: Android WebView does not blur behind it, and the card text showed through */
+.popover.alerts { padding: 14px; display: grid; gap: 10px; background: #0b1222; }
 .popover.alerts fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; min-width: 0; }
 .popover.alerts fieldset:disabled { opacity: .45; }
 .alerts-head { font: 600 15px/1.2 'Space Grotesk', sans-serif; }

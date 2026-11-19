@@ -191,7 +191,9 @@ export function initAlerts(host: AlertsHost, wrap: HTMLElement, btn: HTMLElement
     if (!pop.hidden) void refreshStatus();
   });
   document.addEventListener('click', (e) => {
-    if (!pop.hidden && !(e.target as HTMLElement).closest('#alertsWrap')) {
+    // composedPath(), not target.closest(): a click inside the panel re-renders it, so by the time
+    // this runs the clicked button is detached and closest() would wrongly say "outside".
+    if (!pop.hidden && !e.composedPath().includes(wrap)) {
       pop.hidden = true;
       btn.setAttribute('aria-expanded', 'false');
     }

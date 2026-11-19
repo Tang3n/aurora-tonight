@@ -8,6 +8,10 @@ const config: CapacitorConfig = {
     backgroundColor: '#04070f',
   },
   plugins: {
+    // Light status-bar icons on the dark page, regardless of the phone's light/dark theme.
+    SystemBars: {
+      style: 'DARK',
+    },
     BackgroundRunner: {
       label: 'io.github.tang3n.auroratonight.check',
       src: 'runners/aurora.js',
