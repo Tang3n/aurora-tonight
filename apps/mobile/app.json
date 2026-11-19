@@ -35,9 +35,24 @@
       "expo-background-task",
       [
         "expo-location",
-        { "locationWhenInUsePermission": "Your position is used only to forecast the aurora where you are. It is not sent anywhere except to the weather services." }
+        {
+          "locationWhenInUsePermission": "Your position is used only to forecast the aurora where you are. It is not sent anywhere except to the weather services."
+        }
       ],
-      ["expo-notifications", { "color": "#5cffb0" }]
+      [
+        "expo-notifications",
+        {
+          "color": "#5cffb0"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "extraProguardRules": "# WorkManager (expo-background-task) creates its Room database by reflection; R8 would strip the constructor.\n-keep class * extends androidx.room.RoomDatabase { <init>(); }"
+          }
+        }
+      ]
     ]
   }
 }

@@ -4,8 +4,8 @@ import { STRINGS } from '@aurora/core/i18n';
 import { labelFor } from '@aurora/model/score';
 import * as Notifications from 'expo-notifications';
 import { router, useFocusEffect } from 'expo-router';
-import { useCallback, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { AppState, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { notify, setAlertTaskRegistered } from '../../background/task';
 import { Card, Chip, s } from '../../components/ui';
@@ -21,13 +21,17 @@ export default function AlertsScreen() {
   const [lastNight, setLastNight] = useState<string | null>(null);
   const [lastCheck, setLastCheck] = useState<LastCheck | null>(null);
 
-  // The background task writes these; re-read whenever the tab is shown.
-  useFocusEffect(
-    useCallback(() => {
-      setLastNight(readAlertPrefs().lastNight);
-      setLastCheck(readLastCheck());
-    }, []),
-  );
+  // The background task writes these; re-read whenever the tab is shown, and when the app comes back
+  // to the foreground while this tab is open (focus does not change then).
+  const refresh = useCallback(() => {
+    setLastNight(readAlertPrefs().lastNight);
+    setLastCheck(readLastCheck());
+  }, []);
+  useFocusEffect(refresh);
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (s) => s === 'active' && refresh());
+    return () => sub.remove();
+  }, [refresh]);
 
   const toggle = async (on: boolean) => {
     if (on) {

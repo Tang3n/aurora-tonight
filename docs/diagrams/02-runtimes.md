@@ -15,7 +15,7 @@ flowchart TB
 
     subgraph phone["Phone: Hermes JS engine"]
         mobile["apps/mobile<br/>Expo, React Native"]
-        bg["background task<br/>expo-background-task, ~15 min"]:::planned
+        bg["background task<br/>expo-background-task, ~15 min"]
         m2["packages/model"]
         mobile --> m2
         bg --> m2

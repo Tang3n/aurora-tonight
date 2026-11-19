@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { fetchCloudsMany } from './sources';
+import { fetchCloudsMany, setClientIdentity } from './sources';
 
 /** Fake Open-Meteo: one object per requested coordinate, cloud_cover = latitude (to check order). */
 function fakeOpenMeteo() {
@@ -43,6 +43,20 @@ describe('fetchCloudsMany', () => {
     const [one] = await fetchCloudsMany([{ lat: 58.97, lon: 5.73 }]);
     expect(one!.points.map((p) => p.time.toISOString())).toEqual(['2026-11-19T00:00:00.000Z', '2026-11-19T02:00:00.000Z']);
     expect(one!.points[1]!.cloud).toEqual({ total: 1, low: 0.5, mid: 0.5, high: 0.5 });
+  });
+
+  it('sends the client identity once set (native apps), and no extra header before', async () => {
+    const seen: (string | null)[] = [];
+    vi.stubGlobal('fetch', async (_url: string, init?: RequestInit) => {
+      seen.push(new Headers(init?.headers).get('User-Agent'));
+      return new Response(JSON.stringify({ hourly: { time: [], cloud_cover: [], cloud_cover_low: [], cloud_cover_mid: [], cloud_cover_high: [] } }));
+    });
+    await fetchCloudsMany([{ lat: 1, lon: 1 }]);
+    setClientIdentity('aurora-tonight-app/test');
+    await fetchCloudsMany([{ lat: 1, lon: 1 }]);
+    setClientIdentity('');
+    expect(seen[0]).toBeNull();
+    expect(seen[1]).toBe('aurora-tonight-app/test');
   });
 
   it('asks for the metno_seamless model in UTC', async () => {

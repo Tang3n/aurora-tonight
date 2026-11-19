@@ -14,7 +14,7 @@ import {
   type Tone,
   type ViewModel,
 } from '@aurora/core/view';
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Line, Path } from 'react-native-svg';
@@ -56,15 +56,13 @@ export default function TonightScreen() {
 
       {data.loaded ? (
         <>
-          <Link href="/go" asChild>
-            <Pressable style={[s.card, st.teaser]}>
-              <View style={{ flex: 1, gap: 4 }}>
-                <Eyebrow color={C.aurora}>{S.nav.go}</Eyebrow>
-                <Text style={s.muted}>{S.go.lead}</Text>
-              </View>
-              <Icon name="chevron" color={C.aurora} size={18} />
-            </Pressable>
-          </Link>
+          <Pressable style={[s.card, st.teaser]} onPress={() => router.navigate('/go')} accessibilityRole="link">
+            <View style={{ flex: 1, gap: 4 }}>
+              <Eyebrow color={C.aurora}>{S.nav.go}</Eyebrow>
+              <Text style={s.muted}>{S.go.lead}</Text>
+            </View>
+            <Icon name="chevron" color={C.aurora} size={18} />
+          </Pressable>
           <Timeline vm={vm} />
           <Factors vm={vm} />
           <Wind vm={vm} wind={data.wind} />
