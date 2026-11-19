@@ -11,9 +11,10 @@ const dir = __dirname;
 const sources = readdirSync(dir).filter((f) => f.endsWith('.ts') && !f.endsWith('.test.ts'));
 
 const FORBIDDEN: [RegExp, string][] = [
-  [/\bdocument\./, 'document'],
-  [/\bwindow\./, 'window'],
-  [/\bnavigator\./, 'navigator'],
+  // Globals only: `vm.window.end` (the viewing window) is a property, not the browser's window.
+  [/(?<![.\w])document\./, 'document'],
+  [/(?<![.\w])window\./, 'window'],
+  [/(?<![.\w])navigator\./, 'navigator'],
   [/\blocalStorage\b/, 'localStorage'],
   [/\bsessionStorage\b/, 'sessionStorage'],
   [/\bHTML[A-Z]\w*Element\b/, 'HTML element types'],

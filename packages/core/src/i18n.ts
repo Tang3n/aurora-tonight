@@ -96,6 +96,20 @@ export interface Strings {
   sources: string;
   disclaimer: string;
   nav: { tonight: string; go: string };
+  alerts: {
+    tab: string;
+    title: string;
+    lead: string;
+    enable: string;
+    threshold: string;
+    thresholdOption: (score: number, label: string) => string;
+    permissionDenied: string;
+    howItWorks: string;
+    notifTitle: (score: number, label: string) => string;
+    lastSent: (night: string) => string;
+    never: string;
+    test: string;
+  };
   go: {
     title: string;
     lead: string;
@@ -211,6 +225,20 @@ const en: Strings = {
   sources: 'Data',
   disclaimer: 'A forecast, not a promise — aurora can surprise both ways.',
   nav: { tonight: 'Tonight', go: 'Where to go' },
+  alerts: {
+    tab: 'Alerts',
+    title: 'Tell me when it is worth going out',
+    lead: 'Your phone checks the forecast for your place about every 15 minutes and notifies you once per night.',
+    enable: 'Alerts for tonight',
+    threshold: 'Notify from',
+    thresholdOption: (score, label) => `${score} · ${label}`,
+    permissionDenied: 'Notifications are turned off for this app in the system settings.',
+    howItWorks: 'Android decides when the check runs (battery, network), so an alert can come a little late.',
+    notifTitle: (score, label) => `Aurora tonight: ${score} · ${label}`,
+    lastSent: (night) => `Last alert: night of ${night}`,
+    never: 'No alert sent yet',
+    test: 'Send a test notification',
+  },
   go: {
     title: 'Where to go tonight',
     lead: 'Viewpoints within reach, ranked by tonight’s chance to see aurora with the eye.',
@@ -324,6 +352,20 @@ const cs: Strings = {
   sources: 'Data',
   disclaimer: 'Je to předpověď, ne slib — záře umí překvapit oběma směry.',
   nav: { tonight: 'Dnes v noci', go: 'Kam vyrazit' },
+  alerts: {
+    tab: 'Upozornění',
+    title: 'Dej mi vědět, až se vyplatí vyrazit',
+    lead: 'Telefon zhruba každých 15 minut zkontroluje předpověď pro tvé místo a upozorní tě nejvýš jednou za noc.',
+    enable: 'Upozornění na dnešní noc',
+    threshold: 'Upozornit od',
+    thresholdOption: (score, label) => `${score} · ${label}`,
+    permissionDenied: 'Oznámení jsou pro tuto aplikaci vypnutá v nastavení systému.',
+    howItWorks: 'Kdy kontrola proběhne, řídí Android (baterie, síť), takže upozornění může přijít s malým zpožděním.',
+    notifTitle: (score, label) => `Polární záře dnes: ${score} · ${label}`,
+    lastSent: (night) => `Poslední upozornění: noc ${night}`,
+    never: 'Zatím žádné upozornění',
+    test: 'Poslat zkušební oznámení',
+  },
   go: {
     title: 'Kam dnes vyrazit',
     lead: 'Vyhlídky v dosahu seřazené podle dnešní šance vidět záři pouhým okem.',
@@ -437,6 +479,20 @@ const no: Strings = {
   sources: 'Data',
   disclaimer: 'En prognose, ikke et løfte — nordlyset kan overraske begge veier.',
   nav: { tonight: 'I natt', go: 'Hvor dra' },
+  alerts: {
+    tab: 'Varsler',
+    title: 'Si fra når det er verdt å gå ut',
+    lead: 'Telefonen sjekker prognosen for stedet ditt omtrent hvert 15. minutt og varsler deg høyst én gang per natt.',
+    enable: 'Varsel for i natt',
+    threshold: 'Varsle fra',
+    thresholdOption: (score, label) => `${score} · ${label}`,
+    permissionDenied: 'Varsler er slått av for denne appen i systeminnstillingene.',
+    howItWorks: 'Android bestemmer når sjekken kjøres (batteri, nett), så et varsel kan komme litt sent.',
+    notifTitle: (score, label) => `Nordlys i natt: ${score} · ${label}`,
+    lastSent: (night) => `Siste varsel: natten ${night}`,
+    never: 'Ingen varsel sendt ennå',
+    test: 'Send et testvarsel',
+  },
   go: {
     title: 'Hvor du bør dra i natt',
     lead: 'Utsiktspunkter innen rekkevidde, rangert etter sjansen for å se nordlys med øyet i natt.',

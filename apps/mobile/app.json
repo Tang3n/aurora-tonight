@@ -21,6 +21,12 @@
       },
       "predictiveBackGestureEnabled": false
     },
-    "plugins": ["@maplibre/maplibre-react-native"]
+    "plugins": [
+      "@maplibre/maplibre-react-native",
+      "expo-router",
+      "expo-sqlite",
+      "expo-localization",
+      "expo-background-task"
+    ]
   }
 }

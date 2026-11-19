@@ -145,6 +145,33 @@ export function verdict(vm: ViewModel): Verdict {
   };
 }
 
+/* ---------- rich text from our translations ---------- */
+
+export interface TextPart {
+  text: string;
+  bold: boolean;
+}
+
+/**
+ * Our translation strings mark emphasis with <b>…</b> (never any other tag). The web renders them
+ * as HTML; React Native has no HTML, so it renders these parts as nested <Text> elements.
+ */
+export function richText(s: string): TextPart[] {
+  const parts: TextPart[] = [];
+  const re = /<b>(.*?)<\/b>/g;
+  let last = 0;
+  for (let m = re.exec(s); m; m = re.exec(s)) {
+    if (m.index > last) parts.push({ text: s.slice(last, m.index), bold: false });
+    parts.push({ text: m[1]!, bold: true });
+    last = m.index + m[0].length;
+  }
+  if (last < s.length) parts.push({ text: s.slice(last), bold: false });
+  return parts;
+}
+
+/** The same string without markup, e.g. for a notification. */
+export const plainText = (s: string) => richText(s).map((p) => p.text).join('');
+
 /* ---------- timeline ---------- */
 
 export function sunTimesLine(vm: ViewModel, place: { lat: number; lon: number }): string {
