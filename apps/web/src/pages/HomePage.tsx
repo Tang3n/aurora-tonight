@@ -11,7 +11,7 @@ import type { Location } from '@aurora/data/sources';
 import { Suspense, lazy, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Factors } from '../components/Factors';
-import { HourBars } from '../components/HourBars';
+import { Timeline } from '../components/Timeline';
 import { Nights } from '../components/Nights';
 import { OvalCard } from '../components/OvalCard';
 import { scoreTone } from '../components/score';
@@ -88,6 +88,9 @@ export function HomePage({ vm, data, loc, now, lang }: Props & { lang: Lang }) {
         </div>
       </section>
 
+      {/* Tonight hour by hour: eye (bars), phone camera (dashed), clouds (strip), with a tooltip per hour. */}
+      <Timeline vm={vm} loc={loc} loaded={data.loaded} />
+
       <section className="section">
         <div className="row-head">
           <h2>{S.home.bestSpots(limitLabel(limit))}</h2>
@@ -143,7 +146,20 @@ function VerdictCard({ vm, loaded, place }: { vm: ViewModel; loaded: boolean; pl
         </div>
       </div>
       <Trusted as="p" className="vc-sentence" html={v.sentence} />
-      <HourBars vm={vm} />
+      <div className="look">
+        <div>
+          <div className="k">{S.look}</div>
+          <div className="v">{S.lookValue(v.direction, v.elevation)}</div>
+        </div>
+        <div>
+          <div className="k">{S.kpNeeded}</div>
+          <div className="v">{vm.tonight.kpNeeded.toFixed(1)}</div>
+        </div>
+        <div>
+          <div className="k">{S.magLat}</div>
+          <div className="v">{Math.abs(vm.tonight.mlat).toFixed(1)}°</div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -163,20 +179,6 @@ function Details({ vm, data, loc, now }: Props) {
               {src.text}
             </span>
           ))}
-        </div>
-        <div className="look">
-          <div>
-            <div className="k">{S.look}</div>
-            <div className="v">{S.lookValue(v.direction, v.elevation)}</div>
-          </div>
-          <div>
-            <div className="k">{S.kpNeeded}</div>
-            <div className="v">{vm.tonight.kpNeeded.toFixed(1)}</div>
-          </div>
-          <div>
-            <div className="k">{S.magLat}</div>
-            <div className="v">{Math.abs(vm.tonight.mlat).toFixed(1)}°</div>
-          </div>
         </div>
         <Trusted as="div" className="whybox" html={S.whyText} />
       </div>

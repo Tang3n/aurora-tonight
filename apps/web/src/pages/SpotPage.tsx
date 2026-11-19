@@ -6,11 +6,11 @@
 import type { ForecastData } from '@aurora/core/hooks';
 import type { Lang } from '@aurora/core/i18n';
 import { useSpot, useSpotForecast } from '@aurora/core/spots';
-import { sunTimesLine, verdict, type ViewModel } from '@aurora/core/view';
+import { verdict, type ViewModel } from '@aurora/core/view';
 import type { Location } from '@aurora/data/sources';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router';
-import { HourBars } from '../components/HourBars';
+import { Timeline } from '../components/Timeline';
 import { scoreTone } from '../components/score';
 import { Trusted } from '../components/Trusted';
 
@@ -73,13 +73,13 @@ export function SpotPage({ lang, homeVm, data, loc, now }: Props) {
 
       <div className="spot-body">
         <div className="spot-main">
-          <div className="card">
-            <div className="row-head">
-              <h2>{S.hourByHour}</h2>
-              <span className="hint">{vm ? sunTimesLine(vm, spot) : ''}</span>
+          {vm ? (
+            <Timeline vm={vm} loc={{ ...loc, lat: spot.lat, lon: spot.lon }} loaded />
+          ) : (
+            <div className="card">
+              <p className="hint">{S.go.loading}</p>
             </div>
-            {vm ? <HourBars vm={vm} height={160} /> : <p className="hint">{S.go.loading}</p>}
-          </div>
+          )}
           <div className="card">
             <div className="eyebrow">OpenStreetMap</div>
             <p className="about">{S.spot.about}</p>
