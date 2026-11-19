@@ -1,6 +1,6 @@
 # 9. Sightings are observations, including "nothing", stored with a forecast snapshot
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 ## Context

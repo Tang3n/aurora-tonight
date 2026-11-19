@@ -1,6 +1,6 @@
 # 11. Server-side alerts with a scheduled job and push
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 ## Context

@@ -1,6 +1,6 @@
 # 12. No social feed, chat, comments or follows
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 ## Context

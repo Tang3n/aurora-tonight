@@ -1,6 +1,6 @@
 # 5. Android app via Capacitor and Background Runner
 
-- Status: Accepted (implemented on branch `worktree-android-app`, not merged, not yet tested on a real phone)
+- Status: Superseded by ADR 13 (was implemented on branch `worktree-android-app`, never merged)
 - Date: 2026-11-19
 
 ## Context

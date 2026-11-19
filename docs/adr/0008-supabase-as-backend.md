@@ -1,6 +1,6 @@
 # 8. Supabase as the backend for accounts, reports and photos
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 ## Context

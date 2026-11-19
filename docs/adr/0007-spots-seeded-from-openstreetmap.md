@@ -1,6 +1,6 @@
 # 7. Spots are seeded from OpenStreetMap at build time
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 ## Context

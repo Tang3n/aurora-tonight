@@ -1,6 +1,6 @@
 # 6. "Where to go" is computed in the client from a multi-point cloud forecast
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-19
 
 ## Context

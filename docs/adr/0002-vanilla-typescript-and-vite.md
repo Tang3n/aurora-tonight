@@ -1,6 +1,6 @@
 # 2. Vanilla TypeScript and Vite, no UI framework
 
-- Status: Accepted (retroactive)
+- Status: Superseded by ADR 13 (accepted 2026-11-18, retroactive)
 - Date: 2026-11-18
 
 ## Context

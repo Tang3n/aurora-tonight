@@ -1,64 +1,79 @@
-# 13. React Native with Expo as one universal app for iOS, Android and web
+# 13. React on the web, React Native with Expo on mobile, shared logic in packages
 
-- Status: Proposed (if accepted, supersedes ADR 2 and ADR 5 and amends ADR 3 and ADR 11)
+- Status: Accepted (supersedes ADR 2 and ADR 5; amends ADR 3 and ADR 11)
 - Date: 2026-11-19
 
 ## Context
 
 The app in `design/app-mock/` has six phone screens, forms, sign-in, a photo picker, maps, push notifications and
-background checks. The current stack (vanilla TypeScript, ADR 2) was chosen for one static screen. The Android
-build (ADR 5) wraps a WebView with Capacitor and is not yet verified on a device; there is no iOS app, and iOS web
-push needs the PWA added to the home screen.
+background checks, plus three desktop web pages. The current stack (vanilla TypeScript, ADR 2) was chosen for one
+static screen. The Android build (ADR 5) wraps a WebView with Capacitor, is unverified on a device, and there is no
+iOS app.
 
-React with TypeScript is the stack I already know best, and React Native is widely used in industry, so the choice
-also has portfolio value.
+React with TypeScript is the stack I know best, and React Native is widely used in industry.
+
+The web and the app do different jobs:
+
+- **Web**: the public, read-mostly layer: tonight's forecast, "where to go", spot pages and the scorecard. These are
+  shared as links and opened on laptops, so they need real HTML per URL, link previews and a desktop layout.
+- **Mobile app**: the action layer: alerts, reporting with a photo from the spot, the journal, saved spots and
+  background checks. These need native push, background tasks and the camera roll.
 
 What the product needs from the platform:
 
-| Need | Web (PWA) | Native |
+| Need | Web | Native |
 |---|---|---|
-| Push alerts | Web Push; iOS only from home screen | APNs / FCM, reliable |
+| Push alerts | Web Push; iOS only from home screen | APNs / FCM via `expo-notifications` |
 | Background checks | none | `expo-background-task` (WorkManager / BGTaskScheduler) |
 | Photos | file input + canvas re-encode | `expo-image-picker` + `expo-image-manipulator` (drops EXIF) |
 | Maps | MapLibre GL JS | MapLibre Native (`@maplibre/maplibre-react-native`) |
-| Shareable links, SEO | yes | no, needs the web |
+| Shareable links, previews | yes | no, relies on the web |
 
 ## Options
 
-1. **Keep vanilla TS + Capacitor** (status quo, maybe with Preact or Lit for new screens). Least work now; WebView
-   app with weaker native features; iOS still unaddressed.
-2. **React web (Vite) + a separate React Native app.** Best web experience and best native experience, but two UI
-   codebases: every screen is written twice, in DOM and in native components.
-3. **Expo universal app** (Expo Router, React Native, react-native-web). One UI codebase for iOS, Android and web;
-   platform-specific files (`*.web.tsx`) only where needed.
+1. **Keep vanilla TS + Capacitor.** Least work now; WebView app with weak native features; iOS still unaddressed.
+2. **React web + React Native app, shared logic in packages.** Native where it matters, plain web where it matters;
+   rendering components are written per platform.
+3. **One Expo universal app** (react-native-web for the browser). Screens written once, but the web becomes a
+   React Native app in a browser: bigger bundle, layout limited to React Native styles, harder to keep the CSS
+   desktop layout and the WebGL sky.
 
-## Decision (proposed)
+## Decision
 
-Option 3, in a monorepo with npm workspaces:
+Option 2, in a monorepo with npm workspaces:
 
 ```
-packages/model     pure TypeScript scoring model (ADR 4), no React; tested with Vitest
-packages/data      typed fetchers for NOAA, MET Norway, Open-Meteo; Supabase client and types
-apps/app           Expo + Expo Router (iOS, Android, web); static web output for shareable pages
+packages/model     pure TypeScript scoring model (ADR 4); no React; Vitest
+packages/data      typed fetchers (NOAA, MET Norway, Open-Meteo), Supabase client and generated DB types
+packages/core      React hooks and state shared by both apps: useTonight, useSpotRanking, useReportForm,
+                   alert preferences, i18n tables; TanStack Query for fetching and caching; no DOM, no native views
+apps/web           Vite + React + React Router (static prerender for spot pages and the scorecard), CSS,
+                   MapLibre GL JS, WebGL living-sky shader; deployed to GitHub Pages
+apps/mobile        Expo + Expo Router, MapLibre Native, React Native Skia for the sky shader,
+                   expo-notifications, expo-background-task, expo-image-picker; built with EAS Build
 ```
 
-- Navigation and deep links via Expo Router, so `/spot/dalsnuten` is the same route on web and in the app.
-- Web is exported as static HTML (`web.output: "static"`) and can still be hosted on GitHub Pages (ADR 3).
-- Platform splits: the map (`Map.native.tsx` with MapLibre Native, `Map.web.tsx` with MapLibre GL JS) and the
-  living-sky background (WebGL shader on web, React Native Skia runtime shader on native).
-- Notifications through `expo-notifications`; the server job of ADR 11 sends to Expo's push service or straight to
-  APNs/FCM, plus Web Push for browsers.
-- Builds with EAS Build; Android first (Google Play one-off fee), iOS later (Apple Developer Program, yearly fee).
+Rules:
+
+- `packages/core` may import React but never `react-dom` or `react-native`. Anything that touches the screen lives
+  in an app. This is where the sharing comes from: both apps call the same hooks and only render differently.
+- URLs match across platforms (`/spot/:id`, `/scorecard`). Android App Links (`assetlinks.json` on the web) open
+  the app when it is installed, iOS Universal Links later.
+- Reporting and the journal ship in the app first; the web gets read-only views and a "report in the app" prompt.
+  A web report form can follow later, reusing `useReportForm`.
 
 ## Consequences
 
-- One codebase for three platforms; screens are written once.
-- A rewrite of the current UI (`src/ui/`, `src/main.ts`), and the Capacitor branch is dropped. The model,
-  validation and tests carry over unchanged as `packages/model`.
-- The model must run on Hermes (React Native's JS engine); check `Intl` time-zone support there, which needed a
-  shim in QuickJS.
-- The web bundle grows (React, react-native-web, Expo Router) compared with today's vanilla build; the desktop
-  layout from the mock has to be built with responsive React Native styles, which is less flexible than CSS.
-- Two map libraries and two shader implementations are the price of native maps and smooth animation.
-- Migration order: monorepo and `packages/model` first, then phase 1 ("where to go", ADR 6) built directly in Expo,
-  then retire the old UI once the new web reaches parity.
+- Each platform uses its native strengths; the live web is rewritten in React but keeps its CSS, shader and size
+  budget close to today's.
+- Rendering code is written twice for screens that exist on both platforms (mainly Tonight and the map). Keeping
+  logic in `packages/core` keeps that duplication to markup and styles.
+- The Capacitor branch is retired. The model, validation and tests carry over unchanged into `packages/model`.
+- The model must also run on Hermes (React Native's engine); verify `Intl.DateTimeFormat` with `timeZone` there
+  (QuickJS needed a shim, `src/background/shims.ts`).
+- Two map libraries and two shader implementations are the price of native maps and animation.
+- Builds: Android via a development build over USB (the local emulator crashes); iOS only through EAS Build and an
+  Apple Developer account, so iOS comes after Android.
+- Migration order: (1) monorepo with `packages/model` and `packages/data`, existing web moved to `apps/web`
+  unchanged; (2) web UI rewritten in React, phase 1 "where to go" built there; (3) `apps/mobile` with Expo;
+  (4) backend features (ADR 8–11) on both.
