@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 108 108">
+  <!-- App icon source (iOS AppIcon, store listings). Same arc as the Android adaptive icon. -->
+  <defs>
+    <linearGradient id="g" x1="54" y1="72" x2="54" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5cffb0"/>
+      <stop offset="1" stop-color="#b48cff"/>
+    </linearGradient>
+  </defs>
+  <rect width="108" height="108" fill="#04070f"/>
+  <path d="M30,70C39,50 47,43 54,43s15,7 24,27" fill="none" stroke="url(#g)" stroke-width="9" stroke-linecap="round"/>
+</svg>

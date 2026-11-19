@@ -8,6 +8,7 @@
  * while the app — and this WebView — is closed.
  */
 import { BackgroundRunner } from '@capacitor/background-runner';
+import { Capacitor } from '@capacitor/core';
 import type { AlertConfig } from '../background/notify';
 import { buildOffsetTable } from '../background/tz';
 import type { RunStatus } from '../background/runner';
@@ -47,6 +48,11 @@ const T = {
     last: (time: string, peak: number | undefined) => `Last check ${time}${peak !== undefined ? ` · tonight up to ${peak} %` : ''}`,
     failed: (time: string) => `Last check ${time} failed (no data). Will try again.`,
     battery: 'If nothing arrives, allow the app to run in the background (battery settings).',
+    ios: {
+      denied: 'Notifications are blocked. Allow them in Settings → Notifications → Aurora Tonight.',
+      never: 'Not checked yet. iOS decides when to run the check — usually a few times a day, more often the more you use the app.',
+      battery: 'Keep Background App Refresh on for Aurora Tonight (Settings → General).',
+    },
   },
   cs: {
     title: 'Oznámení',
@@ -63,6 +69,11 @@ const T = {
     last: (time: string, peak: number | undefined) => `Poslední kontrola ${time}${peak !== undefined ? ` · dnes v noci až ${peak} %` : ''}`,
     failed: (time: string) => `Poslední kontrola ${time} selhala (chybí data). Zkusím to znovu.`,
     battery: 'Když nic nechodí, povol appce běh na pozadí (nastavení baterie).',
+    ios: {
+      denied: 'Oznámení jsou zablokovaná. Povol je v Nastavení → Oznámení → Aurora Tonight.',
+      never: 'Zatím nekontrolováno. Kdy kontrola poběží, rozhoduje iOS — obvykle několikrát denně, častěji, čím víc appku používáš.',
+      battery: 'Nech pro Aurora Tonight zapnuté Obnovování na pozadí (Nastavení → Obecné).',
+    },
   },
   no: {
     title: 'Varsler',
@@ -79,6 +90,11 @@ const T = {
     last: (time: string, peak: number | undefined) => `Sist sjekket ${time}${peak !== undefined ? ` · i kveld opptil ${peak} %` : ''}`,
     failed: (time: string) => `Sjekken ${time} feilet (mangler data). Prøver igjen.`,
     battery: 'Kommer det ingenting, tillat appen å kjøre i bakgrunnen (batteriinnstillinger).',
+    ios: {
+      denied: 'Varsler er blokkert. Tillat dem i Innstillinger → Varslinger → Aurora Tonight.',
+      never: 'Ikke sjekket ennå. iOS bestemmer når sjekken kjører — vanligvis noen ganger om dagen, oftere jo mer du bruker appen.',
+      battery: 'La Oppdater apper i bakgrunnen være på for Aurora Tonight (Innstillinger → Generelt).',
+    },
   },
 } satisfies Record<Lang, unknown>;
 
@@ -112,6 +128,9 @@ export interface Alerts {
 }
 
 export function initAlerts(host: AlertsHost, wrap: HTMLElement, btn: HTMLElement, pop: HTMLElement): Alerts {
+  const platform: 'android' | 'ios' = Capacitor.getPlatform() === 'ios' ? 'ios' : 'android';
+  /** Texts for the language, with the iOS wording where the platforms differ. */
+  const tx = (lang: Lang) => (platform === 'ios' ? { ...T[lang], ...T[lang].ios } : T[lang]);
   let prefs = loadPrefs();
   let status: RunStatus | null = null;
   let message = '';
@@ -125,6 +144,7 @@ export function initAlerts(host: AlertsHost, wrap: HTMLElement, btn: HTMLElement
       lang: host.lang(),
       // The runner has no Intl; give it this place's UTC offsets for the next year.
       offsets: buildOffsetTable(place.tz, new Date()),
+      platform,
     };
     try {
       await BackgroundRunner.dispatchEvent({ label: LABEL, event: 'configure', details: cfg as unknown as Record<string, unknown> });
@@ -143,7 +163,7 @@ export function initAlerts(host: AlertsHost, wrap: HTMLElement, btn: HTMLElement
   }
 
   function statusText(): string {
-    const S = T[host.lang()];
+    const S = tx(host.lang());
     if (!status?.at) return S.never;
     const time = new Date(status.at).toLocaleTimeString(host.lang() === 'no' ? 'nb' : host.lang(), { hour: '2-digit', minute: '2-digit' });
     return status.ok ? S.last(time, status.peak) : S.failed(time);
@@ -151,7 +171,7 @@ export function initAlerts(host: AlertsHost, wrap: HTMLElement, btn: HTMLElement
 
   function render() {
     const lang = host.lang();
-    const S = T[lang];
+    const S = tx(lang);
     btn.setAttribute('aria-label', S.title);
     btn.classList.toggle('on', prefs.enabled);
     pop.innerHTML = `
@@ -203,7 +223,7 @@ export function initAlerts(host: AlertsHost, wrap: HTMLElement, btn: HTMLElement
     if (box.id !== 'alEnabled') return;
     if (box.checked && !(await ensurePermission())) {
       box.checked = false;
-      message = T[host.lang()].denied;
+      message = tx(host.lang()).denied;
       render();
       return;
     }
@@ -216,11 +236,11 @@ export function initAlerts(host: AlertsHost, wrap: HTMLElement, btn: HTMLElement
     else if (el.dataset.det) await update({ detector: el.dataset.det as Detector });
     else if (el.id === 'alTest') {
       if (!(await ensurePermission())) {
-        message = T[host.lang()].denied;
+        message = tx(host.lang()).denied;
         return render();
       }
-      const S = T[host.lang()];
-      await BackgroundRunner.dispatchEvent({ label: LABEL, event: 'test', details: { title: S.testTitle, body: S.testBody } });
+      const S = tx(host.lang());
+      await BackgroundRunner.dispatchEvent({ label: LABEL, event: 'test', details: { title: S.testTitle, body: S.testBody, platform } });
     }
   });
 

@@ -26,6 +26,8 @@ export interface AlertConfig {
   /** Minimum score (0..100) worth a notification. */
   threshold: number;
   offsets: OffsetTable;
+  /** Native platform; the runner's notification API differs between them. Default android. */
+  platform?: 'android' | 'ios';
 }
 
 export interface AlertState {
