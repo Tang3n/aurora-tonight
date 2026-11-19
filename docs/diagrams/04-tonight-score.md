@@ -55,7 +55,7 @@ flowchart LR
     clear --> out --> sum
 ```
 
-Validated against the Kilpisjärvi all-sky camera; see [section 10](10-validation-loop.md) and `validation/README.md`.
+Validated against the Kilpisjärvi all-sky camera; see [the validation loop](09-validation-loop.md) and `validation/README.md`.
 
 ---
 

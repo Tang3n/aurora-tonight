@@ -14,11 +14,8 @@ export interface Strings {
   noResults: string;
   locating: string;
   tonight: string;
-  eyeChance: string;
-  camera: (pct: number) => string;
   labels: Record<Label, string>;
   goNow: string;
-  scale: string[];
   sentence: {
     noNight: string;
     clouds: string;
@@ -52,10 +49,6 @@ export interface Strings {
   now: string;
   tt: { eye: string; camera: string; kp: string; clear: string; height: string; sky: string; overhead: string; live: string };
   f: {
-    activity: string;
-    clouds: string;
-    dark: string;
-    moon: string;
     strong: string;
     moderate: string;
     weak: string;
@@ -96,8 +89,41 @@ export interface Strings {
   sources: string;
   disclaimer: string;
   nav: { tonight: string; go: string };
-  go: {
+  home: {
+    tonightAt: (place: string) => string;
+    bestSpots: (limit: string) => string;
+  };
+  spot: {
+    tonightHere: string;
+    navigate: string;
+    share: string;
+    copied: string;
+    elevation: string;
+    viewNorth: string;
+    viewNorthOpen: string;
+    viewNorthUnknown: string;
+    coordinates: string;
+    fromHome: (minutes: number, km: number, home: string) => string;
+    about: string;
+    notFound: string;
+    back: string;
+  };
+  alerts: {
+    tab: string;
     title: string;
+    lead: string;
+    enable: string;
+    threshold: string;
+    thresholdOption: (score: number, label: string) => string;
+    permissionDenied: string;
+    howItWorks: string;
+    notifTitle: (score: number, label: string) => string;
+    lastSent: (night: string) => string;
+    never: string;
+    test: string;
+    language: string;
+  };
+  go: {
     lead: string;
     within: (limit: string) => string;
     home: (score: number) => string;
@@ -112,6 +138,7 @@ export interface Strings {
     travelNote: string;
     attribution: string;
     mapLabel: string;
+    betterNearby: string;
   };
   loading: string;
   failed: (what: string) => string;
@@ -127,11 +154,8 @@ const en: Strings = {
   noResults: 'No places found',
   locating: 'Locating…',
   tonight: 'Tonight',
-  eyeChance: '% chance to see it',
-  camera: (p) => `Phone camera ${p} %`,
   labels: { no: 'No', unlikely: 'Unlikely', maybe: 'Maybe', good: 'Good', great: 'Great' },
   goNow: 'Go now',
-  scale: ['No', 'Unlikely', 'Maybe', 'Good', 'Great'],
   sentence: {
     noNight: 'The sun does not set far enough here tonight — no dark sky to see aurora.',
     clouds: 'Clouds cover the sky for most of the night.',
@@ -166,10 +190,6 @@ const en: Strings = {
   now: 'now',
   tt: { eye: 'Eye', camera: 'Camera', kp: 'Kp', clear: 'Through clouds', height: 'Aurora height', sky: 'Sky brightness', overhead: 'overhead', live: 'live' },
   f: {
-    activity: 'Aurora',
-    clouds: 'Clouds',
-    dark: 'Darkness',
-    moon: 'Moon',
     strong: 'Strong',
     moderate: 'Moderate',
     weak: 'Weak',
@@ -211,8 +231,41 @@ const en: Strings = {
   sources: 'Data',
   disclaimer: 'A forecast, not a promise — aurora can surprise both ways.',
   nav: { tonight: 'Tonight', go: 'Where to go' },
+  home: {
+    tonightAt: (place) => `Tonight at ${place}`,
+    bestSpots: (limit) => `Best spots within ${limit}`,
+  },
+  spot: {
+    tonightHere: 'Tonight here',
+    navigate: 'Navigate',
+    share: 'Share link',
+    copied: 'Link copied',
+    elevation: 'Elevation',
+    viewNorth: 'View north',
+    viewNorthOpen: 'mapped as open',
+    viewNorthUnknown: 'not mapped',
+    coordinates: 'Coordinates',
+    fromHome: (m, km, home) => `≈ ${m} min · ${km} km from ${home}`,
+    about: 'A viewpoint from OpenStreetMap. Check the view north and the road yourself before a night trip; we only know what is mapped.',
+    notFound: 'We could not find this viewpoint.',
+    back: 'Back to tonight',
+  },
+  alerts: {
+    tab: 'Alerts',
+    title: 'Tell me when it is worth going out',
+    lead: 'Your phone checks the forecast for your place about every 15 minutes and notifies you once per night.',
+    enable: 'Alerts for tonight',
+    threshold: 'Notify from',
+    thresholdOption: (score, label) => `${score} · ${label}`,
+    permissionDenied: 'Notifications are turned off for this app in the system settings.',
+    howItWorks: 'Android decides when the check runs (battery, network), so an alert can come a little late.',
+    notifTitle: (score, label) => `Aurora tonight: ${score} · ${label}`,
+    lastSent: (night) => `Last alert: night of ${night}`,
+    never: 'No alert sent yet',
+    test: 'Send a test notification',
+    language: 'Language',
+  },
   go: {
-    title: 'Where to go tonight',
     lead: 'Viewpoints within reach, ranked by tonight’s chance to see aurora with the eye.',
     within: (limit) => `Best within ${limit}`,
     home: (score) => `Home: ${score}`,
@@ -227,6 +280,7 @@ const en: Strings = {
     travelNote: 'Travel time is a straight-line estimate; roads around fjords can take longer.',
     attribution: 'Viewpoints © OpenStreetMap contributors (ODbL)',
     mapLabel: 'Map of viewpoints near you, coloured by tonight’s score',
+    betterNearby: 'Better nearby',
   },
   loading: 'Loading the sky…',
   failed: (w) => `Couldn't load ${w}. The score assumes the worst for it.`,
@@ -240,11 +294,8 @@ const cs: Strings = {
   noResults: 'Nic nenalezeno',
   locating: 'Zjišťuji polohu…',
   tonight: 'Dnes v noci',
-  eyeChance: '% šance ji uvidět',
-  camera: (p) => `Fotoaparát mobilu ${p} %`,
   labels: { no: 'Ne', unlikely: 'Spíš ne', maybe: 'Možná', good: 'Dobré', great: 'Výborné' },
   goNow: 'Vyraz hned',
-  scale: ['Ne', 'Spíš ne', 'Možná', 'Dobré', 'Výborné'],
   sentence: {
     noNight: 'Slunce tu dnes nezapadne dost hluboko — chybí tmavá obloha.',
     clouds: 'Většinu noci zakryjí oblohu mraky.',
@@ -279,10 +330,6 @@ const cs: Strings = {
   now: 'teď',
   tt: { eye: 'Oko', camera: 'Fotoaparát', kp: 'Kp', clear: 'Přes mraky', height: 'Výška záře', sky: 'Jas oblohy', overhead: 'nad hlavou', live: 'živě' },
   f: {
-    activity: 'Záře',
-    clouds: 'Mraky',
-    dark: 'Tma',
-    moon: 'Měsíc',
     strong: 'Silná',
     moderate: 'Střední',
     weak: 'Slabá',
@@ -324,8 +371,41 @@ const cs: Strings = {
   sources: 'Data',
   disclaimer: 'Je to předpověď, ne slib — záře umí překvapit oběma směry.',
   nav: { tonight: 'Dnes v noci', go: 'Kam vyrazit' },
+  home: {
+    tonightAt: (place) => `Dnes v noci · ${place}`,
+    bestSpots: (limit) => `Nejlepší místa do ${limit}`,
+  },
+  spot: {
+    tonightHere: 'Dnes v noci tady',
+    navigate: 'Navigovat',
+    share: 'Sdílet odkaz',
+    copied: 'Odkaz zkopírován',
+    elevation: 'Nadmořská výška',
+    viewNorth: 'Výhled na sever',
+    viewNorthOpen: 'zmapovaný jako otevřený',
+    viewNorthUnknown: 'nezmapováno',
+    coordinates: 'Souřadnice',
+    fromHome: (m, km, home) => `≈ ${m} min · ${km} km od místa ${home}`,
+    about: 'Vyhlídka z OpenStreetMap. Výhled na sever a cestu si před noční výpravou ověř sám; víme jen to, co je zmapované.',
+    notFound: 'Tuhle vyhlídku jsme nenašli.',
+    back: 'Zpět na dnešní noc',
+  },
+  alerts: {
+    tab: 'Upozornění',
+    title: 'Dej mi vědět, až se vyplatí vyrazit',
+    lead: 'Telefon zhruba každých 15 minut zkontroluje předpověď pro tvé místo a upozorní tě nejvýš jednou za noc.',
+    enable: 'Upozornění na dnešní noc',
+    threshold: 'Upozornit od',
+    thresholdOption: (score, label) => `${score} · ${label}`,
+    permissionDenied: 'Oznámení jsou pro tuto aplikaci vypnutá v nastavení systému.',
+    howItWorks: 'Kdy kontrola proběhne, řídí Android (baterie, síť), takže upozornění může přijít s malým zpožděním.',
+    notifTitle: (score, label) => `Polární záře dnes: ${score} · ${label}`,
+    lastSent: (night) => `Poslední upozornění: noc ${night}`,
+    never: 'Zatím žádné upozornění',
+    test: 'Poslat zkušební oznámení',
+    language: 'Jazyk',
+  },
   go: {
-    title: 'Kam dnes vyrazit',
     lead: 'Vyhlídky v dosahu seřazené podle dnešní šance vidět záři pouhým okem.',
     within: (limit) => `Nejlepší do ${limit}`,
     home: (score) => `Doma: ${score}`,
@@ -340,6 +420,7 @@ const cs: Strings = {
     travelNote: 'Doba cesty je odhad vzdušnou čarou; silnice kolem fjordů mohou trvat déle.',
     attribution: 'Vyhlídky © přispěvatelé OpenStreetMap (ODbL)',
     mapLabel: 'Mapa vyhlídek v okolí obarvená podle dnešního skóre',
+    betterNearby: 'Lepší v okolí',
   },
   loading: 'Načítám oblohu…',
   failed: (w) => `Nepodařilo se načíst: ${w}. Skóre pro ně počítá s nejhorším.`,
@@ -353,11 +434,8 @@ const no: Strings = {
   noResults: 'Fant ingen steder',
   locating: 'Finner posisjon…',
   tonight: 'I kveld',
-  eyeChance: '% sjanse å se det',
-  camera: (p) => `Mobilkamera ${p} %`,
   labels: { no: 'Nei', unlikely: 'Lite sannsynlig', maybe: 'Kanskje', good: 'Bra', great: 'Svært bra' },
   goNow: 'Gå ut nå',
-  scale: ['Nei', 'Lite', 'Kanskje', 'Bra', 'Svært bra'],
   sentence: {
     noNight: 'Sola går ikke langt nok ned her i natt — himmelen blir ikke mørk.',
     clouds: 'Skyer dekker himmelen det meste av natten.',
@@ -392,10 +470,6 @@ const no: Strings = {
   now: 'nå',
   tt: { eye: 'Øyet', camera: 'Kamera', kp: 'Kp', clear: 'Gjennom skyer', height: 'Nordlysets høyde', sky: 'Himmelens lysstyrke', overhead: 'rett over', live: 'direkte' },
   f: {
-    activity: 'Nordlys',
-    clouds: 'Skyer',
-    dark: 'Mørke',
-    moon: 'Måne',
     strong: 'Sterk',
     moderate: 'Moderat',
     weak: 'Svak',
@@ -437,8 +511,41 @@ const no: Strings = {
   sources: 'Data',
   disclaimer: 'En prognose, ikke et løfte — nordlyset kan overraske begge veier.',
   nav: { tonight: 'I natt', go: 'Hvor dra' },
+  home: {
+    tonightAt: (place) => `I natt · ${place}`,
+    bestSpots: (limit) => `Beste steder innen ${limit}`,
+  },
+  spot: {
+    tonightHere: 'I natt her',
+    navigate: 'Naviger',
+    share: 'Del lenke',
+    copied: 'Lenke kopiert',
+    elevation: 'Høyde',
+    viewNorth: 'Utsikt mot nord',
+    viewNorthOpen: 'kartlagt som åpen',
+    viewNorthUnknown: 'ikke kartlagt',
+    coordinates: 'Koordinater',
+    fromHome: (m, km, home) => `≈ ${m} min · ${km} km fra ${home}`,
+    about: 'Et utsiktspunkt fra OpenStreetMap. Sjekk utsikten mot nord og veien selv før en nattetur; vi vet bare det som er kartlagt.',
+    notFound: 'Fant ikke dette utsiktspunktet.',
+    back: 'Tilbake til i natt',
+  },
+  alerts: {
+    tab: 'Varsler',
+    title: 'Si fra når det er verdt å gå ut',
+    lead: 'Telefonen sjekker prognosen for stedet ditt omtrent hvert 15. minutt og varsler deg høyst én gang per natt.',
+    enable: 'Varsel for i natt',
+    threshold: 'Varsle fra',
+    thresholdOption: (score, label) => `${score} · ${label}`,
+    permissionDenied: 'Varsler er slått av for denne appen i systeminnstillingene.',
+    howItWorks: 'Android bestemmer når sjekken kjøres (batteri, nett), så et varsel kan komme litt sent.',
+    notifTitle: (score, label) => `Nordlys i natt: ${score} · ${label}`,
+    lastSent: (night) => `Siste varsel: natten ${night}`,
+    never: 'Ingen varsel sendt ennå',
+    test: 'Send et testvarsel',
+    language: 'Språk',
+  },
   go: {
-    title: 'Hvor du bør dra i natt',
     lead: 'Utsiktspunkter innen rekkevidde, rangert etter sjansen for å se nordlys med øyet i natt.',
     within: (limit) => `Best innen ${limit}`,
     home: (score) => `Hjemme: ${score}`,
@@ -453,6 +560,7 @@ const no: Strings = {
     travelNote: 'Reisetiden er anslått i luftlinje; veier rundt fjorder kan ta lengre tid.',
     attribution: 'Utsiktspunkter © OpenStreetMap-bidragsytere (ODbL)',
     mapLabel: 'Kart over utsiktspunkter i nærheten, farget etter nattens poengsum',
+    betterNearby: 'Bedre i nærheten',
   },
   loading: 'Laster himmelen…',
   failed: (w) => `Klarte ikke å laste ${w}. Poengsummen antar det verste.`,

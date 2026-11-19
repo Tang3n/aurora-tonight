@@ -1,6 +1,6 @@
 # 13. React on the web, React Native with Expo on mobile, shared logic in packages
 
-- Status: Accepted (supersedes ADR 2 and ADR 5; amends ADR 3 and ADR 11)
+- Status: Accepted (supersedes ADR 2 and ADR 5; amends ADR 3; amended by ADR 14: no backend)
 - Date: 2026-11-19
 
 ## Context

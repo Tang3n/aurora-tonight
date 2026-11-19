@@ -32,6 +32,17 @@ export const SPOT_REGIONS: { id: string; south: number; west: number; north: num
   { id: 'trondelag', south: 62.2, west: 7.9, north: 65.5, east: 14.4 },
 ];
 
+/** Fetch every region (for a direct link to a spot, wherever home is). `baseUrl` ends with a slash. */
+export async function fetchAllSpotRegions(baseUrl: string): Promise<SpotRegion[]> {
+  return Promise.all(
+    SPOT_REGIONS.map(async (r) => {
+      const res = await fetch(`${baseUrl}spots/${r.id}.json`);
+      if (!res.ok) throw new Error(`${res.status} — spots/${r.id}.json`);
+      return (await res.json()) as SpotRegion;
+    }),
+  );
+}
+
 /** Fetch every region whose box lies within `marginKm` of the point. `baseUrl` ends with a slash. */
 export async function fetchSpotsNear(baseUrl: string, lat: number, lon: number, marginKm = 150): Promise<SpotRegion[]> {
   const dLat = marginKm / 111;

@@ -8,11 +8,22 @@ import { parseOvation, type OvationGrid, type OvationJson } from '@aurora/model/
 
 const SWPC = 'https://services.swpc.noaa.gov';
 
+let clientHeaders: Record<string, string> = {};
+
+/**
+ * Native apps must identify themselves: MET Norway's terms require a User-Agent naming the app, and
+ * it answers 403 to React Native's default "okhttp/…". Browsers send their own User-Agent and must
+ * not override it, so the web never calls this.
+ */
+export function setClientIdentity(userAgent: string) {
+  clientHeaders = userAgent ? { 'User-Agent': userAgent } : {};
+}
+
 async function getJson<T>(url: string, timeoutMs = 15_000): Promise<T> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
-    const res = await fetch(url, { signal: ctrl.signal });
+    const res = await fetch(url, { signal: ctrl.signal, headers: clientHeaders });
     if (!res.ok) throw new Error(`${res.status} ${res.statusText} — ${url}`);
     return (await res.json()) as T;
   } finally {

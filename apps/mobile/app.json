@@ -19,8 +19,41 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "blockedPermissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.SYSTEM_ALERT_WINDOW"
+      ]
     },
-    "plugins": ["@maplibre/maplibre-react-native"]
+    "plugins": [
+      "@maplibre/maplibre-react-native",
+      "expo-router",
+      "expo-sqlite",
+      "expo-localization",
+      "expo-background-task",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Your position is used only to forecast the aurora where you are. It is not sent anywhere except to the weather services."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#5cffb0"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "extraProguardRules": "# WorkManager (expo-background-task) creates its Room database by reflection; R8 would strip the constructor.\n-keep class * extends androidx.room.RoomDatabase { <init>(); }"
+          }
+        }
+      ],
+      "expo-font"
+    ]
   }
 }

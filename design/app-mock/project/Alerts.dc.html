@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Alerts</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#04070f}
+a{color:#5cffb0;text-decoration:none}a:hover{color:#a9ffd6}
+.card{background:rgba(14,22,40,.72);border:1px solid rgba(160,220,255,.12);border-radius:20px;padding:16px}
+.eyebrow{font:500 11px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#93a3bc}
+.tabbar{position:absolute;left:0;right:0;bottom:0;height:84px;display:flex;justify-content:space-around;align-items:flex-start;padding-top:8px;background:rgba(6,10,20,.92);border-top:1px solid rgba(160,220,255,.10)}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:64px;min-height:44px;font:500 11px/1 Inter,sans-serif;color:#93a3bc}
+.tab.on{color:#5cffb0}
+.tab svg{width:24px;height:24px}
+.chip{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid rgba(160,220,255,.16);background:rgba(14,22,40,.8);color:#c9d6ea;font:500 14px Inter,sans-serif;cursor:pointer}
+</style>
+</helmet>
+<div style="position:relative;width:390px;height:844px;overflow:hidden;background:#04070f;color:#e8f1ff;font:15px/1.45 Inter,sans-serif">
+  <div style="height:760px;overflow-y:auto;padding:24px 16px;box-sizing:border-box;display:flex;flex-direction:column;gap:14px">
+    <h1 style="margin:0;font:700 26px/1.15 'Space Grotesk',sans-serif">Tell me when it is worth going out</h1>
+    <p style="margin:0;color:#93a3bc;font-size:15px">Your phone checks the forecast for your place about every 15 minutes and notifies you once per night. No account, nothing leaves the phone except the forecast request.</p>
+
+    <div class="card" style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <span style="font:600 16px 'Space Grotesk',sans-serif">Alerts for tonight</span>
+        <button role="switch" aria-checked="{{onAria}}" aria-label="Alerts for tonight" onClick="{{toggle}}" style="{{track}}"><span style="{{knob}}"></span></button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="eyebrow">Notify from</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <sc-for list="{{thresholds}}" as="t" hint-placeholder-count="3">
+            <button class="chip" style="{{t.style}}" onClick="{{t.pick}}">{{t.label}}</button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="display:flex;flex-direction:column;gap:8px">
+      <div class="eyebrow">Language</div>
+      <div style="display:flex;gap:8px">
+        <button class="chip" style="background:#5cffb0;color:#04120b;border-color:#5cffb0">EN</button>
+        <button class="chip">CS</button>
+        <button class="chip">NO</button>
+      </div>
+    </div>
+
+    <div class="card" style="display:flex;flex-direction:column;gap:6px">
+      <span style="font:500 15px Inter,sans-serif">Last alert: night of 2026-11-17</span>
+      <span style="font-size:13px;color:#93a3bc">Last check 22:14 · score 31 · below threshold</span>
+      <span style="font-size:13px;color:#93a3bc;margin-top:6px">Android decides when the check runs (battery, network), so an alert can come a little late.</span>
+    </div>
+
+    <button class="card" style="min-height:52px;color:#5cffb0;font:600 15px Inter,sans-serif;cursor:pointer">Send a test notification</button>
+    <a href="Scorecard.dc.html" style="text-align:center;font-size:14px;min-height:44px;display:flex;align-items:center;justify-content:center">How accurate is the forecast?</a>
+  </div>
+
+  <nav class="tabbar" aria-label="Main">
+    <a class="tab" href="Main.dc.html"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"></path></svg>Tonight</a>
+    <a class="tab" href="Go.dc.html"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l18-8-8 18-2-8z"></path></svg>Where to go</a>
+    <a class="tab on" href="Alerts.dc.html"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"></path><path d="M10 21a2 2 0 0 0 4 0"></path></svg>Alerts</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { on: true, threshold: 50 };
+  }
+  renderVals() {
+    var self = this;
+    var on = this.state.on;
+    var thresholds = [[30, 'Maybe'], [50, 'Good'], [70, 'Great']].map(function (t) {
+      var sel = self.state.threshold === t[0];
+      return {
+        label: t[0] + ' · ' + t[1],
+        style: sel ? 'background:#5cffb0;color:#04120b;border-color:#5cffb0' : '',
+        pick: function () { self.setState({ threshold: t[0] }); }
+      };
+    });
+    return {
+      onAria: on ? 'true' : 'false',
+      toggle: function () { self.setState({ on: !self.state.on }); },
+      track: 'width:52px;height:32px;border-radius:999px;border:0;padding:3px;cursor:pointer;display:flex;flex:none;justify-content:' + (on ? 'flex-end' : 'flex-start') + ';background:' + (on ? '#5cffb0' : '#2a3850'),
+      knob: 'width:26px;height:26px;border-radius:50%;background:' + (on ? '#04120b' : '#93a3bc'),
+      thresholds: thresholds
+    };
+  }
+}
+</script>
+</body>
+</html>

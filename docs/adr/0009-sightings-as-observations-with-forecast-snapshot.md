@@ -1,6 +1,6 @@
 # 9. Sightings are observations, including "nothing", stored with a forecast snapshot
 
-- Status: Accepted
+- Status: Superseded by ADR 14 (accepted 2026-11-19, withdrawn the same day: no accounts, no backend)
 - Date: 2026-11-19
 
 ## Context

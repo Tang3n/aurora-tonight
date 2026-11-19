@@ -1,9 +1,11 @@
 # Alerts (phase 4)
 
-Part of the [architecture diagrams](../architecture.md). Mermaid sequence diagram, rendered in place on the
+> **Archived 2026-11-19.** Not built: accounts and the backend were dropped in [ADR 14](../../adr/0014-no-accounts-no-backend.md). Kept as the design that was considered.
+
+Part of the [architecture diagrams](../../architecture.md). Mermaid sequence diagram, rendered in place on the
 repository page. Legend: **solid** = exists today, **dashed** = planned.
 
-([ADR 11](../adr/0011-server-side-alerts.md)). Forecast alerts and report alerts share one job, one cooldown and one log.
+([ADR 11](../../adr/0011-server-side-alerts.md)). Forecast alerts and report alerts share one job, one cooldown and one log.
 
 ```mermaid
 sequenceDiagram
@@ -31,4 +33,4 @@ sequenceDiagram
 
 ---
 
-[← All diagrams](../architecture.md)
+[← All diagrams](../../architecture.md)

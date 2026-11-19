@@ -1,10 +1,12 @@
 # Reporting a sighting (phase 3)
 
-Part of the [architecture diagrams](../architecture.md). Mermaid sequence diagram, rendered in place on the
+> **Archived 2026-11-19.** Not built: accounts and the backend were dropped in [ADR 14](../../adr/0014-no-accounts-no-backend.md). Kept as the design that was considered.
+
+Part of the [architecture diagrams](../../architecture.md). Mermaid sequence diagram, rendered in place on the
 repository page. Legend: **solid** = exists today, **dashed** = planned.
 
-The privacy rules ([ADR 10](../adr/0010-location-and-photo-privacy.md)) and the trusted forecast snapshot
-([ADR 9](../adr/0009-sightings-as-observations-with-forecast-snapshot.md)) are enforced on the server, not only in the UI.
+The privacy rules ([ADR 10](../../adr/0010-location-and-photo-privacy.md)) and the trusted forecast snapshot
+([ADR 9](../../adr/0009-sightings-as-observations-with-forecast-snapshot.md)) are enforced on the server, not only in the UI.
 
 ```mermaid
 sequenceDiagram
@@ -30,4 +32,4 @@ sequenceDiagram
 
 ---
 
-[← All diagrams](../architecture.md)
+[← All diagrams](../../architecture.md)

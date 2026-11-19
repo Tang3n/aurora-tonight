@@ -1,6 +1,6 @@
 # 10. Location and photo privacy by default
 
-- Status: Accepted
+- Status: Superseded by ADR 14 (accepted 2026-11-19, withdrawn the same day: no accounts, no backend)
 - Date: 2026-11-19
 
 ## Context

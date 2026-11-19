@@ -47,3 +47,5 @@ Nordic model.
   (`worthTheDrive`), because forecast noise makes smaller gains meaningless. Revisit with report data.
 - Scoring is ~7 ms per spot (Node, laptop); at most 60 candidates run on the main thread. A Web Worker is the
   fix if phones struggle.
+- 2026-11-19, later: on the web "where to go" moved into the home page (map beside the verdict, spot cards below)
+  and each spot got its own page (`/spot/:id`), following the web mock; `/go` redirects to `/`.

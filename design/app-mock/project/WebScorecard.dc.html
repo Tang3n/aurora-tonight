@@ -30,38 +30,37 @@ td{padding:12px;border-bottom:1px solid rgba(160,220,255,.08);font-size:14px}
       </div>
       <nav class="nav" aria-label="Main" style="display:flex;gap:4px;flex-wrap:wrap">
         <a href="WebHome.dc.html">Tonight</a>
-        <a href="WebSpot.dc.html">Spots</a>
+        <a href="WebSpot.dc.html">Where to go</a>
         <a class="on" href="WebScorecard.dc.html">Scorecard</a>
       </nav>
       <div style="flex:1"></div>
-      <button style="min-height:44px;padding:0 18px;border-radius:999px;border:0;background:#5cffb0;color:#04120b;font:600 14px Inter,sans-serif">Sign in</button>
     </header>
 
     <div style="max-width:760px">
       <h1 style="margin:12px 0 0;font:600 40px/1.1 'Space Grotesk',sans-serif">How right were we?</h1>
-      <p style="margin:12px 0 0;font-size:18px;color:#c9d6ea">Every report stores the forecast we showed at that time and place. This page compares the two, including the nights we got wrong.</p>
+      <p style="margin:12px 0 0;font-size:18px;color:#c9d6ea">All-sky cameras in the north record every night, good or bad. Each morning we compare what they saw with what we forecast, including the nights we got wrong.</p>
     </div>
 
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="chip on">South Norway</button>
-      <button class="chip">Mid Norway</button>
-      <button class="chip">North Norway</button>
-      <button class="chip">Finland &amp; Sweden</button>
+      <button class="chip on">All cameras</button>
+      <button class="chip">Kilpisjärvi</button>
+      <button class="chip">Skibotn</button>
+      <button class="chip">Sodankylä</button>
       <div style="flex:1"></div>
       <button class="chip">Last 30 nights</button>
       <button class="chip">Season</button>
     </div>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
-      <div class="card"><div class="eyebrow">Reports</div><div style="font:700 36px 'Space Grotesk',sans-serif;margin-top:8px">412</div><div style="font-size:13px;color:#93a3bc">from 96 people, 30 nights</div></div>
-      <div class="card"><div class="eyebrow">“Nothing” reports</div><div style="font:700 36px 'Space Grotesk',sans-serif;margin-top:8px">58 %</div><div style="font-size:13px;color:#93a3bc">the misses keep us honest</div></div>
+      <div class="card"><div class="eyebrow">Dark hours checked</div><div style="font:700 36px 'Space Grotesk',sans-serif;margin-top:8px">1 016</div><div style="font-size:13px;color:#93a3bc">3 cameras, last 30 nights</div></div>
+      <div class="card"><div class="eyebrow">Hours with aurora</div><div style="font:700 36px 'Space Grotesk',sans-serif;margin-top:8px">31 %</div><div style="font-size:13px;color:#93a3bc">as labelled from the keograms</div></div>
       <div class="card"><div class="eyebrow">Brier skill</div><div style="font:700 36px 'Space Grotesk',sans-serif;margin-top:8px;color:#5cffb0">+0.22</div><div style="font-size:13px;color:#93a3bc">vs. always guessing the average</div></div>
-      <div class="card"><div class="eyebrow">Called right</div><div style="font:700 36px 'Space Grotesk',sans-serif;margin-top:8px">24 / 30</div><div style="font-size:13px;color:#93a3bc">nights with 3+ reports</div></div>
+      <div class="card"><div class="eyebrow">Called right</div><div style="font:700 36px 'Space Grotesk',sans-serif;margin-top:8px">24 / 30</div><div style="font-size:13px;color:#93a3bc">nights with clear sky at a camera</div></div>
     </div>
 
     <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:stretch">
       <div class="card" style="flex:999 1 560px;min-width:0">
-        <div class="eyebrow">Forecast score vs. share of reports that saw aurora</div>
+        <div class="eyebrow">Forecast score vs. share of hours the camera saw aurora</div>
         <div style="display:flex;align-items:flex-end;gap:18px;height:240px;margin-top:24px;border-bottom:1px solid rgba(160,220,255,.14)">
           <sc-for list="{{bins}}" as="b" hint-placeholder-count="5">
             <div style="flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;position:relative">
@@ -91,7 +90,7 @@ td{padding:12px;border-bottom:1px solid rgba(160,220,255,.08);font-size:14px}
         </div>
         <div class="card">
           <div class="eyebrow">Method</div>
-          <p style="margin:12px 0 0;font-size:14px;color:#c9d6ea">Physics model (Starkov oval, AACGM-v2, extinction, moon and twilight contrast) plus an empirical cloud curve, checked against the Kilpisjärvi all-sky camera and these reports.</p>
+          <p style="margin:12px 0 0;font-size:14px;color:#c9d6ea">Physics model (Starkov oval, AACGM-v2, extinction, moon and twilight contrast) plus an empirical cloud curve, checked every morning against public all-sky camera keograms (FMI). No user data is involved.</p>
           <a href="WebScorecard.dc.html" style="display:inline-flex;min-height:44px;align-items:center;font-size:14px">Read the method and data on GitHub</a>
         </div>
       </div>
@@ -100,10 +99,10 @@ td{padding:12px;border-bottom:1px solid rgba(160,220,255,.08);font-size:14px}
     <div class="card" style="padding:8px 8px 4px">
       <div style="overflow-x:auto">
         <table style="width:100%;border-collapse:collapse;min-width:640px">
-          <thead><tr><th>Night</th><th>Forecast</th><th>Eye</th><th>Camera</th><th>Nothing</th><th>Verdict</th></tr></thead>
+          <thead><tr><th>Night</th><th>Station</th><th>Forecast</th><th>Aurora on camera</th><th>Clear hours</th><th>Verdict</th></tr></thead>
           <tbody>
             <sc-for list="{{nights}}" as="n" hint-placeholder-count="5">
-              <tr><td>{{n.d}}</td><td style="font-weight:600">{{n.fc}}</td><td>{{n.eye}}</td><td>{{n.cam}}</td><td>{{n.none}}</td><td style="{{n.mark}}">{{n.verdict}}</td></tr>
+              <tr><td>{{n.d}}</td><td>{{n.fc}}</td><td style="font-weight:600">{{n.eye}}</td><td>{{n.cam}}</td><td>{{n.none}}</td><td style="{{n.mark}}">{{n.verdict}}</td></tr>
             </sc-for>
           </tbody>
         </table>
@@ -122,11 +121,11 @@ class Component extends DCLogic {
         ideal: 'position:absolute;left:-6px;right:-6px;bottom:' + Math.round(d[2] * 2) + 'px;border-top:2px dashed #b48cff' };
     });
     var nights = [
-      ['18 Nov', '22', '0', '1', '5', 'Right', true],
-      ['17 Nov', '61', '9', '3', '2', 'Right', true],
-      ['16 Nov', '35', '0', '0', '7', 'Too high', false],
-      ['14 Nov', '48', '2', '4', '3', 'Right', true],
-      ['13 Nov', '18', '1', '2', '1', 'Too low', false]
+      ['18 Nov', 'Kilpisjärvi', '22', '0 h', '9 h', 'Right', true],
+      ['17 Nov', 'Kilpisjärvi', '61', '5 h', '11 h', 'Right', true],
+      ['16 Nov', 'Skibotn', '35', '0 h', '7 h', 'Too high', false],
+      ['14 Nov', 'Sodankylä', '48', '3 h', '8 h', 'Right', true],
+      ['13 Nov', 'Skibotn', '18', '2 h', '6 h', 'Too low', false]
     ].map(function (n) {
       return { d: n[0], fc: n[1], eye: n[2], cam: n[3], none: n[4], verdict: n[5],
         mark: 'font-weight:600;color:' + (n[6] ? '#5cffb0' : '#ffc56b') };

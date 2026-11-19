@@ -30,7 +30,7 @@ a{color:#5cffb0;text-decoration:none}a:hover{color:#a9ffd6}
       </div>
       <nav class="nav" aria-label="Main" style="display:flex;gap:4px;flex-wrap:wrap">
         <a class="on" href="WebHome.dc.html">Tonight</a>
-        <a href="WebSpot.dc.html">Spots</a>
+        <a href="WebSpot.dc.html">Where to go</a>
         <a href="WebScorecard.dc.html">Scorecard</a>
       </nav>
       <div style="flex:1"></div>
@@ -39,7 +39,6 @@ a{color:#5cffb0;text-decoration:none}a:hover{color:#a9ffd6}
         <span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Search a place</span>
         <input value="Stavanger" style="flex:1;min-width:0;background:none;border:0;color:#e8f1ff;font:15px Inter,sans-serif;outline:none">
       </label>
-      <button style="min-height:44px;padding:0 18px;border-radius:999px;border:0;background:#5cffb0;color:#04120b;font:600 14px Inter,sans-serif">Sign in</button>
     </header>
 
     <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:stretch">
@@ -63,13 +62,13 @@ a{color:#5cffb0;text-decoration:none}a:hover{color:#a9ffd6}
             </sc-for>
           </div>
         </div>
-        <div class="card" style="display:flex;gap:12px;align-items:center">
-          <span aria-hidden="true" style="width:10px;height:10px;border-radius:50%;background:#5cffb0;box-shadow:0 0 10px #5cffb0;flex:none"></span>
-          <div style="flex:1;font-size:14px"><b style="font-weight:600">2 sightings within 80 km</b> in the last hour<div style="font-size:13px;color:#93a3bc">Sola beach 21:42 · camera only · Dalsnuten 21:58 · eye</div></div>
-        </div>
+        <a href="WebSpot.dc.html" class="card" style="display:flex;gap:14px;align-items:center;color:#e8f1ff;border-color:rgba(92,255,176,.35);background:rgba(16,40,34,.72)">
+          <div style="width:56px;height:56px;flex:none;border-radius:14px;background:#5cffb0;display:flex;align-items:center;justify-content:center;font:700 24px 'Space Grotesk',sans-serif;color:#04120b">64</div>
+          <div style="flex:1;font-size:14px"><div class="eyebrow" style="color:#8fe9bf">Better nearby</div><b style="font:600 17px 'Space Grotesk',sans-serif">Dalsnuten viewpoint</b><div style="font-size:13px;color:#93a3bc">≈ 35 min · best 22:30 – 00:30</div></div>
+        </a>
         <a href="WebScorecard.dc.html" class="card" style="display:flex;gap:12px;align-items:center;color:#e8f1ff">
           <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b48cff" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>
-          <div style="flex:1;font-size:14px">Last night we said <b>22, unlikely</b>. 6 reports: 5 nothing, 1 camera only.</div>
+          <div style="flex:1;font-size:14px">Forecast right on <b>24 of 30</b> nights, checked against all-sky cameras in the north.</div>
           <span style="font-size:14px;color:#5cffb0">Scorecard</span>
         </a>
       </div>
@@ -123,7 +122,7 @@ a{color:#5cffb0;text-decoration:none}a:hover{color:#a9ffd6}
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">
         <sc-for list="{{spots}}" as="s" hint-placeholder-count="4">
           <a href="WebSpot.dc.html" class="card" style="display:flex;flex-direction:column;gap:12px;color:#e8f1ff;padding:0;overflow:hidden">
-            <div role="img" aria-label="{{s.photoLabel}}" style="{{s.photo}}"></div>
+            <div aria-hidden="true" style="{{s.photo}}"></div>
             <div style="display:flex;align-items:center;gap:12px;padding:0 16px 16px">
               <div style="{{s.badge}}">{{s.score}}</div>
               <div style="flex:1;min-width:0">
