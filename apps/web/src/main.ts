@@ -8,9 +8,9 @@
 import './styles.css';
 import SunCalc from 'suncalc';
 import { LANGS, STRINGS, detectLang, type Lang } from './i18n';
-import { buildTonight, nightlyOutlook, type KpBlock, type Tonight } from './model/night';
-import type { OvationGrid } from './model/ovation';
-import { bestWindow } from './model/score';
+import { buildTonight, nightlyOutlook, type KpBlock, type Tonight } from '@aurora/model/night';
+import type { OvationGrid } from '@aurora/model/ovation';
+import { bestWindow } from '@aurora/model/score';
 import {
   fetchClouds,
   fetchKp,
@@ -20,7 +20,7 @@ import {
   type CloudForecast,
   type Location,
   type SolarWindSample,
-} from './data/sources';
+} from '@aurora/data/sources';
 import { createSky } from './ui/sky';
 import { drawOval } from './ui/ovalMap';
 import {

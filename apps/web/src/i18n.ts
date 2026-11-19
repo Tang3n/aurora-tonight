@@ -1,4 +1,4 @@
-import type { Label } from './model/score';
+import type { Label } from '@aurora/model/score';
 
 export type Lang = 'en' | 'cs' | 'no';
 export const LANGS: Lang[] = ['en', 'cs', 'no'];

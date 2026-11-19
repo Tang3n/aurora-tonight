@@ -1,5 +1,5 @@
 """
-Generate the AACGM-v2 lookup grid used by src/model/aacgm.ts.
+Generate the AACGM-v2 lookup grid used by packages/model/src/aacgm.ts.
 
 AACGM-v2 (Shepherd 2014) has no JavaScript implementation, so we precompute
 magnetic latitude/longitude at 110 km (lower edge of green aurora) on a 2° grid
@@ -8,7 +8,7 @@ for two IGRF epochs and interpolate in the browser (error < 0.02° at 40–80°)
     uv venv tools/.venv && uv pip install --python tools/.venv/bin/python aacgmv2==2.7.1 numpy
     tools/.venv/bin/python tools/gen_aacgm_grid.py
 
-Output: src/model/aacgmGrid.generated.ts (do not edit by hand).
+Output: packages/model/src/aacgmGrid.generated.ts (do not edit by hand).
 Also prints reference values used in unit tests.
 """
 import base64
@@ -25,7 +25,7 @@ LONS = list(range(0, 360, STEP))
 EPOCHS = [2025, 2029]  # IGRF-14 coefficients end in 2029
 MISSING = -32768
 
-out = pathlib.Path(__file__).resolve().parent.parent / "src" / "model" / "aacgmGrid.generated.ts"
+out = pathlib.Path(__file__).resolve().parent.parent / "packages" / "model" / "src" / "aacgmGrid.generated.ts"
 
 
 def grid(epoch: int) -> tuple[str, str, int]:

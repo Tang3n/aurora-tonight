@@ -4,9 +4,9 @@
  */
 import SunCalc from 'suncalc';
 import { LOCALE, type Lang, type Strings } from '../i18n';
-import type { NightOutlook, Tonight } from '../model/night';
-import { labelFor, type HourScore, type Window } from '../model/score';
-import type { SolarWindSample } from '../data/sources';
+import type { NightOutlook, Tonight } from '@aurora/model/night';
+import { labelFor, type HourScore, type Window } from '@aurora/model/score';
+import type { SolarWindSample } from '@aurora/data/sources';
 
 export const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);

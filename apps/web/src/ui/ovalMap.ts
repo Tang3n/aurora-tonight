@@ -6,7 +6,7 @@ import { geoGraticule10, geoOrthographic, geoPath } from 'd3-geo';
 import { feature } from 'topojson-client';
 import type { Topology, GeometryCollection } from 'topojson-specification';
 import landTopo from 'world-atlas/land-110m.json';
-import type { OvationGrid } from '../model/ovation';
+import type { OvationGrid } from '@aurora/model/ovation';
 
 const topo = landTopo as unknown as Topology<{ land: GeometryCollection }>;
 const land = feature(topo, topo.objects.land);

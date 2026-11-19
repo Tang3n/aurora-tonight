@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // ES2022 only, no DOM and no Node types: the model must not depend on any one runtime (ADR 4).
+    // The few globals it does need are declared in src/runtime.d.ts.
+    "lib": ["ES2022"],
+    "types": []
+  },
+  "include": ["src"]
+}

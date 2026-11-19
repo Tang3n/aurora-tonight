@@ -1,0 +1,20 @@
+{
+  "name": "@aurora/model",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "description": "Aurora visibility model. Pure TypeScript: runs in browsers, React Native (Hermes), QuickJS and Deno (ADR 4).",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "suncalc": "^1.9.0"
+  },
+  "devDependencies": {
+    "@types/suncalc": "^1.9.2"
+  }
+}

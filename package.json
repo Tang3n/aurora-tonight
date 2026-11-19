@@ -1,26 +1,20 @@
 {
   "name": "aurora-tonight",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview",
-    "test": "vitest run",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "d3-geo": "^3.1.1",
-    "suncalc": "^1.9.0",
-    "topojson-client": "^3.1.0",
-    "world-atlas": "^2.0.2"
+    "dev": "npm run dev -w @aurora/web",
+    "build": "npm run build -w @aurora/web",
+    "preview": "npm run preview -w @aurora/web",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
   },
   "devDependencies": {
-    "@types/d3-geo": "^3.1.1",
-    "@types/geojson": "^7946.0.16",
-    "@types/suncalc": "^1.9.2",
-    "@types/topojson-client": "^3.1.5",
     "typescript": "~5.9.3",
     "vite": "^8.3.8",
     "vitest": "^5.1.0"

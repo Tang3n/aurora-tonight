@@ -3,8 +3,8 @@
  * the caller (main.ts) decides how a failed source degrades the page.
  * All endpoints are public, keyless and send `Access-Control-Allow-Origin: *`.
  */
-import type { CloudPoint, KpBlock, KpKind } from '../model/night';
-import { parseOvation, type OvationGrid, type OvationJson } from '../model/ovation';
+import type { CloudPoint, KpBlock, KpKind } from '@aurora/model/night';
+import { parseOvation, type OvationGrid, type OvationJson } from '@aurora/model/ovation';
 
 const SWPC = 'https://services.swpc.noaa.gov';
 
