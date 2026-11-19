@@ -1,7 +1,8 @@
 # Aurora Tonight — Product spec
 
 Rewritten 2026-11-19 when the project grew from a static forecast page into a web + mobile product with accounts.
-Architecture decisions are in [`adr/`](adr/README.md), the stack in [`tech-stack.md`](tech-stack.md), the UI mock in
+Architecture decisions are in [`adr/`](adr/README.md), diagrams in [`architecture.md`](architecture.md), the stack in
+[`tech-stack.md`](tech-stack.md), the UI mock in
 `design/app-mock/` (canvas: https://claude.ai/artifact/YDjKRcTRCTwzhMMn7vqHMw).
 
 ## Goal

@@ -63,7 +63,8 @@ npm workspaces monorepo:
 | `tools/` | generator of the AACGM grid |
 
 Pushes to `main` deploy `apps/web` to GitHub Pages via Actions. Plans and decisions: [docs/spec.md](docs/spec.md),
-[docs/adr/](docs/adr/README.md), [docs/tech-stack.md](docs/tech-stack.md).
+[docs/architecture.md](docs/architecture.md) (diagrams), [docs/adr/](docs/adr/README.md),
+[docs/tech-stack.md](docs/tech-stack.md).
 
 ## License
 
