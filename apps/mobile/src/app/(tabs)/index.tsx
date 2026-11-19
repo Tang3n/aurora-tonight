@@ -5,8 +5,9 @@
  */
 import { useForecastData, useNow, useViewModel, type ForecastData } from '@aurora/core/hooks';
 import { useWhereToGo, worthTheDrive, type RankedSpot } from '@aurora/core/spots';
-import { factors, highlightWindow, inWindow, isNowHour, nightRows, pct, sunTimesLine, verdict, windStats, type Tone, type ViewModel } from '@aurora/core/view';
+import { factors, highlightWindow, inWindow, isNowHour, nightRows, pct, sunTimesLine, tooltipRows, verdict, windStats, type Tone, type ViewModel } from '@aurora/core/view';
 import { router } from 'expo-router';
+import { useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Line, Path } from 'react-native-svg';
@@ -145,38 +146,92 @@ function GoTeaser({ label, text }: { label: string; text: string }) {
   );
 }
 
+/** Eye-bar colour, as on the web (apps/web/src/components/Timeline.tsx). */
+function eyeColor(v: number): string {
+  return v > 60 ? C.aurora : v > 35 ? C.cyan : '#26507a';
+}
+
 /**
- * Hour by hour as in the mock: one bar per hour with the camera score, which still shows the shape of
- * the night when the eye score is near zero; coloured by the same thresholds as the headline.
+ * Tonight hour by hour, the same chart as on the web: solid bars for the eye, a dashed outline for the
+ * phone camera, a strip for clouds, the best window highlighted. Tap an hour for its details (the web's
+ * tooltip; a phone has no hover).
  */
 function Hours({ vm }: { vm: ViewModel }) {
   const { loc } = useAppState();
+  const S = vm.S;
   const hours = vm.tonight.hours;
   const best = highlightWindow(vm);
+  const [picked, setPicked] = useState<number | null>(null);
+  const sel = picked !== null ? hours[picked] : undefined;
+  const rows = sel ? tooltipRows(sel, S) : null;
   return (
     <Card>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' }}>
-        <Eyebrow>{vm.S.hourByHour}</Eyebrow>
-        <Text style={s.hint}>{vm.S.legendCamera}</Text>
+        <Eyebrow>{S.hourByHour}</Eyebrow>
       </View>
       <View style={st.bars}>
-        {hours.map((h) => {
-          const color = h.camera >= 50 ? C.aurora : h.camera >= 30 ? C.warn : inWindow(h, best) ? '#4a6488' : C.slate;
-          return (
-            <View key={h.time.getTime()} style={st.barCol} accessibilityLabel={`${vm.fmt.time(h.time)}: ${h.eye} / ${h.camera}`}>
-              <View style={[st.bar, { height: `${Math.max(5, h.camera)}%`, backgroundColor: color }]} />
-              {isNowHour(h, vm.now) ? <View style={st.nowLine} /> : null}
-            </View>
-          );
-        })}
+        {hours.map((h, i) => (
+          <Pressable
+            key={h.time.getTime()}
+            style={st.barCol}
+            onPress={() => setPicked(picked === i ? null : i)}
+            accessibilityRole="button"
+            accessibilityLabel={`${vm.fmt.time(h.time)}: ${S.tt.eye} ${h.eye}, ${S.tt.camera} ${h.camera}`}
+          >
+            <View style={[st.barCam, { height: `${Math.max(3, h.camera)}%` }, inWindow(h, best) && st.barCamBest]} />
+            <View
+              style={[
+                st.bar,
+                { height: `${Math.max(3, h.eye)}%`, backgroundColor: eyeColor(h.eye), opacity: 0.35 + (h.eye / 100) * 0.65 },
+              ]}
+            />
+            {isNowHour(h, vm.now) ? <View style={st.nowLine} /> : null}
+            {picked === i ? <View style={st.pickLine} /> : null}
+          </Pressable>
+        ))}
       </View>
-      <View style={{ flexDirection: 'row', gap: 4, marginTop: 6 }}>
+      <View style={st.hourRow}>
         {hours.map((h) => (
           <Text key={h.time.getTime()} style={st.hourLabel}>
             {vm.fmt.hour(h.time)}
           </Text>
         ))}
       </View>
+      <View style={st.hourRow}>
+        {hours.map((h) => (
+          <View key={h.time.getTime()} style={[st.cloud, { opacity: h.cloud ? 0.08 + (1 - h.clear) * 0.7 : 0 }]} />
+        ))}
+      </View>
+      <View style={st.legend}>
+        <View style={st.legendItem}>
+          <View style={[st.swatch, { backgroundColor: C.cyan }]} />
+          <Text style={s.hint}>{S.legendEye}</Text>
+        </View>
+        <View style={st.legendItem}>
+          <View style={[st.swatch, st.swatchCam]} />
+          <Text style={s.hint}>{S.legendCamera}</Text>
+        </View>
+        <View style={st.legendItem}>
+          <View style={[st.swatch, { backgroundColor: '#c9d6ea' }]} />
+          <Text style={s.hint}>{S.legendCloud}</Text>
+        </View>
+      </View>
+      {sel && rows ? (
+        <View style={st.detail}>
+          <Text style={st.detailTitle}>
+            {vm.fmt.time(sel.time)}
+            {rows.live ? ` · ${S.tt.live}` : ''}
+          </Text>
+          <View style={st.detailGrid}>
+            {rows.rows.map((r) => (
+              <View key={r.key} style={st.detailCell}>
+                <Text style={st.k}>{S.tt[r.key]}</Text>
+                <Text style={st.detailValue}>{r.value}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      ) : null}
       <Text style={[s.hint, { marginTop: 10 }]}>{sunTimesLine(vm, loc)}</Text>
     </Card>
   );
@@ -292,11 +347,25 @@ const st = StyleSheet.create({
   notice: { color: C.warn, fontSize: 13, fontFamily: F.body },
   rowCard: { flexDirection: 'row', alignItems: 'center', gap: 14 },
   spotName: { color: C.text, fontSize: 17, fontFamily: F.numSemi },
-  bars: { flexDirection: 'row', alignItems: 'flex-end', gap: 4, height: 78, marginTop: 12 },
+  bars: { flexDirection: 'row', alignItems: 'flex-end', gap: 3, height: 120, marginTop: 14 },
   barCol: { flex: 1, height: '100%', justifyContent: 'flex-end' },
-  bar: { width: '100%', borderRadius: 4 },
+  bar: { width: '100%', borderTopLeftRadius: 4, borderTopRightRadius: 4 },
+  barCamBest: { borderColor: 'rgba(92,255,176,0.75)', backgroundColor: 'rgba(92,255,176,0.12)' },
+  barCam: { position: 'absolute', left: 0, right: 0, bottom: 0, borderWidth: 1, borderStyle: 'dashed', borderColor: 'rgba(180,140,255,0.5)', borderBottomWidth: 0, borderTopLeftRadius: 4, borderTopRightRadius: 4, backgroundColor: 'rgba(180,140,255,0.10)' },
   nowLine: { position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, backgroundColor: C.text, opacity: 0.6 },
+  pickLine: { position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, borderRadius: 4, borderWidth: 1, borderColor: 'rgba(232,241,255,0.5)' },
+  hourRow: { flexDirection: 'row', gap: 3, marginTop: 6 },
   hourLabel: { flex: 1, color: C.muted, fontSize: 9, textAlign: 'center', fontFamily: F.body },
+  cloud: { flex: 1, height: 4, borderRadius: 2, backgroundColor: '#c9d6ea' },
+  legend: { flexDirection: 'row', flexWrap: 'wrap', gap: 14, marginTop: 12 },
+  legendItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  swatch: { width: 12, height: 8, borderRadius: 2 },
+  swatchCam: { borderWidth: 1, borderStyle: 'dashed', borderColor: 'rgba(180,140,255,0.7)', backgroundColor: 'rgba(180,140,255,0.15)' },
+  detail: { marginTop: 12, padding: 12, borderRadius: 14, backgroundColor: 'rgba(4,7,15,0.6)', borderWidth: 1, borderColor: C.border, gap: 8 },
+  detailTitle: { color: C.text, fontFamily: F.numSemi, fontSize: 15 },
+  detailGrid: { flexDirection: 'row', flexWrap: 'wrap', rowGap: 8 },
+  detailCell: { width: '33.33%', gap: 2 },
+  detailValue: { color: C.text, fontFamily: F.numSemi, fontSize: 14 },
   levelTitle: { color: C.text, fontSize: 17, fontFamily: F.numSemi, marginTop: 10 },
   k: { color: C.faint, fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', fontFamily: F.bodyMed },
   v: { color: C.text, fontSize: 17, fontFamily: F.numSemi },
