@@ -136,6 +136,60 @@ export async function fetchClouds(lat: number, lon: number): Promise<CloudForeca
   };
 }
 
+/* ---------- Clouds for many points at once (Open-Meteo, ADR 6) ---------- */
+
+interface OpenMeteoHourly {
+  time: number[];
+  cloud_cover: (number | null)[];
+  cloud_cover_low: (number | null)[];
+  cloud_cover_mid: (number | null)[];
+  cloud_cover_high: (number | null)[];
+}
+
+/** Open-Meteo answers a multi-location request with one object per coordinate, in order. */
+type OpenMeteoMulti = { hourly: OpenMeteoHourly }[] | { hourly: OpenMeteoHourly };
+
+/** Locations per request; keeps the URL well under common length limits. */
+const OPEN_METEO_BATCH = 100;
+
+/**
+ * Hourly cloud cover for many points in one request per 100 points, from the `metno_seamless`
+ * model (MET Nordic over Scandinavia, ECMWF elsewhere). Results are in the same order as `points`.
+ * The model uses only `total`, which matches the ERA5 total the cloud curve was fitted on.
+ */
+export async function fetchCloudsMany(points: { lat: number; lon: number }[], days = 2): Promise<CloudForecast[]> {
+  const fetchedAt = new Date();
+  const out: CloudForecast[] = [];
+  for (let i = 0; i < points.length; i += OPEN_METEO_BATCH) {
+    const batch = points.slice(i, i + OPEN_METEO_BATCH);
+    const params = new URLSearchParams({
+      latitude: batch.map((p) => p.lat.toFixed(3)).join(','),
+      longitude: batch.map((p) => p.lon.toFixed(3)).join(','),
+      hourly: 'cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high',
+      models: 'metno_seamless',
+      timeformat: 'unixtime',
+      timezone: 'GMT',
+      forecast_days: String(days),
+    });
+    const json = await getJson<OpenMeteoMulti>(`https://api.open-meteo.com/v1/forecast?${params}`);
+    const list = Array.isArray(json) ? json : [json];
+    if (list.length !== batch.length) throw new Error(`Open-Meteo returned ${list.length} of ${batch.length} locations`);
+    for (const { hourly: h } of list) {
+      const pct = (x: number | null | undefined) => (x ?? 0) / 100;
+      const points: CloudPoint[] = [];
+      h.time.forEach((t, k) => {
+        if (h.cloud_cover[k] === null || h.cloud_cover[k] === undefined) return; // model gap
+        points.push({
+          time: new Date(t * 1000),
+          cloud: { total: pct(h.cloud_cover[k]), low: pct(h.cloud_cover_low[k]), mid: pct(h.cloud_cover_mid[k]), high: pct(h.cloud_cover_high[k]) },
+        });
+      });
+      out.push({ updated: fetchedAt, points });
+    }
+  }
+  return out;
+}
+
 /* ---------- Place search ---------- */
 
 export interface Location {
