@@ -1,0 +1,25 @@
+{
+  "name": "@aurora/mobile",
+  "version": "0.2.0",
+  "main": "index.ts",
+  "private": true,
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "spike:expected": "vite build --ssr scripts/gen-expected.ts --outDir ../../node_modules/.cache/aurora-spike --emptyOutDir && node ../../node_modules/.cache/aurora-spike/gen-expected.mjs"
+  },
+  "dependencies": {
+    "@aurora/model": "*",
+    "@maplibre/maplibre-react-native": "^11.5.1",
+    "expo": "~58.0.26",
+    "expo-status-bar": "~58.0.5",
+    "react": "19.3.0",
+    "react-native": "0.88.1"
+  },
+  "devDependencies": {
+    "@types/react": "~19.3.0",
+    "typescript": "~6.0.3"
+  }
+}
