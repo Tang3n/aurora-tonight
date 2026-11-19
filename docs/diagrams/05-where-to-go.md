@@ -12,7 +12,7 @@ Runs entirely in the client ([ADR 6](../adr/0006-where-to-go-computed-in-the-cli
 sequenceDiagram
     autonumber
     actor U as User
-    participant C as Client (web; app later)
+    participant C as Client (web or app)
     participant S as spots/*.json<br/>(OSM viewpoints, built offline)
     participant OM as Open-Meteo<br/>metno_seamless, many points
     participant N as NOAA SWPC

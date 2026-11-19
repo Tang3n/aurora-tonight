@@ -1,7 +1,7 @@
 # Aurora Tonight — Product spec
 
-Rewritten 2026-11-19 when the project grew from a static forecast page into a web + mobile product with accounts.
-Architecture decisions are in [`adr/`](adr/README.md), diagrams in [`architecture.md`](architecture.md), the stack in
+Rewritten 2026-11-19 when the project grew from a static forecast page into a web + mobile product; the same day
+accounts and the backend were dropped again ([ADR 14](adr/0014-no-accounts-no-backend.md)). Architecture decisions are in [`adr/`](adr/README.md), diagrams in [`architecture.md`](architecture.md), the stack in
 [`tech-stack.md`](tech-stack.md), the UI mock in
 `design/app-mock/` (canvas: https://claude.ai/artifact/YDjKRcTRCTwzhMMn7vqHMw).
 
@@ -21,72 +21,64 @@ Secondary: exchange students and tourists who do not know where to go.
 
 ## Market (checked 2026-11-19)
 
-Community sightings with photos already exist in Hello Aurora, AuroraPulse and Aurora Forecast (iOS). Photo sharing
-alone does not set us apart. What does: a physics model validated against an all-sky camera, a "where to go"
-answer, reports that include "saw nothing", and a public scorecard of our own accuracy.
+Community sightings with photos already exist in Hello Aurora, AuroraPulse and Aurora Forecast (iOS); we do not
+compete there. What sets us apart: a physics model validated against all-sky cameras, a "where to go" answer,
+alerts that need no account, and (later) a public scorecard of our own accuracy.
 
-## Core loop
+## How it is used
 
 ```
-forecast ──► alert ──► drive to a spot ──► report (eye / camera only / nothing, optional photo)
-    ▲                                                   │
-    └── calibration + alerts for people nearby ◄────────┘
+open the app / get an alert ──► see tonight's score and window ──► (maybe) pick a spot within reach ──► go out
 ```
 
-Accounts exist to join this loop. Without one, everything is readable.
+No sign-up, no server: everything runs on the device or in the browser, from public data
+([ADR 14](adr/0014-no-accounts-no-backend.md)).
 
 ## Pillars
 
 1. **Tonight**: one score (eye and camera), the best window, factors (activity, clouds, darkness, moon), the oval,
-   live solar wind, 3-day outlook. Exists today (phase 0).
-2. **Where to go**: rank spots within a chosen travel time by tonight's score; "clear sky 35 min north-east".
-   Spots are seeded from OpenStreetMap viewpoints and later added by users ([ADR 6](adr/0006-where-to-go-computed-in-the-client.md),
+   live solar wind, 3-day outlook.
+2. **Where to go**: rank OSM viewpoints within a chosen travel time by tonight's score; recommend driving only when
+   a spot beats home by 5+ points ([ADR 6](adr/0006-where-to-go-computed-in-the-client.md),
    [ADR 7](adr/0007-spots-seeded-from-openstreetmap.md)).
-3. **Sightings**: observations tied to a place and time: seen with the eye, camera only, or nothing; optional
-   photos; stored with a server-computed snapshot of our forecast ([ADR 9](adr/0009-sightings-as-observations-with-forecast-snapshot.md)).
-   Photos are shown on spot pages, not in a feed ([ADR 12](adr/0012-no-feed-chat-or-follows.md)).
-4. **Scorecard**: a public page comparing forecasts with reports per region, including the nights we got wrong.
-5. **Journal and alerts** (signed in): my nights, my photos, saved spots; alerts for "good night within 1 h drive"
-   and "sightings within 50 km" ([ADR 11](adr/0011-server-side-alerts.md)).
+3. **Alerts** (app): the phone checks the forecast for the saved place about every 15 minutes and notifies at most
+   once per night above a chosen threshold.
+4. **Scorecard** (later): how often the forecast matched what public all-sky cameras saw, regenerated
+   automatically, published as static data.
 
-## Platforms ([ADR 13](adr/0013-react-and-react-native-via-expo.md))
+## Platforms ([ADR 13](adr/0013-react-and-react-native-via-expo.md), [ADR 14](adr/0014-no-accounts-no-backend.md))
 
-| | Web (React) | Mobile app (React Native, Expo) |
+| | Web (React, GitHub Pages) | Mobile app (React Native, Expo) |
 |---|---|---|
-| Role | public, read-mostly; shared by link | action: alerts, reporting from the spot |
 | Tonight, where to go | yes (desktop layout: forecast and map side by side) | yes |
-| Spot pages, scorecard | yes, prerendered, link previews | yes |
-| Report a sighting | later; prompt to use the app | yes, with photo |
-| Journal, alerts | read-only journal later | yes, push + background checks |
+| Alerts | no (a browser cannot run in the background) | yes, on the device |
+| Scorecard (later) | yes | yes |
+| Accounts, reports, photos | no | no |
 
-Both apps share `packages/model`, `packages/data` and `packages/core` (hooks and state). URLs match on both
-(`/spot/:id`, `/scorecard`).
+Both share `packages/model`, `packages/data` and `packages/core` (hooks, view model, ranking, alert decision).
 
 ## Phases
 
-| Phase | Scope | Done when |
+| Phase | Scope | Status |
 |---|---|---|
-| 0 (done) | static forecast page, model v2, validation, EN/CS/NO | live on GitHub Pages |
-| 1 (built 2026-11-19, on branch) | monorepo; web rewritten in React; **where to go** with OSM spots, no backend | I use it to choose where to drive |
-| 2 (built 2026-11-19, emulator-tested) | Expo app (Android first): tonight, where to go, device-side alerts | app on my phone |
-| 3 | Supabase: accounts, sightings incl. "nothing", photos, journal, moderation basics, privacy policy | first report from someone else |
-| 4 | server alerts (forecast + reports nearby), public scorecard from reports | numbers for southern Norway |
-| later | iOS build, web report form, routing-based travel times, light-pollution layer | — |
-
-Phases 3–4 come after the 2026 exam period.
+| 0 | static forecast page, model v2, validation, EN/CS/NO | done, live |
+| 1 | monorepo; web in React; **where to go** with OSM spots | done, live 2026-11-19 |
+| 2 | Expo app (Android first): tonight, where to go, device-side alerts | built 2026-11-19, emulator-tested; phone test pending |
+| 3 | camera scorecard: scheduled GitHub Action reads all-sky keograms, compares with the model, publishes JSON; scorecard page in web and app | next |
+| later | animated sky in the app (Skia), north view from a terrain model, routing-based travel times, light-pollution layer, iOS build | — |
 
 ## Non-goals
 
-- Social features: feed, comments, chat, direct messages, followers, likes as a mechanic ([ADR 12](adr/0012-no-feed-chat-or-follows.md)).
+- Accounts, user-generated content (reports, photos, comments) and any backend or database ([ADR 14](adr/0014-no-accounts-no-backend.md)).
+- Social features of any kind.
 - Monetisation, ads, paid tiers.
 - A historical archive of space weather (we link to existing ones).
-- Storing original photos or precise locations the user did not choose to share ([ADR 10](adr/0010-location-and-photo-privacy.md)).
 
-## Privacy and moderation
+## Privacy
 
-GDPR applies (EU/EEA). EXIF is removed on the device, location precision is the user's choice and enforced on the
-server, account deletion removes everything ([ADR 10](adr/0010-location-and-photo-privacy.md)). Posting needs an
-account; daily upload limit, report button, auto-hide after repeated flags, admin view ([ADR 12](adr/0012-no-feed-chat-or-follows.md)).
+No personal data is collected or stored by us. The app keeps its settings on the phone; the chosen place (or a
+coarse GPS position) is sent only to the public weather and space-weather APIs to fetch the forecast. Fine location,
+storage and overlay permissions are blocked in the Android build.
 
 ## Data sources (verified 2026-11-18/19, all CORS-enabled)
 
@@ -114,9 +106,10 @@ Case et al. 2016; Zhang & Paxton 2008; Krisciunas & Schaefer 1991; Kasten & Youn
 
 Validated 2026-11-18 against the Kilpisjärvi all-sky camera (see `validation/README.md`): the physics ranks clear
 hours well (AUC 0.97); forecast cloud was far too harsh and now uses an empirical curve (overall AUC 0.67 → 0.79,
-Brier skill −0.23 → +0.22). The same model runs on the web, in the app and on the server ([ADR 4](adr/0004-one-typescript-model-for-all-runtimes.md)).
+Brier skill −0.23 → +0.22). The same model runs on the web, in the app and in the app's background check
+([ADR 4](adr/0004-one-typescript-model-for-all-runtimes.md)).
 
-Next: calibrate against user reports in the south (phase 4), log forecast vs observed Kp, light-pollution layer.
+Next: the automated camera scorecard (phase 3), more camera stations, log forecast vs observed Kp, light-pollution layer.
 
 ## Visual direction — "Living sky" (decided 2026-11-18)
 
@@ -130,4 +123,4 @@ headings, Inter for text. Original mockup: `design/mockup.html`; app screens: `d
 - Final name and domain.
 - Light-pollution data with a usable licence.
 - Travel time: OSRM or OpenRouteService for the top spots, and their usage limits.
-- Whether the Supabase free plan's inactivity pause is prevented by the alert cron (ADR 8).
+- Which all-sky cameras publish data usable for an automatic scorecard, and under which terms.

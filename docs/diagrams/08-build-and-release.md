@@ -6,7 +6,7 @@ repository page. Legend: **solid** = exists today, **dashed** = planned.
 ```mermaid
 flowchart LR
     dev["git push"] --> branch{"branch?"}
-    branch -- main --> ci["GitHub Actions<br/>npm ci → npm test → npm run build"]
+    branch -- main --> ci["GitHub Actions<br/>npm ci → typecheck → test → build"]
     ci --> pagesdeploy["upload apps/web/dist → GitHub Pages"]
     branch -- other --> none["no deploy"]
 

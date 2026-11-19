@@ -1,6 +1,6 @@
 # 8. Supabase as the backend for accounts, reports and photos
 
-- Status: Accepted
+- Status: Superseded by ADR 14 (accepted 2026-11-19, withdrawn the same day: no accounts, no backend)
 - Date: 2026-11-19
 
 ## Context
