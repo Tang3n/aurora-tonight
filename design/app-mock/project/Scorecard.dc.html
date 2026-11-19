@@ -27,14 +27,15 @@ a{color:#5cffb0;text-decoration:none}a:hover{color:#a9ffd6}
       <h1 style="margin:0;font:600 20px 'Space Grotesk',sans-serif">How right were we?</h1>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="chip on">South Norway</button>
-      <button class="chip">Mid Norway</button>
-      <button class="chip">North</button>
+      <button class="chip on">All cameras</button>
+      <button class="chip">Kilpisjärvi</button>
+      <button class="chip">Skibotn</button>
+      <button class="chip">Sodankylä</button>
     </div>
 
     <div class="card">
-      <div class="eyebrow">Last 30 nights · 412 reports</div>
-      <p style="margin:10px 0 0;font-size:16px">When we said <b style="color:#5cffb0;font-weight:600">60–80</b>, people saw aurora <b style="color:#5cffb0;font-weight:600">68 %</b> of the time.</p>
+      <div class="eyebrow">Last 30 nights · 3 cameras · 1 016 dark hours</div>
+      <p style="margin:10px 0 0;font-size:16px">When we said <b style="color:#5cffb0;font-weight:600">60–80</b>, the camera saw aurora in <b style="color:#5cffb0;font-weight:600">68 %</b> of those hours.</p>
       <div style="display:flex;align-items:flex-end;gap:10px;height:150px;margin-top:16px;padding-bottom:4px;border-bottom:1px solid rgba(160,220,255,.14);position:relative">
         <sc-for list="{{bins}}" as="b" hint-placeholder-count="5">
           <div style="flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;position:relative">
@@ -50,7 +51,7 @@ a{color:#5cffb0;text-decoration:none}a:hover{color:#a9ffd6}
         </sc-for>
       </div>
       <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:#93a3bc">
-        <span style="display:flex;align-items:center;gap:6px"><span aria-hidden="true" style="width:12px;height:12px;border-radius:3px;background:#5cffb0"></span>seen by reporters</span>
+        <span style="display:flex;align-items:center;gap:6px"><span aria-hidden="true" style="width:12px;height:12px;border-radius:3px;background:#5cffb0"></span>seen by the camera</span>
         <span style="display:flex;align-items:center;gap:6px"><span aria-hidden="true" style="width:14px;height:0;border-top:2px dashed #b48cff"></span>perfectly calibrated</span>
       </div>
     </div>
@@ -59,7 +60,8 @@ a{color:#5cffb0;text-decoration:none}a:hover{color:#a9ffd6}
       <div class="eyebrow">Where we miss</div>
       <ul style="margin:10px 0 0;padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:6px">
         <li>Too optimistic below Kp 2: quiet nights scored 30–40 still came up empty.</li>
-        <li>Coastal fog that the cloud forecast misses.</li>
+        <li>Thin cloud the forecast calls clear.</li>
+        <li>Southern Norway has no camera yet, so it is not checked.</li>
       </ul>
     </div>
 
@@ -76,7 +78,7 @@ a{color:#5cffb0;text-decoration:none}a:hover{color:#a9ffd6}
         </sc-for>
       </div>
     </div>
-    <div style="font-size:12px;color:#93a3bc">Calibration also checked against the Kilpisjärvi all-sky camera. Method and data are open on GitHub.</div>
+    <div style="font-size:12px;color:#93a3bc">Updated every morning from public all-sky camera keograms. No user data. Method and data are open on GitHub.</div>
   </div>
 </div>
 </x-dc>
@@ -90,10 +92,10 @@ class Component extends DCLogic {
         ideal: 'position:absolute;left:-4px;right:-4px;bottom:' + Math.round(d[2] * 1.15) + 'px;border-top:2px dashed #b48cff' };
     });
     var nights = [
-      ['18 Nov', '22', '5 nothing, 1 camera', 'right', true],
-      ['17 Nov', '61', '9 eye, 3 camera, 2 nothing', 'right', true],
-      ['16 Nov', '35', '7 nothing', 'too high', false],
-      ['15 Nov', '12', 'no reports', '–', null]
+      ['18 Nov', '22', 'Kilpisjärvi: none', 'right', true],
+      ['17 Nov', '61', 'Kilpisjärvi: aurora 5 h', 'right', true],
+      ['16 Nov', '35', 'Skibotn: none', 'too high', false],
+      ['15 Nov', '12', 'all cloudy', '–', null]
     ].map(function (n) {
       var c = n[4] === true ? '#5cffb0' : n[4] === false ? '#ffc56b' : '#93a3bc';
       return { d: n[0], fc: n[1], out: n[2], verdict: n[3], mark: 'font:500 12px Inter,sans-serif;color:' + c };
