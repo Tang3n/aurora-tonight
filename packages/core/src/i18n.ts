@@ -95,6 +95,24 @@ export interface Strings {
   tonightShort: string;
   sources: string;
   disclaimer: string;
+  nav: { tonight: string; go: string };
+  go: {
+    title: string;
+    lead: string;
+    within: (limit: string) => string;
+    home: (score: number) => string;
+    drive: (minutes: number, km: number) => string;
+    window: (from: string, to: string) => string;
+    cameraOnly: string;
+    northView: string;
+    loading: string;
+    failed: string;
+    noSpots: string;
+    homeBest: string;
+    travelNote: string;
+    attribution: string;
+    mapLabel: string;
+  };
   loading: string;
   failed: (what: string) => string;
 }
@@ -192,6 +210,24 @@ const en: Strings = {
   tonightShort: 'Tonight',
   sources: 'Data',
   disclaimer: 'A forecast, not a promise — aurora can surprise both ways.',
+  nav: { tonight: 'Tonight', go: 'Where to go' },
+  go: {
+    title: 'Where to go tonight',
+    lead: 'Viewpoints within reach, ranked by tonight’s chance to see aurora with the eye.',
+    within: (limit) => `Best within ${limit}`,
+    home: (score) => `Home: ${score}`,
+    drive: (minutes, km) => `≈ ${minutes} min · ${km} km`,
+    window: (a, b) => `best ${a} – ${b}`,
+    cameraOnly: 'camera only',
+    northView: 'view north',
+    loading: 'Checking clouds at nearby viewpoints…',
+    failed: 'Could not load the cloud forecast for viewpoints.',
+    noSpots: 'No viewpoints near this place yet. We cover Rogaland and Trøndelag so far.',
+    homeBest: 'Nothing within reach beats staying home tonight.',
+    travelNote: 'Travel time is a straight-line estimate; roads around fjords can take longer.',
+    attribution: 'Viewpoints © OpenStreetMap contributors (ODbL)',
+    mapLabel: 'Map of viewpoints near you, coloured by tonight’s score',
+  },
   loading: 'Loading the sky…',
   failed: (w) => `Couldn't load ${w}. The score assumes the worst for it.`,
 };
@@ -287,6 +323,24 @@ const cs: Strings = {
   tonightShort: 'Dnes',
   sources: 'Data',
   disclaimer: 'Je to předpověď, ne slib — záře umí překvapit oběma směry.',
+  nav: { tonight: 'Dnes v noci', go: 'Kam vyrazit' },
+  go: {
+    title: 'Kam dnes vyrazit',
+    lead: 'Vyhlídky v dosahu seřazené podle dnešní šance vidět záři pouhým okem.',
+    within: (limit) => `Nejlepší do ${limit}`,
+    home: (score) => `Doma: ${score}`,
+    drive: (minutes, km) => `≈ ${minutes} min · ${km} km`,
+    window: (a, b) => `nejlépe ${a} – ${b}`,
+    cameraOnly: 'jen fotoaparát',
+    northView: 'výhled na sever',
+    loading: 'Zjišťuji oblačnost na vyhlídkách v okolí…',
+    failed: 'Předpověď oblačnosti pro vyhlídky se nepodařilo načíst.',
+    noSpots: 'U tohoto místa zatím vyhlídky nemáme. Pokrýváme Rogaland a Trøndelag.',
+    homeBest: 'Dnes nic v dosahu nepřekoná zůstat doma.',
+    travelNote: 'Doba cesty je odhad vzdušnou čarou; silnice kolem fjordů mohou trvat déle.',
+    attribution: 'Vyhlídky © přispěvatelé OpenStreetMap (ODbL)',
+    mapLabel: 'Mapa vyhlídek v okolí obarvená podle dnešního skóre',
+  },
   loading: 'Načítám oblohu…',
   failed: (w) => `Nepodařilo se načíst: ${w}. Skóre pro ně počítá s nejhorším.`,
 };
@@ -382,6 +436,24 @@ const no: Strings = {
   tonightShort: 'I natt',
   sources: 'Data',
   disclaimer: 'En prognose, ikke et løfte — nordlyset kan overraske begge veier.',
+  nav: { tonight: 'I natt', go: 'Hvor dra' },
+  go: {
+    title: 'Hvor du bør dra i natt',
+    lead: 'Utsiktspunkter innen rekkevidde, rangert etter sjansen for å se nordlys med øyet i natt.',
+    within: (limit) => `Best innen ${limit}`,
+    home: (score) => `Hjemme: ${score}`,
+    drive: (minutes, km) => `≈ ${minutes} min · ${km} km`,
+    window: (a, b) => `best ${a} – ${b}`,
+    cameraOnly: 'bare kamera',
+    northView: 'utsikt mot nord',
+    loading: 'Sjekker skyene ved utsiktspunkter i nærheten…',
+    failed: 'Klarte ikke å hente skyvarselet for utsiktspunktene.',
+    noSpots: 'Ingen utsiktspunkter her ennå. Foreløpig dekker vi Rogaland og Trøndelag.',
+    homeBest: 'Ingenting innen rekkevidde slår å bli hjemme i natt.',
+    travelNote: 'Reisetiden er anslått i luftlinje; veier rundt fjorder kan ta lengre tid.',
+    attribution: 'Utsiktspunkter © OpenStreetMap-bidragsytere (ODbL)',
+    mapLabel: 'Kart over utsiktspunkter i nærheten, farget etter nattens poengsum',
+  },
   loading: 'Laster himmelen…',
   failed: (w) => `Klarte ikke å laste ${w}. Poengsummen antar det verste.`,
 };

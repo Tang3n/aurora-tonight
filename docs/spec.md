@@ -67,7 +67,7 @@ Both apps share `packages/model`, `packages/data` and `packages/core` (hooks and
 | Phase | Scope | Done when |
 |---|---|---|
 | 0 (done) | static forecast page, model v2, validation, EN/CS/NO | live on GitHub Pages |
-| 1 | monorepo; web rewritten in React; **where to go** with OSM spots, no backend | I use it to choose where to drive |
+| 1 (built 2026-11-19, on branch) | monorepo; web rewritten in React; **where to go** with OSM spots, no backend | I use it to choose where to drive |
 | 2 | Expo app (Android first): tonight, where to go, device-side alerts | app on my phone |
 | 3 | Supabase: accounts, sightings incl. "nothing", photos, journal, moderation basics, privacy policy | first report from someone else |
 | 4 | server alerts (forecast + reports nearby), public scorecard from reports | numbers for southern Norway |

@@ -1,21 +1,20 @@
 /**
- * Web app shell: preferences, data hooks from @aurora/core, page layout.
- * All logic that the mobile app will share lives in packages/core; this file only wires it to the DOM.
+ * Web app shell: preferences, data hooks from @aurora/core, routes.
+ * All logic the mobile app will share lives in packages/core; this file only wires it to the DOM.
  */
 import { DEFAULT_LOCATION, useForecastData, useNow, usePersistentState, useViewModel } from '@aurora/core/hooks';
 import { LANGS, STRINGS, langFromLocale, type Lang } from '@aurora/core/i18n';
 import type { Location } from '@aurora/data/sources';
-import { useEffect } from 'react';
-import { Factors } from './components/Factors';
+import { Suspense, lazy, useEffect } from 'react';
+import { Route, Routes } from 'react-router';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
-import { Nights } from './components/Nights';
-import { OvalCard } from './components/OvalCard';
 import { Ridge, Sky } from './components/Sky';
-import { SpaceWeather } from './components/SpaceWeather';
-import { Timeline } from './components/Timeline';
-import { Verdict } from './components/Verdict';
+import { TonightPage } from './pages/TonightPage';
 import { webStore } from './storage';
+
+// The map library is large; only visitors of "Where to go" download it.
+const GoPage = lazy(() => import('./pages/GoPage'));
 
 function initialLang(): Lang {
   const fromUrl = new URLSearchParams(location.search).get('lang') as Lang | null;
@@ -44,30 +43,25 @@ export function App() {
     document.body.classList.toggle('loading', !data.loaded);
   }, [data.loaded]);
 
+  const tonight = <TonightPage vm={vm} data={data} loc={loc} now={now} />;
   return (
     <>
       <Sky score={data.loaded ? vm.headline : 0} />
       <Ridge />
       <div className="wrap">
         <Header lang={lang} onLang={setLang} loc={loc} onLocation={setLoc} />
-        <main>
-          <section className="hero">
-            <Verdict vm={vm} loaded={data.loaded} />
-            <OvalCard S={S} grid={data.ovation} loc={loc} now={now} />
-          </section>
-
-          <div className="notice" hidden={data.failed.length === 0}>
-            {data.failed.length ? S.failed(data.failed.join(', ')) : ''}
-          </div>
-
-          <Timeline vm={vm} loc={loc} loaded={data.loaded} />
-          <Factors vm={vm} loc={loc} loaded={data.loaded} />
-
-          <section className="split section">
-            <SpaceWeather S={S} wind={data.wind} loaded={data.loaded} />
-            <Nights vm={vm} kp={data.kp} tz={loc.tz} loaded={data.loaded} />
-          </section>
-        </main>
+        <Routes>
+          <Route index element={tonight} />
+          <Route
+            path="go"
+            element={
+              <Suspense fallback={<main className="go"><p className="hint">{S.go.loading}</p></main>}>
+                <GoPage lang={lang} vm={vm} data={data} loc={loc} now={now} />
+              </Suspense>
+            }
+          />
+          <Route path="*" element={tonight} />
+        </Routes>
         <Footer S={S} />
       </div>
     </>

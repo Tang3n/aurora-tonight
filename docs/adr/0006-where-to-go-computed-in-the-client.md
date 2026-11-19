@@ -36,3 +36,14 @@ Nordic model.
 - Two cloud sources means the home score and a spot score at the same place may differ slightly. Show the source
   and re-check the empirical cloud curve against Open-Meteo data in `validation/`.
 - Open-Meteo's free API is for non-commercial use with attribution (CC BY 4.0), which fits this project.
+
+## Implementation notes (2026-11-19)
+
+- Built as decided: `useWhereToGo` in `packages/core/src/spots.ts`, page `apps/web/src/pages/GoPage.tsx`.
+- The two cloud sources agree: `validation/compare_cloud_sources.py` found 0.4 pp mean absolute difference
+  in total cloud between MET and Open-Meteo `metno_seamless` (198 hours, six places), so the concern above did
+  not materialise.
+- Added a rule the ADR did not have: a spot is only recommended when it beats home by at least 5 points
+  (`worthTheDrive`), because forecast noise makes smaller gains meaningless. Revisit with report data.
+- Scoring is ~7 ms per spot (Node, laptop); at most 60 candidates run on the main thread. A Web Worker is the
+  fix if phones struggle.
