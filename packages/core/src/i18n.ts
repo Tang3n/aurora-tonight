@@ -14,11 +14,8 @@ export interface Strings {
   noResults: string;
   locating: string;
   tonight: string;
-  eyeChance: string;
-  camera: (pct: number) => string;
   labels: Record<Label, string>;
   goNow: string;
-  scale: string[];
   sentence: {
     noNight: string;
     clouds: string;
@@ -52,10 +49,6 @@ export interface Strings {
   now: string;
   tt: { eye: string; camera: string; kp: string; clear: string; height: string; sky: string; overhead: string; live: string };
   f: {
-    activity: string;
-    clouds: string;
-    dark: string;
-    moon: string;
     strong: string;
     moderate: string;
     weak: string;
@@ -131,7 +124,6 @@ export interface Strings {
     language: string;
   };
   go: {
-    title: string;
     lead: string;
     within: (limit: string) => string;
     home: (score: number) => string;
@@ -162,11 +154,8 @@ const en: Strings = {
   noResults: 'No places found',
   locating: 'Locating…',
   tonight: 'Tonight',
-  eyeChance: '% chance to see it',
-  camera: (p) => `Phone camera ${p} %`,
   labels: { no: 'No', unlikely: 'Unlikely', maybe: 'Maybe', good: 'Good', great: 'Great' },
   goNow: 'Go now',
-  scale: ['No', 'Unlikely', 'Maybe', 'Good', 'Great'],
   sentence: {
     noNight: 'The sun does not set far enough here tonight — no dark sky to see aurora.',
     clouds: 'Clouds cover the sky for most of the night.',
@@ -201,10 +190,6 @@ const en: Strings = {
   now: 'now',
   tt: { eye: 'Eye', camera: 'Camera', kp: 'Kp', clear: 'Through clouds', height: 'Aurora height', sky: 'Sky brightness', overhead: 'overhead', live: 'live' },
   f: {
-    activity: 'Aurora',
-    clouds: 'Clouds',
-    dark: 'Darkness',
-    moon: 'Moon',
     strong: 'Strong',
     moderate: 'Moderate',
     weak: 'Weak',
@@ -281,7 +266,6 @@ const en: Strings = {
     language: 'Language',
   },
   go: {
-    title: 'Where to go tonight',
     lead: 'Viewpoints within reach, ranked by tonight’s chance to see aurora with the eye.',
     within: (limit) => `Best within ${limit}`,
     home: (score) => `Home: ${score}`,
@@ -310,11 +294,8 @@ const cs: Strings = {
   noResults: 'Nic nenalezeno',
   locating: 'Zjišťuji polohu…',
   tonight: 'Dnes v noci',
-  eyeChance: '% šance ji uvidět',
-  camera: (p) => `Fotoaparát mobilu ${p} %`,
   labels: { no: 'Ne', unlikely: 'Spíš ne', maybe: 'Možná', good: 'Dobré', great: 'Výborné' },
   goNow: 'Vyraz hned',
-  scale: ['Ne', 'Spíš ne', 'Možná', 'Dobré', 'Výborné'],
   sentence: {
     noNight: 'Slunce tu dnes nezapadne dost hluboko — chybí tmavá obloha.',
     clouds: 'Většinu noci zakryjí oblohu mraky.',
@@ -349,10 +330,6 @@ const cs: Strings = {
   now: 'teď',
   tt: { eye: 'Oko', camera: 'Fotoaparát', kp: 'Kp', clear: 'Přes mraky', height: 'Výška záře', sky: 'Jas oblohy', overhead: 'nad hlavou', live: 'živě' },
   f: {
-    activity: 'Záře',
-    clouds: 'Mraky',
-    dark: 'Tma',
-    moon: 'Měsíc',
     strong: 'Silná',
     moderate: 'Střední',
     weak: 'Slabá',
@@ -429,7 +406,6 @@ const cs: Strings = {
     language: 'Jazyk',
   },
   go: {
-    title: 'Kam dnes vyrazit',
     lead: 'Vyhlídky v dosahu seřazené podle dnešní šance vidět záři pouhým okem.',
     within: (limit) => `Nejlepší do ${limit}`,
     home: (score) => `Doma: ${score}`,
@@ -458,11 +434,8 @@ const no: Strings = {
   noResults: 'Fant ingen steder',
   locating: 'Finner posisjon…',
   tonight: 'I kveld',
-  eyeChance: '% sjanse å se det',
-  camera: (p) => `Mobilkamera ${p} %`,
   labels: { no: 'Nei', unlikely: 'Lite sannsynlig', maybe: 'Kanskje', good: 'Bra', great: 'Svært bra' },
   goNow: 'Gå ut nå',
-  scale: ['Nei', 'Lite', 'Kanskje', 'Bra', 'Svært bra'],
   sentence: {
     noNight: 'Sola går ikke langt nok ned her i natt — himmelen blir ikke mørk.',
     clouds: 'Skyer dekker himmelen det meste av natten.',
@@ -497,10 +470,6 @@ const no: Strings = {
   now: 'nå',
   tt: { eye: 'Øyet', camera: 'Kamera', kp: 'Kp', clear: 'Gjennom skyer', height: 'Nordlysets høyde', sky: 'Himmelens lysstyrke', overhead: 'rett over', live: 'direkte' },
   f: {
-    activity: 'Nordlys',
-    clouds: 'Skyer',
-    dark: 'Mørke',
-    moon: 'Måne',
     strong: 'Sterk',
     moderate: 'Moderat',
     weak: 'Svak',
@@ -577,7 +546,6 @@ const no: Strings = {
     language: 'Språk',
   },
   go: {
-    title: 'Hvor du bør dra i natt',
     lead: 'Utsiktspunkter innen rekkevidde, rangert etter sjansen for å se nordlys med øyet i natt.',
     within: (limit) => `Best innen ${limit}`,
     home: (score) => `Hjemme: ${score}`,
