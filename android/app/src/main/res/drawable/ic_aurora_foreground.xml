@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Adaptive-icon foreground (108dp canvas, 66dp safe zone): the favicon's aurora arc. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#00000000"
+        android:strokeWidth="9"
+        android:strokeLineCap="round"
+        android:pathData="M30,70C39,50 47,43 54,43s15,7 24,27">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="54" android:startY="72"
+                android:endX="54" android:endY="40">
+                <item android:offset="0" android:color="#FF5CFFB0" />
+                <item android:offset="1" android:color="#FFB48CFF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+</vector>

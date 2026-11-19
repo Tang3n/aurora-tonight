@@ -25,7 +25,7 @@
   }
   #sky { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; }
   .ridge { position: fixed; left: 0; right: 0; bottom: 0; width: 100%; height: 22vh; z-index: 1; pointer-events: none; }
-  .wrap { position: relative; z-index: 2; max-width: 1120px; margin: 0 auto; padding: 20px 16px 120px; }
+  .wrap { position: relative; z-index: 2; max-width: 1120px; margin: 0 auto; padding: calc(20px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-right, 0px)) calc(120px + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px)); }
 
   /* header */
   header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -186,3 +186,19 @@
 .hour .bar.cam { position: absolute; left: 0; right: 0; bottom: 0; z-index: 0; background: rgba(180,140,255,.10); border: 1px dashed rgba(180,140,255,.45); border-bottom: 0; }
 .cam-swatch { background: rgba(180,140,255,.15); border: 1px dashed rgba(180,140,255,.6); }
 .label small.cam { color: var(--violet); margin-top: 2px; }
+
+/* notification settings (Android app only) */
+.pill.bell { padding: 8px 11px; }
+.pill.bell.on svg { color: var(--aurora-2); opacity: 1; }
+.popover.alerts { padding: 14px; display: grid; gap: 10px; }
+.popover.alerts fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; min-width: 0; }
+.popover.alerts fieldset:disabled { opacity: .45; }
+.alerts-head { font: 600 15px/1.2 'Space Grotesk', sans-serif; }
+.alerts-label { color: var(--muted); font-size: 12px; letter-spacing: .04em; margin-top: 4px; }
+.alerts-note { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+.alerts-note.faint { color: var(--faint); font-size: 12px; }
+.switch { display: flex; gap: 10px; align-items: center; cursor: pointer; }
+.switch input { width: 18px; height: 18px; accent-color: var(--aurora-2); flex: none; }
+.seg { display: flex; padding: 3px; border-radius: 999px; background: rgba(255,255,255,.05); border: 1px solid var(--border); }
+.seg button { flex: 1; border: 0; background: transparent; color: var(--muted); font: 500 13px/1 Inter; padding: 9px 8px; border-radius: 999px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: rgba(255,255,255,.12); color: var(--text); }

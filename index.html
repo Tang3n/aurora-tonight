@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Aurora Tonight</title>
   <meta name="description" content="Should you go outside tonight to see the northern lights? One answer for your location, with the reasons behind it.">
   <meta name="theme-color" content="#04070f">
@@ -35,6 +35,12 @@
           <ul id="results"></ul>
           <button class="geo" id="geo" type="button"></button>
         </div>
+      </div>
+      <div class="loc" id="alertsWrap" hidden>
+        <button class="pill bell" id="alertsBtn" aria-haspopup="dialog" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        </button>
+        <div class="popover alerts" id="alertsPop" role="dialog" hidden></div>
       </div>
       <div class="lang" role="group" aria-label="Language" id="lang"></div>
     </header>

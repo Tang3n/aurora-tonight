@@ -54,6 +54,41 @@ npm run build   # typecheck + production build to dist/
 Code map: `src/model/` pure scoring and astronomy (unit-tested) · `src/data/` all network access · `src/ui/` rendering ·
 `src/main.ts` state and refresh schedule. Pushes to `main` deploy to GitHub Pages via Actions.
 
+## Android app with notifications
+
+The same code wrapped with [Capacitor](https://capacitorjs.com/) into a native Android app that tells you when
+it's worth going out — also while the app is closed. No server: the phone fetches NOAA and MET Norway itself.
+
+```
+WorkManager (every ~15 min)                       App (WebView)
+  └─ BackgroundRunner → runners/aurora.js           └─ bell panel: on/off, threshold, eye/camera
+       QuickJS, no DOM/Intl                              │  "configure" event: place, language,
+       fetch Kp + clouds (+ OVATION)                     │  UTC-offset table for the next year
+       buildTonight()  ← same src/model/ as the web      ▼
+       decideAlerts()  → CapacitorNotifications     CapacitorKV (config, per-night state, last status)
+```
+
+- `src/background/runner.ts` — event handlers (`check`, `configure`, `status`, `test`); state lives in
+  CapacitorKV because every run gets a fresh JS context.
+- `src/background/notify.ts` — when to notify (pure, unit-tested): **now** when the current hour reaches the threshold
+  (again that night only if it climbs to a higher label), **tonight** once per night for a window starting within 12 h.
+  Silent without a cloud forecast.
+- `src/background/tz.ts`, `shims.ts` — the runner's QuickJS has no `Intl`, `atob` or `AbortController`; the app
+  precomputes UTC offsets (DST included) and the runner only looks them up.
+- `src/background/runner.qjs.test.ts` builds the runner bundle and runs it in QuickJS (WASM) with fake runner
+  globals, so missing globals fail in CI rather than on the phone.
+
+Build (needs JDK 21 and the Android SDK, `ANDROID_HOME` or `android/local.properties` with `sdk.dir=…`):
+
+```sh
+npm run android:apk    # → android/app/build/outputs/apk/debug/app-debug.apk
+adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+npx cap open android   # or open android/ in Android Studio / IntelliJ
+```
+
+Android may postpone background work to save battery; on some phones the app has to be exempted from battery
+optimisation (see [dontkillmyapp.com](https://dontkillmyapp.com/)).
+
 ## License
 
 MIT

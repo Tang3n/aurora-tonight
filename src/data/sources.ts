@@ -8,15 +8,28 @@ import { parseOvation, type OvationGrid, type OvationJson } from '../model/ovati
 
 const SWPC = 'https://services.swpc.noaa.gov';
 
+/**
+ * Extra request headers. The browser sets its own User-Agent; the Android background runner
+ * has none, and MET Norway's terms require an identifying one, so the runner sets it here.
+ */
+let extraHeaders: Record<string, string> = {};
+export function setRequestHeaders(headers: Record<string, string>) {
+  extraHeaders = headers;
+}
+
 async function getJson<T>(url: string, timeoutMs = 15_000): Promise<T> {
-  const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  // The background runner (QuickJS) has no AbortController and its fetch ignores `signal`;
+  // there the OS bounds the run instead.
+  const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+  const timer = ctrl ? setTimeout(() => ctrl.abort(), timeoutMs) : undefined;
   try {
-    const res = await fetch(url, { signal: ctrl.signal });
-    if (!res.ok) throw new Error(`${res.status} ${res.statusText} — ${url}`);
-    return (await res.json()) as T;
+    const init: RequestInit = { headers: extraHeaders };
+    if (ctrl) init.signal = ctrl.signal;
+    const res = await fetch(url, init);
+    if (!res.ok) throw new Error(`${res.status} — ${url}`);
+    return JSON.parse(await res.text()) as T;
   } finally {
-    clearTimeout(timer);
+    if (timer !== undefined) clearTimeout(timer);
   }
 }
 

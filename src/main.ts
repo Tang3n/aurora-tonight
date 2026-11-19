@@ -204,6 +204,8 @@ $('lang').addEventListener('click', (e) => {
   store.set('aurora.lang', lang);
   render();
   redrawOval();
+  alerts?.render();
+  void alerts?.sync();
 });
 
 document.addEventListener('click', (e) => {
@@ -257,6 +259,8 @@ function openPicker(open: boolean) {
 async function setLocation(loc: Location) {
   state.loc = loc;
   store.set('aurora.loc', loc);
+  alerts?.render();
+  void alerts?.sync();
   openPicker(false);
   state.clouds = null;
   render();
@@ -327,6 +331,17 @@ $('geo').addEventListener('click', () => {
     { timeout: 10_000, maximumAge: 10 * 60_000 },
   );
 });
+
+/* ---------- notifications (Android app only) ---------- */
+
+// Inside the Capacitor WebView the native bridge defines window.Capacitor. Checking it directly
+// keeps @capacitor/* out of the web bundle: the module is only fetched in the app.
+const isNativeApp = !!(window as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor?.isNativePlatform?.();
+let alerts: import('./native/alerts').Alerts | null = null;
+if (isNativeApp) {
+  const { initAlerts } = await import('./native/alerts');
+  alerts = initAlerts({ place: () => state.loc, lang: () => state.lang }, $('alertsWrap'), $('alertsBtn'), $('alertsPop'));
+}
 
 /* ---------- boot ---------- */
 
