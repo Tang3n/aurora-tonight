@@ -19,14 +19,25 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "blockedPermissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.SYSTEM_ALERT_WINDOW"
+      ]
     },
     "plugins": [
       "@maplibre/maplibre-react-native",
       "expo-router",
       "expo-sqlite",
       "expo-localization",
-      "expo-background-task"
+      "expo-background-task",
+      [
+        "expo-location",
+        { "locationWhenInUsePermission": "Your position is used only to forecast the aurora where you are. It is not sent anywhere except to the weather services." }
+      ],
+      ["expo-notifications", { "color": "#5cffb0" }]
     ]
   }
 }

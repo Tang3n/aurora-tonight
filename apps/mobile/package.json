@@ -11,6 +11,8 @@
     "spike:expected": "vite build --ssr scripts/gen-expected.ts --outDir ../../node_modules/.cache/aurora-spike --emptyOutDir && node ../../node_modules/.cache/aurora-spike/gen-expected.mjs"
   },
   "dependencies": {
+    "@aurora/core": "*",
+    "@aurora/data": "*",
     "@aurora/model": "*",
     "@maplibre/maplibre-react-native": "^11.5.1",
     "@tanstack/react-query": "^5.108.0",
