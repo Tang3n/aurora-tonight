@@ -23,11 +23,9 @@ interface RunnerNotification {
   id: number;
   title: string;
   body: string;
-  scheduleAt?: Date;
   smallIcon?: string;
   autoCancel?: boolean;
 }
-type Platform = 'android' | 'ios';
 declare const CapacitorKV: {
   set(key: string, value: string): void;
   get(key: string): { value: string } | null | undefined;
@@ -68,23 +66,11 @@ export interface RunStatus {
 // Fixed id per kind: a newer alert of the same kind replaces the old one in the shade.
 const NOTIFICATION_ID: Record<Alert['kind'], number> = { now: 1, tonight: 2 };
 
-/**
- * The two native implementations disagree on `scheduleAt`:
- *   Android parses its ISO string in the phone's zone despite the 'Z' (an hour off in Norway);
- *           omitted, it means "now" — so we omit it.
- *   iOS     requires it as a Date (it throws without one), and a time already in the past builds
- *           a DateInterval ending before it starts — so "now + 2 s".
- */
-function show(alerts: Alert[], platform: Platform = 'android') {
+function show(alerts: Alert[]) {
   if (!alerts.length) return;
+  // No scheduleAt: the plugin parses it in the phone's zone despite the 'Z'; omitted means "now".
   CapacitorNotifications.schedule(
-    alerts.map((a) => ({
-      id: NOTIFICATION_ID[a.kind],
-      title: a.title,
-      body: a.body,
-      ...(platform === 'ios' ? { scheduleAt: new Date(Date.now() + 2000) } : { smallIcon: 'ic_stat_aurora' }),
-      autoCancel: true,
-    })),
+    alerts.map((a) => ({ id: NOTIFICATION_ID[a.kind], title: a.title, body: a.body, smallIcon: 'ic_stat_aurora', autoCancel: true })),
   );
 }
 
@@ -110,7 +96,7 @@ async function check(): Promise<RunStatus> {
   const now = new Date();
   const tonight = buildTonight(now, cfg.place, { kp, clouds: clouds.points, ovation });
   const { alerts, state } = decideAlerts(now, tonight.hours, tonight.mlat, cfg, read<AlertState>(KEYS.state));
-  show(alerts, cfg.platform);
+  show(alerts);
   if (state) write(KEYS.state, state);
   const peak = Math.max(0, ...tonight.hours.map((h) => h[cfg.detector]));
   return { at, ok: true, peak, sent: alerts.map((a) => a.kind), ...(kp ? {} : { error: 'Kp unavailable' }) };
@@ -141,7 +127,7 @@ addEventListener('status', (resolve) => {
 });
 
 addEventListener('test', (resolve, _reject, args) => {
-  const { title, body, platform } = args as { title: string; body: string; platform?: Platform };
-  show([{ kind: 'now', title, body }], platform);
+  const { title, body } = args as { title: string; body: string };
+  show([{ kind: 'now', title, body }]);
   resolve();
 });

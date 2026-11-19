@@ -7,11 +7,6 @@ const config: CapacitorConfig = {
   android: {
     backgroundColor: '#04070f',
   },
-  ios: {
-    backgroundColor: '#04070f',
-    // The page pads itself with env(safe-area-inset-*) (viewport-fit=cover), like on Android.
-    contentInset: 'never',
-  },
   plugins: {
     // Light status-bar icons on the dark page, regardless of the phone's light/dark theme.
     SystemBars: {

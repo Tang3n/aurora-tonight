@@ -170,17 +170,5 @@ describe('background runner in QuickJS', () => {
     await h.dispatch('check');
     expect(h.shown).toHaveLength(1);
     expect(JSON.parse(h.kv.get('alerts.status')!)).toMatchObject({ ok: true, sent: [] });
-    // Android: no scheduleAt (the plugin would misread its zone), status-bar icon set
-    expect(h.shown[0]).toMatchObject({ smallIcon: 'ic_stat_aurora' });
-    expect(h.shown[0]).not.toHaveProperty('scheduleAt');
   }, 30_000);
-
-  it('gives iOS the scheduleAt date it requires, slightly in the future', async () => {
-    const h = await harness();
-    const before = Date.now();
-    await h.dispatch('test', { title: 't', body: 'b', platform: 'ios' });
-    const n = h.shown[0] as unknown as { scheduleAt: string; smallIcon?: string };
-    expect(Date.parse(n.scheduleAt)).toBeGreaterThan(before);
-    expect(n.smallIcon).toBeUndefined();
-  });
 });
