@@ -1,20 +1,19 @@
 /**
  * Web app shell: preferences, data hooks from @aurora/core, routes.
  * All logic the mobile app will share lives in packages/core; this file only wires it to the DOM.
+ * Routes follow the web mock: one home page (tonight + where to go) and a page per spot.
  */
 import { DEFAULT_LOCATION, useForecastData, useNow, usePersistentState, useViewModel } from '@aurora/core/hooks';
 import { LANGS, STRINGS, langFromLocale, type Lang } from '@aurora/core/i18n';
 import type { Location } from '@aurora/data/sources';
-import { Suspense, lazy, useEffect } from 'react';
-import { Route, Routes } from 'react-router';
+import { useEffect } from 'react';
+import { Navigate, Route, Routes } from 'react-router';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Ridge, Sky } from './components/Sky';
-import { TonightPage } from './pages/TonightPage';
+import { HomePage } from './pages/HomePage';
+import { SpotPage } from './pages/SpotPage';
 import { webStore } from './storage';
-
-// The map library is large; only visitors of "Where to go" download it.
-const GoPage = lazy(() => import('./pages/GoPage'));
 
 function initialLang(): Lang {
   const fromUrl = new URLSearchParams(location.search).get('lang') as Lang | null;
@@ -34,7 +33,6 @@ export function App() {
   const now = useNow();
   const data = useForecastData(loc);
   const vm = useViewModel(lang, loc, data, now);
-  const S = STRINGS[lang];
 
   useEffect(() => {
     document.documentElement.lang = lang === 'no' ? 'nb' : lang;
@@ -43,7 +41,7 @@ export function App() {
     document.body.classList.toggle('loading', !data.loaded);
   }, [data.loaded]);
 
-  const tonight = <TonightPage vm={vm} data={data} loc={loc} now={now} />;
+  const home = <HomePage vm={vm} data={data} loc={loc} now={now} lang={lang} />;
   return (
     <>
       <Sky score={data.loaded ? vm.headline : 0} />
@@ -51,18 +49,13 @@ export function App() {
       <div className="wrap">
         <Header lang={lang} onLang={setLang} loc={loc} onLocation={setLoc} />
         <Routes>
-          <Route index element={tonight} />
-          <Route
-            path="go"
-            element={
-              <Suspense fallback={<main className="go"><p className="hint">{S.go.loading}</p></main>}>
-                <GoPage lang={lang} vm={vm} data={data} loc={loc} now={now} />
-              </Suspense>
-            }
-          />
-          <Route path="*" element={tonight} />
+          <Route index element={home} />
+          {/* "Where to go" used to be its own page; on the web it is now part of home. */}
+          <Route path="go" element={<Navigate to="/" replace />} />
+          <Route path="spot/:id" element={<SpotPage lang={lang} homeVm={vm} data={data} loc={loc} now={now} />} />
+          <Route path="*" element={home} />
         </Routes>
-        <Footer S={S} />
+        <Footer S={STRINGS[lang]} />
       </div>
     </>
   );

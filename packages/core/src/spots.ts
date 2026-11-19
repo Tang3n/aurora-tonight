@@ -5,7 +5,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { fetchCloudsMany, type Location } from '@aurora/data/sources';
-import { fetchSpotsNear, type Spot } from '@aurora/data/spots';
+import { fetchAllSpotRegions, fetchSpotsNear, type Spot } from '@aurora/data/spots';
 import { buildTonight } from '@aurora/model/night';
 import type { Window } from '@aurora/model/score';
 import { greatCircleKm } from '@aurora/model/visibility';
@@ -124,6 +124,47 @@ export const MEANINGFUL_GAIN = 5;
 
 export function worthTheDrive(best: RankedSpot | undefined, homeScore: number): boolean {
   return !!best && best.score - homeScore >= MEANINGFUL_GAIN;
+}
+
+/** One spot by id, from any region (spot pages are linkable, so home may be far away). */
+export function useSpot(baseUrl: string, id: string | undefined) {
+  const q = useQuery({
+    queryKey: ['spots-all', baseUrl],
+    queryFn: () => fetchAllSpotRegions(baseUrl),
+    staleTime: Infinity,
+    enabled: !!id,
+  });
+  const found = q.data?.flatMap((r) => r.spots).find((s) => s.id === id) ?? null;
+  return { spot: found, loading: q.isPending && !!id, error: q.isError, attribution: q.data?.[0]?.attribution ?? null };
+}
+
+/** Tonight at one spot: its own clouds (one Open-Meteo request), Kp and OVATION shared with home. */
+export function useSpotForecast(spot: Spot | null, home: Location, data: ForecastData, now: Date, lang: Lang) {
+  const clouds = useQuery({
+    queryKey: ['clouds-many', spot?.id ?? ''],
+    queryFn: () => fetchCloudsMany([spot!]),
+    enabled: !!spot,
+    staleTime: 30 * 60_000,
+    retry: 1,
+  });
+  const minute = Math.floor(now.getTime() / 60_000);
+  return useMemo(() => {
+    if (!spot || !clouds.data) return null;
+    const tonight = buildTonight(now, { lat: spot.lat, lon: spot.lon }, { kp: data.kp, clouds: clouds.data[0]?.points ?? null, ovation: data.ovation });
+    const vm = buildViewModel({
+      S: STRINGS[lang],
+      fmt: makeFmt(lang, home.tz),
+      now,
+      lat: spot.lat,
+      tonight,
+      ovationTime: data.ovation?.observed ?? null,
+      cloudsUpdated: clouds.data[0]?.updated ?? null,
+      kpOk: !!data.kp,
+    });
+    const km = greatCircleKm(home.lat, home.lon, spot.lat, spot.lon);
+    return { vm, km, minutes: travelMinutes(km) };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `now` folded into `minute`
+  }, [spot, clouds.data, data.kp, data.ovation, minute, lang, home.lat, home.lon, home.tz]);
 }
 
 /** Spots within `limit` minutes, best first. */

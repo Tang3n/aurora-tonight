@@ -6,7 +6,7 @@ repository page. Legend: **solid** = exists today, **dashed** = planned.
 Runs entirely in the client ([ADR 6](../adr/0006-where-to-go-computed-in-the-client.md),
 [ADR 7](../adr/0007-spots-seeded-from-openstreetmap.md)). Built 2026-11-19: `packages/core/src/spots.ts`
 (`useWhereToGo`), `packages/data/src/spots.ts`, `fetchCloudsMany` in `packages/data/src/sources.ts`, page
-`apps/web/src/pages/GoPage.tsx`. The expensive part, the cloud forecast for many points, is one request.
+`apps/web/src/pages/HomePage.tsx` (on the web, part of the home page since 2026-11-19), spot pages in `SpotPage.tsx`. The expensive part, the cloud forecast for many points, is one request.
 
 ```mermaid
 sequenceDiagram

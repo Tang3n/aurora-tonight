@@ -59,7 +59,7 @@ npm workspaces monorepo:
 | `packages/model` | pure scoring and astronomy, unit-tested; no DOM or Node APIs, runs on web, mobile and server |
 | `packages/data` | all network access (NOAA, MET Norway, Open-Meteo), only `fetch` |
 | `packages/core` | shared React hooks (data refresh via TanStack Query), view model, translations; no DOM, no React Native |
-| `apps/web` | the website in React: `src/components/`, `src/App.tsx`; WebGL sky and oval map in `src/ui/` |
+| `apps/web` | the website in React: home (`/`, tonight + where to go) and spot pages (`/spot/:id`) in `src/pages/`; WebGL sky and oval map in `src/ui/` |
 | `apps/mobile` | Expo / React Native app for Android: Tonight, Where to go, background alerts ([README](apps/mobile/README.md)) |
 | `validation/` | hindcast against the Kilpisjärvi all-sky camera |
 | `tools/` | generator of the AACGM grid |

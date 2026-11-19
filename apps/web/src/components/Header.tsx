@@ -1,7 +1,7 @@
 import { LANGS, STRINGS, type Lang } from '@aurora/core/i18n';
 import { searchPlaces, type Location } from '@aurora/data/sources';
 import { useEffect, useRef, useState } from 'react';
-import { NavLink } from 'react-router';
+import { Link } from 'react-router';
 
 interface Props {
   lang: Lang;
@@ -13,16 +13,10 @@ interface Props {
 export function Header({ lang, onLang, loc, onLocation }: Props) {
   return (
     <header>
-      <div className="brand">
+      <Link to="/" className="brand">
         <span className="mark" />
         Aurora Tonight
-      </div>
-      <nav className="nav" aria-label="Pages">
-        <NavLink to="/" end>
-          {STRINGS[lang].nav.tonight}
-        </NavLink>
-        <NavLink to="/go">{STRINGS[lang].nav.go}</NavLink>
-      </nav>
+      </Link>
       <LocationPicker lang={lang} loc={loc} onLocation={onLocation} />
       <div className="lang" role="group" aria-label="Language">
         {LANGS.map((l) => (

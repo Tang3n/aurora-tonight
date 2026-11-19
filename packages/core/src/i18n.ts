@@ -96,6 +96,25 @@ export interface Strings {
   sources: string;
   disclaimer: string;
   nav: { tonight: string; go: string };
+  home: {
+    tonightAt: (place: string) => string;
+    bestSpots: (limit: string) => string;
+  };
+  spot: {
+    tonightHere: string;
+    navigate: string;
+    share: string;
+    copied: string;
+    elevation: string;
+    viewNorth: string;
+    viewNorthOpen: string;
+    viewNorthUnknown: string;
+    coordinates: string;
+    fromHome: (minutes: number, km: number, home: string) => string;
+    about: string;
+    notFound: string;
+    back: string;
+  };
   alerts: {
     tab: string;
     title: string;
@@ -227,6 +246,25 @@ const en: Strings = {
   sources: 'Data',
   disclaimer: 'A forecast, not a promise — aurora can surprise both ways.',
   nav: { tonight: 'Tonight', go: 'Where to go' },
+  home: {
+    tonightAt: (place) => `Tonight at ${place}`,
+    bestSpots: (limit) => `Best spots within ${limit}`,
+  },
+  spot: {
+    tonightHere: 'Tonight here',
+    navigate: 'Navigate',
+    share: 'Share link',
+    copied: 'Link copied',
+    elevation: 'Elevation',
+    viewNorth: 'View north',
+    viewNorthOpen: 'mapped as open',
+    viewNorthUnknown: 'not mapped',
+    coordinates: 'Coordinates',
+    fromHome: (m, km, home) => `≈ ${m} min · ${km} km from ${home}`,
+    about: 'A viewpoint from OpenStreetMap. Check the view north and the road yourself before a night trip; we only know what is mapped.',
+    notFound: 'We could not find this viewpoint.',
+    back: 'Back to tonight',
+  },
   alerts: {
     tab: 'Alerts',
     title: 'Tell me when it is worth going out',
@@ -356,6 +394,25 @@ const cs: Strings = {
   sources: 'Data',
   disclaimer: 'Je to předpověď, ne slib — záře umí překvapit oběma směry.',
   nav: { tonight: 'Dnes v noci', go: 'Kam vyrazit' },
+  home: {
+    tonightAt: (place) => `Dnes v noci · ${place}`,
+    bestSpots: (limit) => `Nejlepší místa do ${limit}`,
+  },
+  spot: {
+    tonightHere: 'Dnes v noci tady',
+    navigate: 'Navigovat',
+    share: 'Sdílet odkaz',
+    copied: 'Odkaz zkopírován',
+    elevation: 'Nadmořská výška',
+    viewNorth: 'Výhled na sever',
+    viewNorthOpen: 'zmapovaný jako otevřený',
+    viewNorthUnknown: 'nezmapováno',
+    coordinates: 'Souřadnice',
+    fromHome: (m, km, home) => `≈ ${m} min · ${km} km od místa ${home}`,
+    about: 'Vyhlídka z OpenStreetMap. Výhled na sever a cestu si před noční výpravou ověř sám; víme jen to, co je zmapované.',
+    notFound: 'Tuhle vyhlídku jsme nenašli.',
+    back: 'Zpět na dnešní noc',
+  },
   alerts: {
     tab: 'Upozornění',
     title: 'Dej mi vědět, až se vyplatí vyrazit',
@@ -485,6 +542,25 @@ const no: Strings = {
   sources: 'Data',
   disclaimer: 'En prognose, ikke et løfte — nordlyset kan overraske begge veier.',
   nav: { tonight: 'I natt', go: 'Hvor dra' },
+  home: {
+    tonightAt: (place) => `I natt · ${place}`,
+    bestSpots: (limit) => `Beste steder innen ${limit}`,
+  },
+  spot: {
+    tonightHere: 'I natt her',
+    navigate: 'Naviger',
+    share: 'Del lenke',
+    copied: 'Lenke kopiert',
+    elevation: 'Høyde',
+    viewNorth: 'Utsikt mot nord',
+    viewNorthOpen: 'kartlagt som åpen',
+    viewNorthUnknown: 'ikke kartlagt',
+    coordinates: 'Koordinater',
+    fromHome: (m, km, home) => `≈ ${m} min · ${km} km fra ${home}`,
+    about: 'Et utsiktspunkt fra OpenStreetMap. Sjekk utsikten mot nord og veien selv før en nattetur; vi vet bare det som er kartlagt.',
+    notFound: 'Fant ikke dette utsiktspunktet.',
+    back: 'Tilbake til i natt',
+  },
   alerts: {
     tab: 'Varsler',
     title: 'Si fra når det er verdt å gå ut',
