@@ -11,19 +11,19 @@ and `packages/model` may not touch any runtime API at all (its `tsconfig` has no
 flowchart BT
     model["packages/model<br/>scoring, astronomy, AACGM grid<br/>deps: suncalc"]
     data["packages/data<br/>fetchers: NOAA, MET, Open-Meteo<br/>only fetch"]
-    core["packages/core<br/>React hooks, TanStack Query, i18n"]:::planned
-    web["apps/web<br/>Vite"]
+    core["packages/core<br/>React hooks, TanStack Query,<br/>view model, i18n"]
+    web["apps/web<br/>React + Vite"]
     mobile["apps/mobile<br/>Expo"]
     validation["validation/<br/>hindcast vs all-sky camera"]
     tools["tools/gen_aacgm_grid.py<br/>Python, aacgmv2"]
     edge["supabase/functions<br/>Deno"]:::planned
 
     data --> model
-    core -.-> data
-    core -.-> model
+    core --> data
+    core --> model
     web --> data
     web --> model
-    web -.-> core
+    web --> core
     mobile --> model
     mobile -.-> core
     validation --> model

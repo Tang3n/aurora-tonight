@@ -8,7 +8,7 @@ The same TypeScript model runs in four places ([ADR 4](../adr/0004-one-typescrip
 ```mermaid
 flowchart TB
     subgraph browser["Browser"]
-        webapp["apps/web<br/>React (today: vanilla TS)"]
+        webapp["apps/web<br/>React"]
         m1["packages/model"]
         webapp --> m1
     end

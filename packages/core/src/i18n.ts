@@ -392,8 +392,9 @@ function cap(s: string): string {
 
 export const STRINGS: Record<Lang, Strings> = { en, cs, no };
 
-export function detectLang(): Lang {
-  const nav = navigator.language.toLowerCase();
+/** Pick our language from a BCP 47 tag (navigator.language on the web, the OS locale on mobile). */
+export function langFromLocale(tag: string): Lang {
+  const nav = tag.toLowerCase();
   if (nav.startsWith('cs') || nav.startsWith('sk')) return 'cs';
   if (nav.startsWith('nb') || nav.startsWith('nn') || nav.startsWith('no')) return 'no';
   return 'en';
