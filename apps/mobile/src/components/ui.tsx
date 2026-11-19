@@ -2,10 +2,10 @@ import { richText } from '@aurora/core/view';
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View, type ColorValue, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
 import Svg, { Circle, Path } from 'react-native-svg';
-import { C, scoreColors } from '../theme';
+import { C, F, scoreColors } from '../theme';
 
 export function Card({ children, style, accent }: { children: ReactNode; style?: StyleProp<ViewStyle>; accent?: boolean }) {
-  return <View style={[s.card, accent && { borderColor: 'rgba(92,255,176,0.4)' }, style]}>{children}</View>;
+  return <View style={[s.card, accent && s.cardAccent, style]}>{children}</View>;
 }
 
 export function Eyebrow({ children, color }: { children: ReactNode; color?: string }) {
@@ -18,7 +18,7 @@ export function RichText({ text, style, boldColor = C.aurora }: { text: string; 
     <Text style={style}>
       {richText(text).map((p, i) =>
         p.bold ? (
-          <Text key={i} style={{ fontWeight: '700', color: boldColor }}>
+          <Text key={i} style={{ fontFamily: F.bodySemi, color: boldColor }}>
             {p.text}
           </Text>
         ) : (
@@ -33,7 +33,7 @@ export function ScoreBadge({ score, size = 44 }: { score: number; size?: number 
   const c = scoreColors(score);
   return (
     <View style={[s.badge, { width: size, height: size, backgroundColor: c.bg }]}>
-      <Text style={{ color: c.fg, fontSize: size * 0.4, fontWeight: '700' }}>{score}</Text>
+      <Text style={{ color: c.fg, fontSize: size * 0.42, fontFamily: F.num }}>{score}</Text>
     </View>
   );
 }
@@ -46,7 +46,7 @@ export function Chip({ label, on, onPress }: { label: string; on: boolean; onPre
       accessibilityState={{ selected: on }}
       style={[s.chip, on && { backgroundColor: C.aurora, borderColor: C.aurora }]}
     >
-      <Text style={{ color: on ? '#04120b' : '#c9d6ea', fontWeight: '600' }}>{label}</Text>
+      <Text style={{ color: on ? '#04120b' : '#c9d6ea', fontFamily: F.bodyMed, fontSize: 14 }}>{label}</Text>
     </Pressable>
   );
 }
@@ -87,12 +87,13 @@ export function Icon({ name, color = C.text, size = 22 }: { name: IconName; colo
 
 export const s = StyleSheet.create({
   card: { backgroundColor: C.card, borderColor: C.border, borderWidth: 1, borderRadius: 20, padding: 16 },
-  eyebrow: { color: C.muted, fontSize: 11, fontWeight: '600', letterSpacing: 1.4, textTransform: 'uppercase' },
-  badge: { borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
-  chip: { minHeight: 40, paddingHorizontal: 16, borderRadius: 999, borderWidth: 1, borderColor: 'rgba(160,220,255,0.16)', backgroundColor: C.card, justifyContent: 'center' },
+  cardAccent: { borderColor: 'rgba(92,255,176,0.35)', backgroundColor: 'rgba(16,40,34,0.85)' },
+  eyebrow: { color: C.muted, fontSize: 11, fontFamily: F.bodyMed, letterSpacing: 1.3, textTransform: 'uppercase' },
+  badge: { borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
+  chip: { minHeight: 40, paddingHorizontal: 16, borderRadius: 999, borderWidth: 1, borderColor: 'rgba(160,220,255,0.16)', backgroundColor: 'rgba(14,22,40,0.92)', justifyContent: 'center' },
   sectionHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, marginBottom: 12, flexWrap: 'wrap' },
-  sectionTitle: { color: C.text, fontSize: 17, fontWeight: '700' },
-  hint: { color: C.muted, fontSize: 12 },
-  body: { color: C.text, fontSize: 15, lineHeight: 21 },
-  muted: { color: C.muted, fontSize: 13, lineHeight: 18 },
+  sectionTitle: { color: C.text, fontSize: 17, fontFamily: F.numSemi },
+  hint: { color: C.muted, fontSize: 12, fontFamily: F.body },
+  body: { color: C.text, fontSize: 15, lineHeight: 22, fontFamily: F.body },
+  muted: { color: C.muted, fontSize: 13, lineHeight: 19, fontFamily: F.body },
 });

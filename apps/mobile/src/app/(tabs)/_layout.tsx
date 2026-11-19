@@ -2,7 +2,7 @@ import { STRINGS } from '@aurora/core/i18n';
 import { Tabs } from 'expo-router';
 import { Icon } from '../../components/ui';
 import { useAppState } from '../../state';
-import { C } from '../../theme';
+import { C, F } from '../../theme';
 
 export default function TabsLayout() {
   const { lang } = useAppState();
@@ -15,6 +15,7 @@ export default function TabsLayout() {
         tabBarStyle: { backgroundColor: '#060a14', borderTopColor: C.border },
         tabBarActiveTintColor: C.aurora,
         tabBarInactiveTintColor: C.muted,
+        tabBarLabelStyle: { fontFamily: F.bodyMed, fontSize: 11 },
       }}
     >
       <Tabs.Screen name="index" options={{ title: S.nav.tonight, tabBarIcon: ({ color }) => <Icon name="moon" color={color} /> }} />

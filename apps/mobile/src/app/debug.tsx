@@ -9,7 +9,7 @@ import { runAlertCheck } from '../background/task';
 import { Card, s } from '../components/ui';
 import { compare, runChecks } from '../spike/checks';
 import expected from '../spike/expected.json';
-import { C } from '../theme';
+import { C, F } from '../theme';
 
 export default function DebugScreen() {
   const checks = useMemo(() => {
@@ -29,10 +29,10 @@ export default function DebugScreen() {
   return (
     <ScrollView style={{ backgroundColor: C.bg }} contentContainerStyle={{ padding: 16, gap: 12 }}>
       <Card style={{ gap: 6 }}>
-        <Text style={{ color: C.text, fontWeight: '700' }}>Model vs Node ({engine})</Text>
+        <Text style={{ color: C.text, fontFamily: F.numSemi }}>Model vs Node ({engine})</Text>
         {checks.map((c) => (
           <View key={c.key}>
-            <Text style={{ color: c.ok ? C.aurora : C.bad, fontWeight: '700' }}>
+            <Text style={{ color: c.ok ? C.aurora : C.bad, fontFamily: F.numSemi }}>
               {c.ok ? 'PASS' : 'FAIL'} · {c.key}
             </Text>
             {c.lines.slice(0, 4).map((l) => (
@@ -55,7 +55,7 @@ export default function DebugScreen() {
           }
         }}
       >
-        <Text style={{ color: C.aurora, fontWeight: '700' }}>Dry-run alert check</Text>
+        <Text style={{ color: C.aurora, fontFamily: F.numSemi }}>Dry-run alert check</Text>
       </Pressable>
       {dry ? (
         <Card>

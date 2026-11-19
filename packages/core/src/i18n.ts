@@ -109,6 +109,7 @@ export interface Strings {
     lastSent: (night: string) => string;
     never: string;
     test: string;
+    language: string;
   };
   go: {
     title: string;
@@ -126,6 +127,7 @@ export interface Strings {
     travelNote: string;
     attribution: string;
     mapLabel: string;
+    betterNearby: string;
   };
   loading: string;
   failed: (what: string) => string;
@@ -238,6 +240,7 @@ const en: Strings = {
     lastSent: (night) => `Last alert: night of ${night}`,
     never: 'No alert sent yet',
     test: 'Send a test notification',
+    language: 'Language',
   },
   go: {
     title: 'Where to go tonight',
@@ -255,6 +258,7 @@ const en: Strings = {
     travelNote: 'Travel time is a straight-line estimate; roads around fjords can take longer.',
     attribution: 'Viewpoints © OpenStreetMap contributors (ODbL)',
     mapLabel: 'Map of viewpoints near you, coloured by tonight’s score',
+    betterNearby: 'Better nearby',
   },
   loading: 'Loading the sky…',
   failed: (w) => `Couldn't load ${w}. The score assumes the worst for it.`,
@@ -365,6 +369,7 @@ const cs: Strings = {
     lastSent: (night) => `Poslední upozornění: noc ${night}`,
     never: 'Zatím žádné upozornění',
     test: 'Poslat zkušební oznámení',
+    language: 'Jazyk',
   },
   go: {
     title: 'Kam dnes vyrazit',
@@ -382,6 +387,7 @@ const cs: Strings = {
     travelNote: 'Doba cesty je odhad vzdušnou čarou; silnice kolem fjordů mohou trvat déle.',
     attribution: 'Vyhlídky © přispěvatelé OpenStreetMap (ODbL)',
     mapLabel: 'Mapa vyhlídek v okolí obarvená podle dnešního skóre',
+    betterNearby: 'Lepší v okolí',
   },
   loading: 'Načítám oblohu…',
   failed: (w) => `Nepodařilo se načíst: ${w}. Skóre pro ně počítá s nejhorším.`,
@@ -492,6 +498,7 @@ const no: Strings = {
     lastSent: (night) => `Siste varsel: natten ${night}`,
     never: 'Ingen varsel sendt ennå',
     test: 'Send et testvarsel',
+    language: 'Språk',
   },
   go: {
     title: 'Hvor du bør dra i natt',
@@ -509,6 +516,7 @@ const no: Strings = {
     travelNote: 'Reisetiden er anslått i luftlinje; veier rundt fjorder kan ta lengre tid.',
     attribution: 'Utsiktspunkter © OpenStreetMap-bidragsytere (ODbL)',
     mapLabel: 'Kart over utsiktspunkter i nærheten, farget etter nattens poengsum',
+    betterNearby: 'Bedre i nærheten',
   },
   loading: 'Laster himmelen…',
   failed: (w) => `Klarte ikke å laste ${w}. Poengsummen antar det verste.`,

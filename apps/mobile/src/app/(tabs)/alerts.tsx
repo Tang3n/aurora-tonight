@@ -1,6 +1,6 @@
 /** Alerts: turn device-side alerts on/off and pick the threshold. The check itself is background/task.ts. */
 import { ALERT_THRESHOLDS } from '@aurora/core/alerts';
-import { STRINGS } from '@aurora/core/i18n';
+import { LANGS, STRINGS } from '@aurora/core/i18n';
 import { labelFor } from '@aurora/model/score';
 import * as Notifications from 'expo-notifications';
 import { router, useFocusEffect } from 'expo-router';
@@ -11,10 +11,10 @@ import { notify, setAlertTaskRegistered } from '../../background/task';
 import { Card, Chip, s } from '../../components/ui';
 import { readAlertPrefs, readLastCheck, type LastCheck } from '../../prefs';
 import { useAppState } from '../../state';
-import { C } from '../../theme';
+import { C, F } from '../../theme';
 
 export default function AlertsScreen() {
-  const { lang, alerts, setAlerts } = useAppState();
+  const { lang, setLang, alerts, setAlerts } = useAppState();
   const S = STRINGS[lang];
   const insets = useSafeAreaInsets();
   const [denied, setDenied] = useState(false);
@@ -50,7 +50,7 @@ export default function AlertsScreen() {
 
       <Card style={{ gap: 14 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Text style={{ color: C.text, fontSize: 16, fontWeight: '700', flex: 1 }}>{S.alerts.enable}</Text>
+          <Text style={{ color: C.text, fontSize: 16, fontFamily: F.numSemi, flex: 1 }}>{S.alerts.enable}</Text>
           <Switch
             value={alerts.enabled}
             onValueChange={toggle}
@@ -70,8 +70,17 @@ export default function AlertsScreen() {
         </View>
       </Card>
 
+      <Card style={{ gap: 8 }}>
+        <Text style={st.k}>{S.alerts.language}</Text>
+        <View style={{ flexDirection: 'row', gap: 8 }}>
+          {LANGS.map((l) => (
+            <Chip key={l} label={l.toUpperCase()} on={l === lang} onPress={() => setLang(l)} />
+          ))}
+        </View>
+      </Card>
+
       <Card style={{ gap: 6 }}>
-        <Text style={{ color: C.text }}>{lastNight ? S.alerts.lastSent(lastNight) : S.alerts.never}</Text>
+        <Text style={{ color: C.text, fontFamily: F.bodyMed }}>{lastNight ? S.alerts.lastSent(lastNight) : S.alerts.never}</Text>
         {lastCheck ? (
           <Text style={s.muted}>
             {new Date(lastCheck.at).toLocaleString()} · {lastCheck.score} · {lastCheck.reason}
@@ -81,16 +90,16 @@ export default function AlertsScreen() {
       </Card>
 
       <Pressable style={[s.card, { alignItems: 'center' }]} onPress={() => notify(S.alerts.notifTitle(42, S.labels.maybe), S.alerts.test)} accessibilityRole="button">
-        <Text style={{ color: C.aurora, fontWeight: '700' }}>{S.alerts.test}</Text>
+        <Text style={{ color: C.aurora, fontFamily: F.bodySemi }}>{S.alerts.test}</Text>
       </Pressable>
       <Pressable onPress={() => router.push('/debug')} accessibilityRole="button">
-        <Text style={{ color: C.faint, fontSize: 12, textAlign: 'center' }}>Debug</Text>
+        <Text style={{ color: C.faint, fontSize: 12, textAlign: 'center', fontFamily: F.body }}>Debug</Text>
       </Pressable>
     </ScrollView>
   );
 }
 
 const st = StyleSheet.create({
-  h1: { color: C.text, fontSize: 24, fontWeight: '800' },
-  k: { color: C.faint, fontSize: 11, letterSpacing: 1, textTransform: 'uppercase', fontWeight: '600' },
+  h1: { color: C.text, fontSize: 26, fontFamily: F.num, lineHeight: 30 },
+  k: { color: C.faint, fontSize: 11, letterSpacing: 1, textTransform: 'uppercase', fontFamily: F.bodyMed },
 });

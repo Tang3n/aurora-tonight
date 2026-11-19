@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Icon, s } from '../components/ui';
 import { useAppState } from '../state';
-import { C } from '../theme';
+import { C, F } from '../theme';
 
 export default function PlaceScreen() {
   const { lang, setLoc } = useAppState();
@@ -69,7 +69,7 @@ export default function PlaceScreen() {
       />
       <Pressable onPress={useGps} style={[s.card, st.gps]} accessibilityRole="button">
         {locating ? <ActivityIndicator color={C.aurora} /> : <Icon name="pin" color={C.aurora} size={18} />}
-        <Text style={{ color: C.aurora, fontWeight: '700' }}>{locating ? S.locating : S.useMyLocation}</Text>
+        <Text style={{ color: C.aurora, fontFamily: F.numSemi }}>{locating ? S.locating : S.useMyLocation}</Text>
       </Pressable>
       <FlatList
         data={results ?? []}
@@ -78,7 +78,7 @@ export default function PlaceScreen() {
         ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: C.border }} />}
         renderItem={({ item }) => (
           <Pressable onPress={() => choose(item)} style={st.row} accessibilityRole="button">
-            <Text style={{ color: C.text, fontSize: 16, fontWeight: '600' }}>{item.name}</Text>
+            <Text style={{ color: C.text, fontSize: 16, fontFamily: F.bodySemi }}>{item.name}</Text>
             <Text style={s.muted}>{item.region}</Text>
           </Pressable>
         )}
@@ -88,7 +88,7 @@ export default function PlaceScreen() {
 }
 
 const st = StyleSheet.create({
-  input: { minHeight: 48, borderRadius: 14, borderWidth: 1, borderColor: 'rgba(160,220,255,0.2)', backgroundColor: C.card, color: C.text, paddingHorizontal: 14, fontSize: 16 },
+  input: { minHeight: 48, borderRadius: 14, borderWidth: 1, borderColor: 'rgba(160,220,255,0.2)', backgroundColor: C.card, color: C.text, paddingHorizontal: 14, fontSize: 16, fontFamily: F.body },
   gps: { flexDirection: 'row', alignItems: 'center', gap: 10, minHeight: 48, paddingVertical: 10 },
   row: { paddingVertical: 12, minHeight: 48, gap: 2 },
 });

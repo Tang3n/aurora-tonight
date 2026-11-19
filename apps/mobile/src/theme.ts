@@ -15,6 +15,20 @@ export const C = {
   slate: '#3a4d6b',
 } as const;
 
+/** Fonts as in the mock: Space Grotesk for numbers and headings, Inter for text (loaded in app/_layout.tsx). */
+export const F = {
+  num: 'SpaceGrotesk_700Bold',
+  numSemi: 'SpaceGrotesk_600SemiBold',
+  body: 'Inter_400Regular',
+  bodyMed: 'Inter_500Medium',
+  bodySemi: 'Inter_600SemiBold',
+} as const;
+
+/** Text colour for a score: green from 50, amber from 30, otherwise muted (as in the mock). */
+export function scoreTint(score: number): string {
+  return score >= 50 ? C.aurora : score >= 30 ? C.warn : C.muted;
+}
+
 /** Badge colours for a 0–100 eye score, as on the web. */
 export function scoreColors(score: number): { bg: string; fg: string } {
   if (score >= 50) return { bg: C.aurora, fg: '#04120b' };
